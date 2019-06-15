@@ -200,12 +200,6 @@ header{
     border: 1px solid rgba(7, 133, 252, 0.839);
 }
 
-#signup-form input:focus-visible{
-    border-radius: 6px;
-    border: 1px solid rgba(7, 133, 252, 0.839);
-}
-
-
 footer{
     
     background-color:rgba(7, 133, 252, 0.839);
