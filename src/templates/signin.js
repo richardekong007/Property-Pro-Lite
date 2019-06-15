@@ -1,7 +1,7 @@
 exports.render = () =>{
     return `
         <div class = 'main-content'>
-            <div id = 'main-image-container'>
+            <div class = 'home-image-container'>
                 <img src = '../public/images/estate.jpg' alt = 'image'/>
             </div>
             <div class = 'form-container'>
@@ -14,7 +14,7 @@ exports.render = () =>{
                         Forget Password?
                         <span class = "checkmark"></span>
                     <label> <br>
-                    <button class = 'login-button smaller-text'>SIGN IN</button> <br>
+                    <button class = 'login-button smaller-text'>Sign in</button>
                 </form>
                 <p class= 'form-container-text'>Don't have an account?</p>
                 <p id ='signup-text' class = 'bold-text smaller-text' > 

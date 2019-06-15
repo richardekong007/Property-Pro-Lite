@@ -49,10 +49,11 @@ header{
     flex-direction: row;
 }
 
-#main-image-container{
+.home-image-container{
     border: 1px solid rgba(7, 133, 252, 0.839);
 }
-#main-image-container img {
+
+.home-image-container img {
     display: inline-block;
     max-width : 100%;
     height: auto;
@@ -79,15 +80,17 @@ header{
 
 #signin-form {
     width: 29em;
-    display: flex;
+    /* display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: center; */
     padding: 30px;
 }
 
-#signin-form input {
+#signin-form input{
     border-radius: 6px;
+    width: 100%;
     height: 30px;
+    margin-bottom: 20px;
     padding: 5px;
     border: 1px solid rgba(7, 133, 252, 0.839);
 }
@@ -151,7 +154,7 @@ header{
 }
 
 .login-button {
-    width: 25em;
+    width: 100%;
     color: rgb(255,255,255);
     background-color: rgba(7, 133, 252, 0.839);
     border-radius: 10px;
@@ -172,16 +175,36 @@ header{
     text-align: center;
 }
 
-#signup-text{
+#signup-text, #signin-text{
     color:rgba(7, 133, 252, 0.839);
     text-align: center;
 }
 
-#signup-text a{
+#signup-text a, #signin-text a{
     text-decoration: none;
     color:rgba(7, 133, 252, 0.839);
-
 }
+
+#signup-form {
+    width:29em;
+    padding:30px;
+}
+
+#signup-form input {
+    border-radius: 6px;
+    width: 40%;
+    height: 30px;
+    margin-right:40px;
+    margin-bottom: 15px;
+    padding: 5px;
+    border: 1px solid rgba(7, 133, 252, 0.839);
+}
+
+#signup-form input:focus-visible{
+    border-radius: 6px;
+    border: 1px solid rgba(7, 133, 252, 0.839);
+}
+
 
 footer{
     

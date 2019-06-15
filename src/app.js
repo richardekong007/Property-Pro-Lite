@@ -8,8 +8,8 @@ class App {
     }
 
     init (){
-        this.signin.render();
-        this.Signup.render();
+        //this.signin.render();
+        this.signup.render();
     }
 }
 
