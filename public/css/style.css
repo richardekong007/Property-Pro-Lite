@@ -374,18 +374,11 @@ footer{
 }
 
 .property-detail-form {
-    max-width:100%;
     width: fit-content;
     height:auto;
-    padding: 10px;
+    padding: 50px;
     display: flex;
     flex-direction: row;
-}
-
-.property-detail-form .col {
-    display:inline-block;
-    max-width: 100%;
-    width:fit-content;
 }
 
 @media only screen and (max-width:620px){
