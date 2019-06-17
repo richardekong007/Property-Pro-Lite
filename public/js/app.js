@@ -7,6 +7,8 @@ var _signup = _interopRequireDefault(require("./components/signup.js"));
 
 var _postPropertyDialog = _interopRequireDefault(require("./components/postPropertyDialog.js"));
 
+var _updatePropertyDialog = _interopRequireDefault(require("./components/updatePropertyDialog.js"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -24,6 +26,7 @@ function () {
     this.signin = new _signin["default"](container);
     this.signup = new _signup["default"](container);
     this.postPropertyDialog = new _postPropertyDialog["default"](container);
+    this.updatePropertyDialog = new _updatePropertyDialog["default"](container);
   }
 
   _createClass(App, [{
@@ -31,7 +34,8 @@ function () {
     value: function init() {
       //this.signin.render();
       //this.signup.render();
-      this.postPropertyDialog.show();
+      //this.postPropertyDialog.show();
+      this.updatePropertyDialog.show();
     }
   }]);
 
@@ -40,7 +44,7 @@ function () {
 
 module.exports = App;
 
-},{"./components/postPropertyDialog.js":2,"./components/signin.js":3,"./components/signup.js":4}],2:[function(require,module,exports){
+},{"./components/postPropertyDialog.js":2,"./components/signin.js":3,"./components/signup.js":4,"./components/updatePropertyDialog.js":5}],2:[function(require,module,exports){
 "use strict";
 
 var _postPropertyDialog = _interopRequireDefault(require("../templates/postPropertyDialog.js"));
@@ -75,7 +79,7 @@ function () {
 
 module.exports = PostPropertyDialog;
 
-},{"../templates/postPropertyDialog.js":5}],3:[function(require,module,exports){
+},{"../templates/postPropertyDialog.js":6}],3:[function(require,module,exports){
 "use strict";
 
 var _signin = _interopRequireDefault(require("../templates/signin.js"));
@@ -109,7 +113,7 @@ function () {
 
 module.exports = Signin;
 
-},{"../templates/signin.js":6}],4:[function(require,module,exports){
+},{"../templates/signin.js":7}],4:[function(require,module,exports){
 "use strict";
 
 var _signup = _interopRequireDefault(require("../templates/signup"));
@@ -143,28 +147,69 @@ function () {
 
 module.exports = Signup;
 
-},{"../templates/signup":7}],5:[function(require,module,exports){
+},{"../templates/signup":8}],5:[function(require,module,exports){
+"use strict";
+
+var _updatePropertyDialog = _interopRequireDefault(require("../templates/updatePropertyDialog.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var UpdatePropertyDialog =
+/*#__PURE__*/
+function () {
+  function UpdatePropertyDialog(container) {
+    _classCallCheck(this, UpdatePropertyDialog);
+
+    this.container = container;
+  }
+
+  _createClass(UpdatePropertyDialog, [{
+    key: "show",
+    value: function show() {
+      this.container.innerHTML = _updatePropertyDialog["default"].show();
+    }
+  }]);
+
+  return UpdatePropertyDialog;
+}();
+
+module.exports = UpdatePropertyDialog;
+
+},{"../templates/updatePropertyDialog.js":9}],6:[function(require,module,exports){
 "use strict";
 
 exports.show = function () {
-  return "\n            <div class = \"dialog-container\">\n                <div class = \"dialog-header\">\n                    <span class = \"dialog-title\">Post Advert</span>\n                    <button class = \"close-rect smaller-text\">x</button>\n                </div>\n                <form id = \"new-property-form\">\n                    <input type = \"text\" placeholder = \"Property Address\" title = \"Property Address\" required/>\n                    <input type = \"text\" placeholder = \"Property City\" title = \"Property City\" required/>\n                    <br>\n                    <input type = \"text\" placeholder = \"Property State\" title = \"Property State\" required/>\n                    <select class = \"property-type\">\n                        <option value = \"Property type\"> Property type</option>\n                        <option value = \"Self-contained\">Self-contained</option>\n                        <option value = \"2 Bedroom\">2 Bedroom</option>\n                        <option value = \"3 Bedroom\">3 Bedroom</option>\n                        <option value = \"Mini flat\">Mini flat</option>\n                        <option value = \"Duplex\">Duplex</option>\n                        <option value = \"Bungalow\">Bungalow</option>\n                    </select>\n                    <br>\n                    <input type = \"number\" placeholder = \"Property Price\" title = \"Property Price\" required/>\n                    <input type = \"file\"/>\n                    <br><br><br>\n                    <button  class = \"fab tooltip\">\n                        <img src = \"../public/vectors/tick.svg\" alt =\"tick\" width = \"25px\" height = \"25px\"/>\n                        <span class = \"tooltiptext small-text\">Post</span>\n                    </button>\n                </form>\n            <div>\n    ";
-};
-
-},{}],6:[function(require,module,exports){
-"use strict";
-
-exports.render = function () {
-  return "\n        <div class = 'main-content'>\n            <div class = 'home-image-container'>\n                <img src = '../public/images/estate.jpg' alt = 'image'/>\n            </div>\n            <div class = 'form-container'>\n                <div class = 'form-header smaller-text'>Sign In</div>\n                <form id ='signin-form'>\n                    <input type = 'text' placeholder = 'Username' title = 'Provide username' required/> <br>\n                    <input type = 'password' placeholder = 'Password' title = 'Provide Password' required/> <br>\n                    <label class = \"checkbox small-text\"> \n                        <input type = \"checkbox\">\n                        Forget Password?\n                        <span class = \"checkmark\"></span>\n                    <label> <br>\n                    <button class = 'login-button smaller-text'>Sign in</button>\n                </form>\n                <p class= 'form-container-text'>Don't have an account?</p>\n                <p id ='signup-text' class = 'bold-text smaller-text' > \n                    <a href = '#'>\n                    SIGN UP NOW\n                    </a>\n                </p>\n            </div>\n        </div>";
+  return "\n            <div class = \"dialog-container\">\n                <div class = \"dialog-header\">\n                    <span class = \"dialog-title\">Post Advert</span>\n                    <button class = \"close-rect smaller-text\">x</button>\n                </div>\n                <form class = \"property-form\">\n                    <input type = \"text\" placeholder = \"Property Address\" title = \"Property Address\" required/>\n                    <input type = \"text\" placeholder = \"Property City\" title = \"Property City\" required/>\n                    <br>\n                    <input type = \"text\" placeholder = \"Property State\" title = \"Property State\" required/>\n                    <select class = \"property-type\">\n                        <option value = \"Property type\"> Property type</option>\n                        <option value = \"Self-contained\">Self-contained</option>\n                        <option value = \"2 Bedroom\">2 Bedroom</option>\n                        <option value = \"3 Bedroom\">3 Bedroom</option>\n                        <option value = \"Mini flat\">Mini flat</option>\n                        <option value = \"Duplex\">Duplex</option>\n                        <option value = \"Bungalow\">Bungalow</option>\n                    </select>\n                    <br>\n                    <input type = \"number\" placeholder = \"Property Price\" title = \"Property Price\" required/>\n                    <input type = \"file\"/>\n                    <br><br><br>\n                    <button  class = \"fab tooltip\">\n                        <img src = \"../public/vectors/tick.svg\" alt =\"tick\" width = \"25px\" height = \"25px\"/>\n                        <span class = \"tooltiptext small-text\">Post</span>\n                    </button>\n                </form>\n            <div>\n    ";
 };
 
 },{}],7:[function(require,module,exports){
 "use strict";
 
 exports.render = function () {
-  return "\n        <div class = \"main-content\">\n             <div class = \"form-container\">\n                <div class = \"form-header smaller-text\">Sign up</div>\n                <form id = \"signup-form\">\n                    <input type = \"text\" placeholder = \"First Name\" title = \"Username\" required/>\n                    <input type = \"text\" placeholder = \"Last Name\" title = \"Last Name\" required/>\n                    <br>\n                    <input type = \"text\" placeholder = \"Email\" title = \"Email\" required/>\n                    <input type = \"text\" placeholder = \"Phone\" title = \"Phone\" required/>\n                    <br>\n                    <input type = \"text\" placeholder = \"Address\" title = \"Address\" required/>\n                    <input type = \"password\" placeholder = \"Password\" title = \"Password\" required/>\n                    <br>\n                    <label class = \"checkbox small-text\">\n                        <input type = \"checkbox\" />\n                        Sign up as an Agent\n                        <span class = \"checkmark\"></span>\n                    </label>\n                    <br>\n                    <button class = 'login-button smaller-text'>Sign up</button>    \n                </form>\n                <p class = \"form-container-text small-text\">Already have an account?</p>\n                <p id = \"signin-text\" class = 'bold-text smaller-text'>\n                    <a href = \"#\">SIGN IN</a>\n                </p>    \n             </div>\n             <div class = \"home-image-container\">\n                <img src = \"../public/images/estate.jpg\" alt ='estate img'/>\n             </div>\n        </div>\n    ";
+  return "\n        <div class = 'main-content'>\n            <div class = 'home-image-container'>\n                <img src = '../public/images/estate.jpg' alt = 'image'/>\n            </div>\n            <div class = 'form-container'>\n                <div class = 'form-header smaller-text'>Sign In</div>\n                <form id ='signin-form'>\n                    <input type = 'text' placeholder = 'Username' title = 'Provide username' required/> <br>\n                    <input type = 'password' placeholder = 'Password' title = 'Provide Password' required/> <br>\n                    <label class = \"checkbox small-text\"> \n                        <input type = \"checkbox\">\n                        Forget Password?\n                        <span class = \"checkmark\"></span>\n                    <label> <br>\n                    <button class = 'login-button smaller-text'>Sign in</button>\n                </form>\n                <p class= 'form-container-text'>Don't have an account?</p>\n                <p id ='signup-text' class = 'bold-text smaller-text' > \n                    <a href = '#'>\n                    SIGN UP NOW\n                    </a>\n                </p>\n            </div>\n        </div>";
 };
 
 },{}],8:[function(require,module,exports){
+"use strict";
+
+exports.render = function () {
+  return "\n        <div class = \"main-content\">\n             <div class = \"form-container\">\n                <div class = \"form-header smaller-text\">Sign up</div>\n                <form id = \"signup-form\">\n                    <input type = \"text\" placeholder = \"First Name\" title = \"Username\" required/>\n                    <input type = \"text\" placeholder = \"Last Name\" title = \"Last Name\" required/>\n                    <br>\n                    <input type = \"text\" placeholder = \"Email\" title = \"Email\" required/>\n                    <input type = \"text\" placeholder = \"Phone\" title = \"Phone\" required/>\n                    <br>\n                    <input type = \"text\" placeholder = \"Address\" title = \"Address\" required/>\n                    <input type = \"password\" placeholder = \"Password\" title = \"Password\" required/>\n                    <br>\n                    <label class = \"checkbox small-text\">\n                        <input type = \"checkbox\" />\n                        Sign up as an Agent\n                        <span class = \"checkmark\"></span>\n                    </label>\n                    <br>\n                    <button class = 'login-button smaller-text'>Sign up</button>    \n                </form>\n                <p class = \"form-container-text small-text\">Already have an account?</p>\n                <p id = \"signin-text\" class = 'bold-text smaller-text'>\n                    <a href = \"#\">SIGN IN</a>\n                </p>    \n             </div>\n             <div class = \"home-image-container\">\n                <img src = \"../public/images/estate.jpg\" alt ='estate img'/>\n             </div>\n        </div>\n    ";
+};
+
+},{}],9:[function(require,module,exports){
+"use strict";
+
+exports.show = function () {
+  return "\n    <div class = \"dialog-container\">\n        <div class = \"dialog-header\">\n            <span class = \"dialog-title\">Edit Advert</span>\n            <button class = \"close-rect smaller-text\">x</button>\n        </div>\n        <form class = \"property-form\">\n            <input type = \"text\" placeholder = \"Property Address\" title = \"Property Address\" required/>\n            <input type = \"text\" placeholder = \"Property City\" title = \"Property City\" required/>\n            <br>\n            <input type = \"text\" placeholder = \"Property State\" title = \"Property State\" required/>\n            <select class = \"property-type\">\n                <option value = \"Property type\"> Property type</option>\n                <option value = \"Self-contained\">Self-contained</option>\n                <option value = \"2 Bedroom\">2 Bedroom</option>\n                <option value = \"3 Bedroom\">3 Bedroom</option>\n                <option value = \"Mini flat\">Mini flat</option>\n                <option value = \"Duplex\">Duplex</option>\n                <option value = \"Bungalow\">Bungalow</option>\n            </select>\n            <br>\n            <input type = \"number\" placeholder = \"Property Price\" title = \"Property Price\" required/>\n            <input type = \"file\"/>\n            <br>\n            <label class = \"checkbox bit-smaller-text\">\n                <input type = \"checkbox\" />\n                Sold\n                <span class = \"checkmark\"></span>\n            </label>\n            <br><br>\n            <button  class = \"fab tooltip\">\n                <img src = \"../public/vectors/tick.svg\" alt =\"tick\" width = \"25px\" height = \"25px\"/>\n                <span class = \"tooltiptext small-text\">Edit</span>\n            </button>\n        </form>\n    <div>\n    ";
+};
+
+},{}],10:[function(require,module,exports){
 "use strict";
 
 var _app = _interopRequireDefault(require("./app.js"));
@@ -176,4 +221,4 @@ window.onload = function () {
   new _app["default"](main).init();
 };
 
-},{"./app.js":1}]},{},[8]);
+},{"./app.js":1}]},{},[10]);

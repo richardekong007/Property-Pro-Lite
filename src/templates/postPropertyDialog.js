@@ -5,7 +5,7 @@ exports.show = () =>{
                     <span class = "dialog-title">Post Advert</span>
                     <button class = "close-rect smaller-text">x</button>
                 </div>
-                <form id = "new-property-form">
+                <form class = "property-form">
                     <input type = "text" placeholder = "Property Address" title = "Property Address" required/>
                     <input type = "text" placeholder = "Property City" title = "Property City" required/>
                     <br>
