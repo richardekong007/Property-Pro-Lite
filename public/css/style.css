@@ -381,6 +381,10 @@ footer{
     flex-direction: row;
 }
 
+.action-section {
+    margin:auto;
+}
+
 @media only screen and (max-width:620px){
     body, header, main, footer, #container{
         width:100%;
