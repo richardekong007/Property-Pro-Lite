@@ -7,6 +7,10 @@
     font-size: 10px;
 }
 
+.bit-smaller-text {
+    font-size: 15px;
+}
+
 .smaller-text{
     font-size: 20px;
 }
@@ -208,7 +212,7 @@ footer{
     height: auto;
 }
 
-/* postPropertydialog section*/
+/* postPropertyDialog and updatePropertyDialog section*/
 .dialog-container {
     position: absolute;
     width:auto;
@@ -265,11 +269,11 @@ footer{
     transform: scale(1.05);
 }
 
-#new-property-form {
+.property-form {
     padding: 10px;
 }
 
-#new-property-form input, #new-property-form select{
+.property-form input, .property-form select{
     border-radius: 6px;
     border:1px solid rgba(7, 133, 252, 0.839);
     padding :6px;
@@ -278,8 +282,8 @@ footer{
     
 }
 
-#new-property-form input:active,
-#new-property-form select:active{
+.property-form input:active,
+.property-form select:active{
     outline: none;
 }
 
@@ -302,7 +306,7 @@ footer{
     transform: scale(1.05);
 }
 
-.fab:active{
+.fab:active {
     outline: none;
 }
 
@@ -342,6 +346,10 @@ footer{
     border-width: 5px;
     border-style: solid;
     border-color:transparent transparent transparent #000;
+}
+
+.property-form .checkmark{
+    margin-left:10px;
 }
 
 @media only screen and (max-width:620px){
