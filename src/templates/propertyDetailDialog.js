@@ -8,7 +8,7 @@ exports.show = () =>{
             <div class = "property-detail-content bit-smaller-text">
                 <div class = "property-detail-images"></div>
                 <form class = "property-detail-form">
-                    <div class = "col">
+                    <div>
                         <label class = "bold-text">Type:</label> 
                         <span data-property-type>Sample Text</span>
                         <br>
@@ -30,7 +30,13 @@ exports.show = () =>{
                         <br>
                         <label class = "bold-text">Posted On:</label>
                         <span data-property-post-date>Sample Text</span>
-                    </div>    
+                    </div>   
+                    <div>
+                        <button class = "fab tooltip">
+                            <img src = "../public/vectors/edit.svg" alt = "edit-icon" width = "20px" height = "20px"/>
+                            <span class = "tooltiptext small-text">Edit property</span>
+                        </button>    
+                    </div> 
                 </form>
             </div>
         </div>`;
