@@ -233,7 +233,9 @@ footer{
 }
 
 .dialog-header {
-    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     color:rgb(255,255,255);
     background-color:rgba(7, 133, 252, 0.839);
     border-top-right-radius: 10px;
@@ -241,28 +243,31 @@ footer{
 }
 
 .dialog-title {
-    position: absolute;
-    display: inline-block;
-    left:35%;
-    top:-10%;
+    text-align: center;
+    width: 100%;
 }
 
 .close-rect {
-    position: relative;
-    left:94%;
-    width: 30px;
-    height: 30px;
-    display: inline-block;
     text-align: center;
     padding:auto 0;
     border-top-right-radius: 10px;
     color:#fff;
     background-color: rgba(235,20,10,0.869);
-    border:3px solid rgba(235,20,10,0.869);
+    border:1px solid rgba(235,20,10,0.869);
 }
 
 .close-rect:active, .close-rect:focus{
     outline: none;
+    
+
+}
+
+.close-rect:active{
+    border:3px solid rgba(235,20,10,0.869);
+}
+
+.close-rect::after{
+    border:1px solid rgba(235,20,10,0.869);
 }
 
 .close-rect:hover {
@@ -350,6 +355,39 @@ footer{
 
 .property-form .checkmark{
     margin-left:10px;
+}
+
+/*Property Detail dialog*/
+
+.property-detail-content {
+    display:flex;
+    flex-direction: row;
+    max-width: 100%;
+    height:auto;
+    padding:10px;
+}
+
+.property-detail-images {
+    max-width:100%;
+    width: fit-content;
+    height: auto;
+    margin: 10px;
+    border-radius:6px;
+}
+
+.property-detail-form {
+    max-width:100%;
+    width: fit-content;
+    height:auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+}
+
+.property-detail-form .col {
+    display:inline-block;
+    max-width: 100%;
+    width:fit-content;
 }
 
 @media only screen and (max-width:620px){
