@@ -31,10 +31,15 @@ exports.show = () =>{
                         <label class = "bold-text">Posted On:</label>
                         <span data-property-post-date>Sample Text</span>
                     </div>   
-                    <div>
+                    <div class = "action-section">
                         <button class = "fab tooltip">
                             <img src = "../public/vectors/edit.svg" alt = "edit-icon" width = "20px" height = "20px"/>
                             <span class = "tooltiptext small-text">Edit property</span>
+                        </button>
+                        <br><br>    
+                        <button class = "fab tooltip">
+                            <img src = "../public/vectors/dustbin.svg" alt = "delete-icon" width = "20px" height = "20px"/>
+                            <span class = "tooltiptext small-text">Delete Property</span>
                         </button>    
                     </div> 
                 </form>
