@@ -37,7 +37,7 @@ exports.show = () =>{
                             <span class = "tooltiptext small-text">Edit property</span>
                         </button>
                         <br><br>    
-                        <button class = "fab tooltip">
+                        <button id = "delete-action" class = "fab tooltip">
                             <img src = "../public/vectors/dustbin.svg" alt = "delete-icon" width = "20px" height = "20px"/>
                             <span class = "tooltiptext small-text">Delete Property</span>
                         </button>    
