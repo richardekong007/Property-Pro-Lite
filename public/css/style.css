@@ -390,6 +390,51 @@ footer{
     border: 1px solid rgba(235,20,10,0.869);
 }
 
+.property-container {
+    display:flex;
+    flex-direction: column;
+}
+
+#properties-grid {
+    display: grid;
+    grid-template-columns: auto auto;
+    margin-top: 5px;
+    grid-gap:5px;
+    height:80vh;
+    overflow-y: auto;
+}
+
+#add-property-button {
+    background-color:rgba(7, 133, 252, 0.839);
+    border-radius:50%;
+    border: 1px solid rgba(7, 133, 252, 0.839);
+    color: #fff;
+    text-align: center;
+    justify-content: right;
+}
+
+#properties-title {
+    background-color: rgba(7, 133, 252, 0.839);
+    color: rgb(255,255,255);
+    text-align: center;
+    vertical-align: center;
+    padding: 5px;
+}
+
+.property-item {
+    display: flex;
+    flex-direction: column;
+    margin:0.1px;
+    padding: 15px;
+    border-radius:6px;
+    border:1px solid rgba(7, 133, 252, 0.839);
+    /* color:rgba(7, 133, 252, 0.839); */
+}
+
+.property-item img{
+    width:100%;
+}
+
 @media only screen and (max-width:620px){
     body, header, main, footer, #container{
         width:100%;
