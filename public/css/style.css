@@ -84,9 +84,6 @@ header{
 
 #signin-form {
     width: 29em;
-    /* display: flex;
-    flex-direction: column;
-    justify-content: center; */
     padding: 30px;
 }
 
@@ -395,6 +392,7 @@ footer{
     flex-direction: column;
 }
 
+/* View properties page */
 #properties-grid {
     display: grid;
     grid-template-columns: auto auto;
@@ -416,9 +414,11 @@ footer{
 #properties-title {
     background-color: rgba(7, 133, 252, 0.839);
     color: rgb(255,255,255);
+    margin-top:5px;
     text-align: center;
     vertical-align: center;
     padding: 5px;
+
 }
 
 .property-item {
@@ -428,12 +428,35 @@ footer{
     padding: 15px;
     border-radius:6px;
     border:1px solid rgba(7, 133, 252, 0.839);
-    /* color:rgba(7, 133, 252, 0.839); */
 }
 
 .property-item img{
     width:100%;
 }
+
+.property-item:hover{
+    background-color: #fff8d1e8;
+}
+
+.property-type-holder{
+    display: inline-block;
+    padding: 10px;
+    background-color: rgba(7, 133, 252, 0.839);
+    border-bottom-left-radius:6px;
+    border-bottom-right-radius:6px;
+    border:1px solid rgba(7, 133, 252, 0.839);
+    color:#fff;
+}
+
+.property-type-holder form{
+    float: right;
+}
+
+.property-type-options{
+    border-radius:6px;
+}
+
+
 
 @media only screen and (max-width:620px){
     body, header, main, footer, #container{
