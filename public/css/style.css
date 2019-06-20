@@ -84,9 +84,6 @@ header{
 
 #signin-form {
     width: 29em;
-    /* display: flex;
-    flex-direction: column;
-    justify-content: center; */
     padding: 30px;
 }
 
@@ -395,6 +392,7 @@ footer{
     flex-direction: column;
 }
 
+/* View properties page */
 #properties-grid {
     display: grid;
     grid-template-columns: auto auto;
