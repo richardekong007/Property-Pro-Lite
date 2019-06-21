@@ -1,5 +1,4 @@
-exports.show = () =>{
-    return `
+const template = `
     <div class = "dialog-container">
         <div class = "dialog-header">
             <span class = "dialog-title">Edit Advert</span>
@@ -36,4 +35,4 @@ exports.show = () =>{
         </form>
     <div>
     `;
-};
+    module.exports = template;
