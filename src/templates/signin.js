@@ -2,7 +2,7 @@ exports.render = () =>{
     return `
         <div class = 'main-content'>
             <div class = 'home-image-container'>
-                <img src = '../public/images/estate.jpg' alt = 'image'/>
+                <img src = './images/estate.jpg' alt = 'image'/>
             </div>
             <div class = 'form-container'>
                 <div class = 'form-header smaller-text'>Sign In</div>

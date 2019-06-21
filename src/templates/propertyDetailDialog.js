@@ -33,12 +33,12 @@ const template = `
         </div>   
         <div class = "action-section">
             <button id = "edit-action" class = "fab tooltip">
-                <img src = "../public/vectors/edit.svg" alt = "edit-icon" width = "20px" height = "20px"/>
+                <img src = "./vectors/edit.svg" alt = "edit-icon" width = "20px" height = "20px"/>
                 <span class = "tooltiptext small-text">Edit property</span>
             </button>
             <br><br>    
             <button id = "delete-action" class = "fab tooltip">
-                <img src = "../public/vectors/dustbin.svg" alt = "delete-icon" width = "20px" height = "20px"/>
+                <img src = "./vectors/dustbin.svg" alt = "delete-icon" width = "20px" height = "20px"/>
                 <span class = "tooltiptext small-text">Delete Property</span>
             </button>    
         </div> 

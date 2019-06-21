@@ -27,7 +27,7 @@ exports.render = () =>{
                 </p>    
              </div>
              <div class = "home-image-container">
-                <img src = "../public/images/estate.jpg" alt ='estate img'/>
+                <img src = "./images/estate.jpg" alt ='estate img'/>
              </div>
         </div>
     `;
