@@ -6,9 +6,9 @@
     "doc": "docs"
   },
   "scripts": {
-    "start":"npm run build && npm run server",
-    "server":"http-server -p 4000",
-    "build":"browserify src -t babelify -o public/js/app.js"
+    "start": "npm run build && npm run server",
+    "server": "http-server -p 4000",
+    "build": "browserify src -t babelify -o public/js/app.js"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,7 @@
     "@babel/preset-env": "^7.4.5",
     "babelify": "^10.0.0",
     "browserify": "^16.2.3",
-    "http-server": "^0.11.1"
+    "http-server": "^0.11.1",
+    "tiny-emitter": "^2.1.0"
   }
 }

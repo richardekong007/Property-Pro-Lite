@@ -7,7 +7,7 @@ exports.render = () =>{
             <div class = 'form-container'>
                 <div class = 'form-header smaller-text'>Sign In</div>
                 <form id ='signin-form'>
-                    <input type = 'text' placeholder = 'Username' title = 'Provide username' required/> <br>
+                    <input type = 'text' placeholder = 'Username' title = 'Provide username' data-username required/> <br>
                     <input type = 'password' placeholder = 'Password' title = 'Provide Password' required/> <br>
                     <label class = "checkbox small-text"> 
                         <input type = "checkbox">

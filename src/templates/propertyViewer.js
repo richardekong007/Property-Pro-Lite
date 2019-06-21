@@ -6,8 +6,7 @@ const renderProperties = properties => {
                 <span>${property.address}</span><br>
                 <span>${property.price}</span><br>
                 <span>${property.status}</span><br>
-            </div>
-            `;
+            </div>`;
     }).join("");
 };
 

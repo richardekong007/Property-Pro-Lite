@@ -4,7 +4,7 @@ exports.render = () =>{
              <div class = "form-container">
                 <div class = "form-header smaller-text">Sign up</div>
                 <form id = "signup-form">
-                    <input type = "text" placeholder = "First Name" title = "Username" required/>
+                    <input type = "text" placeholder = "First Name" title = "Username" data-first-name required/>
                     <input type = "text" placeholder = "Last Name" title = "Last Name" required/>
                     <br>
                     <input type = "text" placeholder = "Email" title = "Email" required/>
