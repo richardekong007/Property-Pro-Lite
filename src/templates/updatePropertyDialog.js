@@ -29,7 +29,7 @@ const template = `
             </label>
             <br><br>
             <button  class = "fab tooltip">
-                <img src = "../public/vectors/tick.svg" alt ="tick" width = "25px" height = "25px"/>
+                <img src = "./vectors/tick.svg" alt ="tick" width = "25px" height = "25px"/>
                 <span class = "tooltiptext small-text">Edit</span>
             </button>
         </form>
