@@ -18,12 +18,6 @@ class App {
     init (){
         this.signin.render();
         this.addEventListener();
-        //this.signup.render();
-        //this.postPropertyDialog.show();
-        //this.updatePropertyDialog.show();
-        //this.propertyDetailDialog.show();
-        //this.PropertiesPage.render();
-
     }
 
     addEventListener(){
