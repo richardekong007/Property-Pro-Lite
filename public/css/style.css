@@ -472,13 +472,16 @@ footer{
 
 @media only screen and (max-width:620px){
 
-    
+    .form-container,  #signin-form, #signup-form{
+        width: fit-content;
+    }
     
     .home-image-container, .home-image-container img{
         display: none;
     }
 
-    .main-content{
+    .main-content, header, .form-header, .login-button, #signin-form input,
+    #signup-form input{
         width:100%;
     }
 
