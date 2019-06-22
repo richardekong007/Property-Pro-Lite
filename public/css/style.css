@@ -1,4 +1,6 @@
 
+@media all and (min-width:420px){
+    
 .tiny-text{
     font-family: 6px;
 }
@@ -468,12 +470,5 @@ footer{
 
 .property-type-options{
     border-radius:6px;
-}
-
-
-
-@media only screen and (max-width:620px){
-    body, header, main, footer, #container{
-        width:100%;
-    }
+}   
 }
