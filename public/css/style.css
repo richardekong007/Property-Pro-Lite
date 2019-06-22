@@ -473,8 +473,12 @@ footer{
 @media only screen and (max-width:620px){
 
     .home-image-container, .home-image-container img,
-    #signin-form, #signup-form, .login-button{
+    #signin-form, #signup-form{
         width:100%;
+    }
+
+    .login-button,#signin-form input,#signup-form input{
+        width:60%;
     }
 
     /* .login-button, #signin-form input,#signup-form input {
