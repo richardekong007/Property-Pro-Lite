@@ -475,6 +475,10 @@ footer{
     #signin-form, #signup-form{
         width: fit-content;
     }
+
+    .form-header{
+        max-width:100%;
+    }
     
     .home-image-container, .home-image-container img{
         display: none;
