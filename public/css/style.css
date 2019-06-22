@@ -475,7 +475,7 @@ footer{
     /* .home-image-container, .home-image-container img{
         visibility: hidden;
     } */
-    #signin-form, #signup-form{
+    .form-header,#signin-form, #signup-form{
         width:100%;
     }
 
