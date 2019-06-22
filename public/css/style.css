@@ -482,7 +482,7 @@ footer{
     }
 
     .login-button, #signin-form input,#signup-form input {
-        max-width:100%;
+        width:100%;
     }
 
 }
