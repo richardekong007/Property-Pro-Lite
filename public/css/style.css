@@ -473,12 +473,12 @@ footer{
 @media only screen and (max-width:620px){
 
     #signin-form, #signup-form{
-        width:max-content;
-    }
-
-    .login-button,#signin-form input,
-    #signup-form input{
         width:100%;
     }
+
+    /* .login-button,#signin-form input,
+    #signup-form input{
+        width:100%;
+    } */
 
 }
