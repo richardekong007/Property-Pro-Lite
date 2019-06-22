@@ -480,8 +480,7 @@ footer{
         display: none;
     }
 
-    .main-content, header, .login-button, #signin-form input,
-    #signup-form input{
+    .main-content, header{
         width:100%;
     }
 
