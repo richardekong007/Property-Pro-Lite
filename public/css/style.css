@@ -1,6 +1,5 @@
 
-@media all and (min-width:420px){
-    
+
 .tiny-text{
     font-family: 6px;
 }
@@ -471,4 +470,12 @@ footer{
 .property-type-options{
     border-radius:6px;
 }   
+
+@media only screen and (max-width:620px){
+    .home-image-container img,
+    .login-button,
+    #signin-form input,
+    #signup-form input{
+        width:100%;
+    }
 }
