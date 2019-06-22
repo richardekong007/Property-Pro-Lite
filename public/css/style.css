@@ -471,13 +471,15 @@ footer{
 }   
 
 @media only screen and (max-width:620px){
+
+    .home-image-container,
     .home-image-container img,
     .login-button,
     #signin-form,
     #signup-form,
     #signin-form input,
     #signup-form input {
-        max-width:100%;
+        width:100%;
     }
 
 }
