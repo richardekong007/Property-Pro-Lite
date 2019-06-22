@@ -472,9 +472,6 @@ footer{
 
 @media only screen and (max-width:620px){
 
-    /* .home-image-container, .home-image-container img{
-        visibility: hidden;
-    } */
     .form-header,#signin-form, #signup-form{
         width:fit-content;
     }
