@@ -483,7 +483,7 @@ footer{
 
     .login-button,#signin-form input,
     #signup-form input{
-        width:fit-content;
+        width:max-content;
     }
 
 }
