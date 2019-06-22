@@ -481,7 +481,7 @@ footer{
         display: none;
     }
 
-    .login-button,#signin-form input,
+    .form-header.login-button,#signin-form input,
     #signup-form input{
         width:100%;
     }
