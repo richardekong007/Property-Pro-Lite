@@ -478,7 +478,7 @@ footer{
         display: none;
     }
 
-    .main-content, #signin-form, #signup-form{
+    .main-content, .form-container{
         width:100%;
     }
 
