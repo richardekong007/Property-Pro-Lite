@@ -477,7 +477,7 @@ footer{
     }
 
     .form-header{
-        max-width:100%;
+        width:max-content;
     }
     
     .home-image-container, .home-image-container img{
