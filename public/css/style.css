@@ -478,11 +478,7 @@ footer{
     }
 
     .login-button,#signin-form input,#signup-form input{
-        width:60%;
+        width:min-content;
     }
-
-    /* .login-button, #signin-form input,#signup-form input {
-        width:100%;
-    } */
 
 }
