@@ -476,7 +476,8 @@ footer{
         width: fit-content;
     }
 
-    .form-header{
+    .form-header, #signin-form input,
+    #signup-form input{
         width:min-content;
     }
     
@@ -484,8 +485,7 @@ footer{
         display: none;
     }
 
-    .main-content, header, .login-button, #signin-form input,
-    #signup-form input{
+    .main-content, header, .login-button{
         width:100%;
     }
 
