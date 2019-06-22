@@ -476,12 +476,12 @@ footer{
         visibility: hidden;
     } */
     .form-header,#signin-form, #signup-form{
-        width:100%;
+        width:fit-content;
     }
 
     .login-button,#signin-form input,
     #signup-form input{
-        width:max-content;
+        width:100%;
     }
 
 }
