@@ -478,7 +478,7 @@ footer{
     }
 
     .login-button,#signin-form input,#signup-form input{
-        width:min-content;
+        width:max-content;
     }
 
 }
