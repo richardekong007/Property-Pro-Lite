@@ -476,14 +476,17 @@ footer{
         width:fit-content;
     }
 
+    header .form-container .form-header, #signin-form, #signup-form{
+        width: 100%;
+    }
     
     .home-image-container, .home-image-container img{
         display: none;
     }
 
-    .login-button,#signin-form input,
+    /* .login-button,#signin-form input,
     #signup-form input{
         width:100%;
-    }
+    } */
 
 }
