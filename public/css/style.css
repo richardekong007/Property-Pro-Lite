@@ -477,9 +477,9 @@ footer{
         width:100%;
     }
 
-    /* .login-button,#signin-form input,
+    .login-button,#signin-form input,
     #signup-form input{
-        width:100%;
-    } */
+        max-width:100%;
+    }
 
 }
