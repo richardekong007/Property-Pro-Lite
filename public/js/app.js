@@ -172,24 +172,17 @@ function () {
 
 module.exports = App;
 
-},{"./components/postPropertyDialog.js":4,"./components/properties.js":5,"./components/propertyDetailDialog.js":6,"./components/signin.js":8,"./components/signup.js":9,"./components/updatePropertyDialog.js":10}],3:[function(require,module,exports){
+},{"./components/postPropertyDialog.js":5,"./components/properties.js":6,"./components/propertyDetailDialog.js":7,"./components/signin.js":9,"./components/signup.js":10,"./components/updatePropertyDialog.js":11}],3:[function(require,module,exports){
 "use strict";
 
-exports.createOverlay = function () {
-  var overlay = document.createElement("div");
-  overlay.setAttribute("id", "overlay");
-  overlay.setAttribute("class", "dialog-overlay");
-  return overlay;
-};
-
-},{}],4:[function(require,module,exports){
-"use strict";
-
-var _postPropertyDialog = _interopRequireDefault(require("../templates/postPropertyDialog.js"));
-
-var _overlay = _interopRequireDefault(require("../components/overlay.js"));
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
 
 var _tinyEmitter = _interopRequireDefault(require("tiny-emitter"));
+
+var _overlay = _interopRequireDefault(require("./overlay.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -211,24 +204,31 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
-var PostPropertyDialog =
+var Dialog =
 /*#__PURE__*/
 function (_TinyEmitter) {
-  _inherits(PostPropertyDialog, _TinyEmitter);
+  _inherits(Dialog, _TinyEmitter);
 
-  function PostPropertyDialog(container) {
+  function Dialog(container) {
     var _this;
 
-    _classCallCheck(this, PostPropertyDialog);
+    _classCallCheck(this, Dialog);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(PostPropertyDialog).call(this));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Dialog).call(this));
     _this.container = container;
     _this.overlay = _overlay["default"].createOverlay();
     _this.dialog = _this.createDialog();
     return _this;
   }
 
-  _createClass(PostPropertyDialog, [{
+  _createClass(Dialog, [{
+    key: "createDialog",
+    value: function createDialog() {
+      var dialogContainer = document.createElement("div");
+      dialogContainer.setAttribute("class", "dialog-container");
+      return dialogContainer;
+    }
+  }, {
     key: "show",
     value: function show() {
       this.container.appendChild(this.overlay);
@@ -240,30 +240,104 @@ function (_TinyEmitter) {
       this.container.removeChild(this.overlay);
       this.container.removeChild(this.dialog);
     }
-  }, {
+  }]);
+
+  return Dialog;
+}(_tinyEmitter["default"]);
+
+var _default = Dialog;
+exports["default"] = _default;
+
+},{"./overlay.js":4,"tiny-emitter":1}],4:[function(require,module,exports){
+"use strict";
+
+exports.createOverlay = function () {
+  var overlay = document.createElement("div");
+  overlay.setAttribute("id", "overlay");
+  overlay.setAttribute("class", "dialog-overlay");
+  return overlay;
+};
+
+},{}],5:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _postPropertyDialog = _interopRequireDefault(require("../templates/postPropertyDialog.js"));
+
+var _dialog = _interopRequireDefault(require("./dialog.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
+
+function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var PostPropertyDialog =
+/*#__PURE__*/
+function (_Dialog) {
+  _inherits(PostPropertyDialog, _Dialog);
+
+  function PostPropertyDialog(container) {
+    _classCallCheck(this, PostPropertyDialog);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(PostPropertyDialog).call(this, container));
+  }
+
+  _createClass(PostPropertyDialog, [{
     key: "createDialog",
     value: function createDialog() {
-      var _this2 = this;
+      var _this = this;
 
-      var dialogContainer = document.createElement("div");
-      dialogContainer.setAttribute("class", "dialog-container");
+      var dialogContainer = _get(_getPrototypeOf(PostPropertyDialog.prototype), "createDialog", this).call(this);
+
       dialogContainer.innerHTML = _postPropertyDialog["default"];
+      var form = dialogContainer.querySelector("form");
       var closebtn = dialogContainer.querySelector(".close-rect");
       closebtn.addEventListener("click", function (event) {
         event.preventDefault();
 
-        _this2.dismiss();
+        _this.dismiss();
+      });
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        if (event.target.querySelector("#done")) {
+          _this.emit("add_property");
+        }
       });
       return dialogContainer;
     }
   }]);
 
   return PostPropertyDialog;
-}(_tinyEmitter["default"]);
+}(_dialog["default"]);
 
-module.exports = PostPropertyDialog;
+var _default = PostPropertyDialog;
+exports["default"] = _default;
 
-},{"../components/overlay.js":3,"../templates/postPropertyDialog.js":12,"tiny-emitter":1}],5:[function(require,module,exports){
+},{"../templates/postPropertyDialog.js":13,"./dialog.js":3}],6:[function(require,module,exports){
 "use strict";
 
 var _properties = _interopRequireDefault(require("../templates/properties"));
@@ -356,14 +430,17 @@ function (_TinyEmitter) {
 
 module.exports = Properties;
 
-},{"../components/propertyViewer.js":7,"../templates/properties":13,"tiny-emitter":1}],6:[function(require,module,exports){
+},{"../components/propertyViewer.js":8,"../templates/properties":14,"tiny-emitter":1}],7:[function(require,module,exports){
 "use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
 
 var _propertyDetailDialog = _interopRequireDefault(require("../templates/propertyDetailDialog.js"));
 
-var _overlay = _interopRequireDefault(require("../components/overlay.js"));
-
-var _tinyEmitter = _interopRequireDefault(require("tiny-emitter"));
+var _dialog = _interopRequireDefault(require("./dialog.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -379,6 +456,10 @@ function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) ===
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
+function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
+
+function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
+
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
@@ -387,68 +468,54 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 var PropertyDetailDialog =
 /*#__PURE__*/
-function (_TinyEmitter) {
-  _inherits(PropertyDetailDialog, _TinyEmitter);
+function (_Dialog) {
+  _inherits(PropertyDetailDialog, _Dialog);
 
   function PropertyDetailDialog(container) {
-    var _this;
-
     _classCallCheck(this, PropertyDetailDialog);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(PropertyDetailDialog).call(this));
-    _this.container = container;
-    _this.overlay = _overlay["default"].createOverlay();
-    _this.dialog = _this.createDialog();
-    return _this;
+    return _possibleConstructorReturn(this, _getPrototypeOf(PropertyDetailDialog).call(this, container));
   }
 
   _createClass(PropertyDetailDialog, [{
-    key: "show",
-    value: function show() {
-      this.showDialog();
-    }
-  }, {
     key: "createDialog",
     value: function createDialog() {
-      var _this2 = this;
+      var _this = this;
 
-      var dialogContainer = document.createElement("div");
-      dialogContainer.setAttribute("class", "dialog-container");
+      var dialogContainer = _get(_getPrototypeOf(PropertyDetailDialog.prototype), "createDialog", this).call(this);
+
       dialogContainer.innerHTML = _propertyDetailDialog["default"];
+      var form = dialogContainer.querySelector("form");
       var closeBtn = dialogContainer.querySelector(".close-rect");
       var editBtn = dialogContainer.querySelector("#edit-action");
       closeBtn.addEventListener("click", function (event) {
         event.preventDefault();
 
-        _this2.dismiss();
+        _this.dismiss();
+      });
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        if (event.target.querySelector("#delete-action")) {
+          _this.emit("delete_property");
+        }
       });
       editBtn.addEventListener("click", function (event) {
         event.preventDefault();
 
-        _this2.emit("edit_property");
+        _this.emit("edit_property");
       });
       return dialogContainer;
-    }
-  }, {
-    key: "dismiss",
-    value: function dismiss() {
-      this.container.removeChild(this.overlay);
-      this.container.removeChild(this.dialog);
-    }
-  }, {
-    key: "showDialog",
-    value: function showDialog() {
-      this.container.appendChild(this.overlay);
-      this.container.appendChild(this.dialog);
     }
   }]);
 
   return PropertyDetailDialog;
-}(_tinyEmitter["default"]);
+}(_dialog["default"]);
 
-module.exports = PropertyDetailDialog;
+var _default = PropertyDetailDialog;
+exports["default"] = _default;
 
-},{"../components/overlay.js":3,"../templates/propertyDetailDialog.js":14,"tiny-emitter":1}],7:[function(require,module,exports){
+},{"../templates/propertyDetailDialog.js":15,"./dialog.js":3}],8:[function(require,module,exports){
 "use strict";
 
 var _propertyViewer = _interopRequireDefault(require("../templates/propertyViewer.js"));
@@ -484,7 +551,7 @@ function () {
 
 module.exports = PropertyViewer;
 
-},{"../temp/temporaryProperties.js":11,"../templates/propertyViewer.js":15}],8:[function(require,module,exports){
+},{"../temp/temporaryProperties.js":12,"../templates/propertyViewer.js":16}],9:[function(require,module,exports){
 "use strict";
 
 var _signin = _interopRequireDefault(require("../templates/signin.js"));
@@ -569,7 +636,7 @@ function (_TinyEmitter) {
 
 module.exports = Signin;
 
-},{"../templates/signin.js":16,"tiny-emitter":1}],9:[function(require,module,exports){
+},{"../templates/signin.js":17,"tiny-emitter":1}],10:[function(require,module,exports){
 "use strict";
 
 var _signup = _interopRequireDefault(require("../templates/signup"));
@@ -650,14 +717,17 @@ function (_TinyEmitter) {
 
 module.exports = Signup;
 
-},{"../templates/signup":17,"tiny-emitter":1}],10:[function(require,module,exports){
+},{"../templates/signup":18,"tiny-emitter":1}],11:[function(require,module,exports){
 "use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
 
 var _updatePropertyDialog = _interopRequireDefault(require("../templates/updatePropertyDialog.js"));
 
-var _tinyEmitter = _interopRequireDefault(require("tiny-emitter"));
-
-var _overlay = _interopRequireDefault(require("../components/overlay.js"));
+var _dialog = _interopRequireDefault(require("./dialog.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -673,6 +743,10 @@ function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) ===
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
+function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
+
+function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
+
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
@@ -681,57 +755,48 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 var UpdatePropertyDialog =
 /*#__PURE__*/
-function (_TinyEmitter) {
-  _inherits(UpdatePropertyDialog, _TinyEmitter);
+function (_Dialog) {
+  _inherits(UpdatePropertyDialog, _Dialog);
 
   function UpdatePropertyDialog(container) {
-    var _this;
-
     _classCallCheck(this, UpdatePropertyDialog);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(UpdatePropertyDialog).call(this));
-    _this.container = container;
-    _this.overlay = _overlay["default"].createOverlay();
-    _this.dialog = _this.createDialog();
-    return _this;
+    return _possibleConstructorReturn(this, _getPrototypeOf(UpdatePropertyDialog).call(this, container));
   }
 
   _createClass(UpdatePropertyDialog, [{
-    key: "show",
-    value: function show() {
-      document.body.appendChild(this.overlay);
-      document.body.appendChild(this.dialog);
-    }
-  }, {
-    key: "dismiss",
-    value: function dismiss() {
-      document.body.removeChild(this.overlay);
-      document.body.removeChild(this.dialog);
-    }
-  }, {
     key: "createDialog",
     value: function createDialog() {
-      var _this2 = this;
+      var _this = this;
 
-      var dialogContainer = document.createElement("div");
-      dialogContainer.setAttribute("class", "dialog-container");
+      var dialogContainer = _get(_getPrototypeOf(UpdatePropertyDialog.prototype), "createDialog", this).call(this);
+
       dialogContainer.innerHTML = _updatePropertyDialog["default"];
+      var form = dialogContainer.querySelector("form");
       var closeBtn = dialogContainer.querySelector(".close-rect");
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        if (event.target.querySelector("#done")) {
+          _this.emit("update_property");
+        }
+      });
       closeBtn.addEventListener("click", function (event) {
         event.preventDefault();
 
-        _this2.dismiss();
+        _this.dismiss();
       });
       return dialogContainer;
     }
   }]);
 
   return UpdatePropertyDialog;
-}(_tinyEmitter["default"]);
+}(_dialog["default"]);
 
-module.exports = UpdatePropertyDialog;
+var _default = UpdatePropertyDialog;
+exports["default"] = _default;
 
-},{"../components/overlay.js":3,"../templates/updatePropertyDialog.js":18,"tiny-emitter":1}],11:[function(require,module,exports){
+},{"../templates/updatePropertyDialog.js":19,"./dialog.js":3}],12:[function(require,module,exports){
 "use strict";
 
 var properties = [{
@@ -797,26 +862,36 @@ var properties = [{
 }];
 module.exports = properties;
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 "use strict";
 
-var template = "<div class = \"dialog-header\">\n        <span class = \"dialog-title\">Post Advert</span>\n        <button class = \"close-rect smaller-text\">x</button>\n    </div>\n    <form class = \"property-form\">\n        <input type = \"text\" placeholder = \"Property Address\" title = \"Property Address\" data-property-address required/>\n        <input type = \"text\" placeholder = \"Property City\" title = \"Property City\" required/>\n        <br>\n        <input type = \"text\" placeholder = \"Property State\" title = \"Property State\" required/>\n        <select class = \"property-type\">\n            <option value = \"Property type\"> Property type</option>\n            <option value = \"Self-contained\">Self-contained</option>\n            <option value = \"2 Bedroom\">2 Bedroom</option>\n            <option value = \"3 Bedroom\">3 Bedroom</option>\n            <option value = \"Mini flat\">Mini flat</option>\n            <option value = \"Duplex\">Duplex</option>\n            <option value = \"Bungalow\">Bungalow</option>\n        </select>\n        <br>\n        <input type = \"number\" placeholder = \"Property Price\" title = \"Property Price\" required/>\n        <input type = \"file\"/>\n        <br><br><br>\n        <button  class = \"fab tooltip\">\n            <img src = \"./vectors/tick.svg\" alt =\"tick\" width = \"25px\" height = \"25px\"/>\n            <span class = \"tooltiptext small-text\">Post</span>\n        </button>\n    </form>";
-module.exports = template;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+var template = "\n    <div class = \"dialog-header\">\n        <span class = \"dialog-title\">Post Advert</span>\n        <button class = \"close-rect smaller-text\">x</button>\n    </div>\n    <form class = \"property-form\">\n        <input type = \"text\" placeholder = \"Property Address\" title = \"Property Address\" data-property-address required/>\n        <input type = \"text\" placeholder = \"Property City\" title = \"Property City\" required/>\n        <br>\n        <input type = \"text\" placeholder = \"Property State\" title = \"Property State\" required/>\n        <select class = \"property-type\">\n            <option value = \"Property type\"> Property type</option>\n            <option value = \"Self-contained\">Self-contained</option>\n            <option value = \"2 Bedroom\">2 Bedroom</option>\n            <option value = \"3 Bedroom\">3 Bedroom</option>\n            <option value = \"Mini flat\">Mini flat</option>\n            <option value = \"Duplex\">Duplex</option>\n            <option value = \"Bungalow\">Bungalow</option>\n        </select>\n        <br>\n        <input type = \"number\" placeholder = \"Property Price\" title = \"Property Price\" required/>\n        <input type = \"file\"/>\n        <br><br><br>\n        <button id = \"done\" class = \"fab tooltip\">\n            <img src = \"./vectors/tick.svg\" alt =\"tick\" width = \"25px\" height = \"25px\"/>\n            <span class = \"tooltiptext small-text\">Post</span>\n        </button>\n    </form>";
+var _default = template;
+exports["default"] = _default;
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 "use strict";
 
 exports.render = function () {
   return "\n        <div class = \"property-container\">\n            <div id = \"properties-title\">Property Adverts</div>\n            <div class = \"property-type-holder\">\n            <form>\n                    <label>Search by:</label>\n                        <select class = \"property-type-options\">\n                            <option value = \"Property type\"> Property type</option>\n                            <option value = \"Self-contained\">Self-contained</option>\n                            <option value = \"2 Bedroom\">2 Bedroom</option>\n                            <option value = \"3 Bedroom\">3 Bedroom</option>\n                            <option value = \"Mini flat\">Mini flat</option>\n                            <option value = \"Duplex\">Duplex</option>\n                            <option value = \"Bungalow\">Bungalow</option>\n                        </select>\n                </form>\n            </div>\n            <div id = \"properties-grid\"></div>\n            <div id = \"add-property-button\" class = \"fab tooltip\">+\n                <span class = \"tooltiptext small-text\">Add property</span>\n            </div>\n        </div>";
 };
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
 var template = "\n    <div class = \"dialog-header\">\n        <span class = \"dialog-title\">Property Detail</span>\n        <button class = \"close-rect smaller-text\">x</button>\n    </div>\n    <div class = \"property-detail-content bit-smaller-text\">\n    <div class = \"property-detail-images\"></div>\n    <form class = \"property-detail-form\">\n        <div>\n            <label class = \"bold-text\">Type:</label> \n            <span data-property-type>Sample Text</span>\n            <br>\n            <label class = \"bold-text\">Address:</label> \n            <span data-property-address>Sample Text</span>\n            <br>\n            <label class = \"bold-text\">Price:</label>\n            <span data-property-price>Sample Text</span>\n            <br>\n            <label class = \"bold-text\">Status:</label>\n            <span data-property-status>Sample Text</span>\n            <br>\n            <p class = \"bold-text\">Owner Contact Information</p>\n            <label class = \"bold-text\">Owner:</label>\n            <span data-property-owner>Sample Text</span>\n            <br>\n            <label class = \"bold-text\">Phone:</label>\n            <span data-property-phone>Sample Text</span>\n            <br>\n            <label class = \"bold-text\">Posted On:</label>\n            <span data-property-post-date>Sample Text</span>\n        </div>   \n        <div class = \"action-section\">\n            <button id = \"edit-action\" class = \"fab tooltip\">\n                <img src = \"./vectors/edit.svg\" alt = \"edit-icon\" width = \"20px\" height = \"20px\"/>\n                <span class = \"tooltiptext small-text\">Edit property</span>\n            </button>\n            <br><br>    \n            <button id = \"delete-action\" class = \"fab tooltip\">\n                <img src = \"./vectors/dustbin.svg\" alt = \"delete-icon\" width = \"20px\" height = \"20px\"/>\n                <span class = \"tooltiptext small-text\">Delete Property</span>\n            </button>    \n        </div> \n    </form>\n    </div>";
-module.exports = template;
+var _default = template;
+exports["default"] = _default;
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 "use strict";
 
 var renderProperties = function renderProperties(properties) {
@@ -833,27 +908,32 @@ exports.render = function (properties) {
   return "<h4 class = \"text-center\">No property found</h4>";
 };
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 "use strict";
 
 exports.render = function () {
   return "\n        <div class = 'main-content'>\n            <div class = 'home-image-container'>\n                <img src = './images/estate.jpg' alt = 'image'/>\n            </div>\n            <div class = 'form-container'>\n                <div class = 'form-header smaller-text'>Sign In</div>\n                <form id ='signin-form'>\n                    <input type = 'text' placeholder = 'Username' title = 'Provide username' data-username required/> <br>\n                    <input type = 'password' placeholder = 'Password' title = 'Provide Password' required/> <br>\n                    <label class = \"checkbox small-text\"> \n                        <input type = \"checkbox\">\n                        Forget Password?\n                        <span class = \"checkmark\"></span>\n                    <label> <br>\n                    <button class = 'login-button smaller-text'>Sign in</button>\n                </form>\n                <p class= 'form-container-text'>Don't have an account?</p>\n                <p id ='signup-text' class = 'bold-text smaller-text' > \n                    <a href = '#'>\n                    SIGN UP NOW\n                    </a>\n                </p>\n            </div>\n        </div>";
 };
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 "use strict";
 
 exports.render = function () {
   return "\n        <div class = \"main-content\">\n             <div class = \"form-container\">\n                <div class = \"form-header smaller-text\">Sign up</div>\n                <form id = \"signup-form\">\n                    <input type = \"text\" placeholder = \"First Name\" title = \"Username\" data-first-name required/>\n                    <input type = \"text\" placeholder = \"Last Name\" title = \"Last Name\" required/>\n                    <br>\n                    <input type = \"text\" placeholder = \"Email\" title = \"Email\" required/>\n                    <input type = \"text\" placeholder = \"Phone\" title = \"Phone\" required/>\n                    <br>\n                    <input type = \"text\" placeholder = \"Address\" title = \"Address\" required/>\n                    <input type = \"password\" placeholder = \"Password\" title = \"Password\" required/>\n                    <br>\n                    <label class = \"checkbox small-text\">\n                        <input type = \"checkbox\" />\n                        Sign up as an Agent\n                        <span class = \"checkmark\"></span>\n                    </label>\n                    <br>\n                    <button class = 'login-button smaller-text'>Sign up</button>    \n                </form>\n                <p class = \"form-container-text small-text\">Already have an account?</p>\n                <p id = \"signin-text\" class = 'bold-text smaller-text'>\n                    <a href = \"#\">SIGN IN</a>\n                </p>    \n             </div>\n             <div class = \"home-image-container\">\n                <img src = \"./images/estate.jpg\" alt ='estate img'/>\n             </div>\n        </div>\n    ";
 };
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 "use strict";
 
-var template = "\n    <div class = \"dialog-container\">\n        <div class = \"dialog-header\">\n            <span class = \"dialog-title\">Edit Advert</span>\n            <button class = \"close-rect smaller-text\">x</button>\n        </div>\n        <form class = \"property-form\">\n            <input type = \"text\" placeholder = \"Property Address\" title = \"Property Address\" required/>\n            <input type = \"text\" placeholder = \"Property City\" title = \"Property City\" required/>\n            <br>\n            <input type = \"text\" placeholder = \"Property State\" title = \"Property State\" required/>\n            <select class = \"property-type\">\n                <option value = \"Property type\"> Property type</option>\n                <option value = \"Self-contained\">Self-contained</option>\n                <option value = \"2 Bedroom\">2 Bedroom</option>\n                <option value = \"3 Bedroom\">3 Bedroom</option>\n                <option value = \"Mini flat\">Mini flat</option>\n                <option value = \"Duplex\">Duplex</option>\n                <option value = \"Bungalow\">Bungalow</option>\n            </select>\n            <br>\n            <input type = \"number\" placeholder = \"Property Price\" title = \"Property Price\" required/>\n            <input type = \"file\"/>\n            <br>\n            <label class = \"checkbox bit-smaller-text\">\n                <input type = \"checkbox\" />\n                Sold\n                <span class = \"checkmark\"></span>\n            </label>\n            <br><br>\n            <button  class = \"fab tooltip\">\n                <img src = \"./vectors/tick.svg\" alt =\"tick\" width = \"25px\" height = \"25px\"/>\n                <span class = \"tooltiptext small-text\">Edit</span>\n            </button>\n        </form>\n    <div>\n    ";
-module.exports = template;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+var template = "\n    <div class = \"dialog-container\">\n        <div class = \"dialog-header\">\n            <span class = \"dialog-title\">Edit Advert</span>\n            <button class = \"close-rect smaller-text\">x</button>\n        </div>\n        <form class = \"property-form\">\n            <input type = \"text\" placeholder = \"Property Address\" title = \"Property Address\" required/>\n            <input type = \"text\" placeholder = \"Property City\" title = \"Property City\" required/>\n            <br>\n            <input type = \"text\" placeholder = \"Property State\" title = \"Property State\" required/>\n            <select class = \"property-type\">\n                <option value = \"Property type\"> Property type</option>\n                <option value = \"Self-contained\">Self-contained</option>\n                <option value = \"2 Bedroom\">2 Bedroom</option>\n                <option value = \"3 Bedroom\">3 Bedroom</option>\n                <option value = \"Mini flat\">Mini flat</option>\n                <option value = \"Duplex\">Duplex</option>\n                <option value = \"Bungalow\">Bungalow</option>\n            </select>\n            <br>\n            <input type = \"number\" placeholder = \"Property Price\" title = \"Property Price\" required/>\n            <input type = \"file\"/>\n            <br>\n            <label class = \"checkbox bit-smaller-text\">\n                <input type = \"checkbox\" />\n                Sold\n                <span class = \"checkmark\"></span>\n            </label>\n            <br><br>\n            <button id = \"done\" class = \"fab tooltip\">\n                <img src = \"./vectors/tick.svg\" alt =\"tick\" width = \"25px\" height = \"25px\"/>\n                <span class = \"tooltiptext small-text\">Edit</span>\n            </button>\n        </form>\n    <div>";
+var _default = template;
+exports["default"] = _default;
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 "use strict";
 
 var _app = _interopRequireDefault(require("./app.js"));
@@ -865,4 +945,4 @@ window.onload = function () {
   new _app["default"](main).init();
 };
 
-},{"./app.js":2}]},{},[19]);
+},{"./app.js":2}]},{},[20]);

@@ -1,25 +1,18 @@
 import Template from "../templates/propertyDetailDialog.js";
-import Overlay from "../components/overlay.js";
-import TinyEmitter from "tiny-emitter";
+import Dialog from "./dialog.js";
 
 
-class PropertyDetailDialog extends TinyEmitter{
+class PropertyDetailDialog extends Dialog{
 
     constructor(container){
-        super();
-        this.container = container;
-        this.overlay = Overlay.createOverlay();
-        this.dialog = this.createDialog();
-    }
-
-    show (){
-        this.showDialog();
+        super(container);
     }
 
     createDialog (){
-        let dialogContainer = document.createElement("div");
-        dialogContainer.setAttribute("class","dialog-container");
+        let dialogContainer = super.createDialog()
         dialogContainer.innerHTML = Template;
+
+        const form = dialogContainer.querySelector("form");
         const closeBtn = dialogContainer.querySelector(".close-rect");
         const editBtn = dialogContainer.querySelector("#edit-action");
 
@@ -28,22 +21,19 @@ class PropertyDetailDialog extends TinyEmitter{
             this.dismiss();
         });
 
+        form.addEventListener("submit", event =>{
+            event.preventDefault();
+            if (event.target.querySelector("#delete-action")){
+                this.emit("delete_property");
+            }
+        });
+
         editBtn.addEventListener("click", event =>{
             event.preventDefault();
             this.emit("edit_property");
         });
         return dialogContainer;
     }
-
-    dismiss (){
-        this.container.removeChild(this.overlay);
-        this.container.removeChild(this.dialog);
-    }
-
-    showDialog (){
-        this.container.appendChild(this.overlay);
-        this.container.appendChild(this.dialog);
-    }
 }
 
-module.exports = PropertyDetailDialog;
+export default PropertyDetailDialog;

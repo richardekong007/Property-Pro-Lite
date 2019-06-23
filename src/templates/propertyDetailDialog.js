@@ -44,4 +44,5 @@ const template = `
         </div> 
     </form>
     </div>`;
-module.exports = template;
+    
+export default template;
