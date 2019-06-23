@@ -28,11 +28,11 @@ const template = `
                 <span class = "checkmark"></span>
             </label>
             <br><br>
-            <button  class = "fab tooltip">
+            <button id = "done" class = "fab tooltip">
                 <img src = "./vectors/tick.svg" alt ="tick" width = "25px" height = "25px"/>
                 <span class = "tooltiptext small-text">Edit</span>
             </button>
         </form>
-    <div>
-    `;
-    module.exports = template;
+    <div>`;
+
+    export default template;

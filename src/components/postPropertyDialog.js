@@ -1,38 +1,31 @@
 import Template from "../templates/postPropertyDialog.js";
-import Overlay from "../components/overlay.js";
-import TinyEmitter from "tiny-emitter";
+import Dialog from "./dialog.js";
 
-class PostPropertyDialog extends TinyEmitter{
+class PostPropertyDialog extends Dialog{
+    
     constructor(container){
-        super();
-        this.container = container;
-        this.overlay = Overlay.createOverlay();
-        this.dialog = this.createDialog();
-    }
-
-    show (){
-        this.container.appendChild(this.overlay);
-        this.container.appendChild(this.dialog);
-    }
-
-    dismiss (){
-        this.container.removeChild(this.overlay);
-        this.container.removeChild(this.dialog);
+        super(container);
     }
 
     createDialog () {
-        let dialogContainer = document.createElement("div");
-        dialogContainer.setAttribute("class","dialog-container");
+        
+        let dialogContainer = super.createDialog();
         dialogContainer.innerHTML = Template;
-    
+        const form = dialogContainer.querySelector("form");
         const closebtn = dialogContainer.querySelector(".close-rect");
         closebtn.addEventListener("click", event =>{
             event.preventDefault();
             this.dismiss();
-            
+        });
+
+        form.addEventListener("submit", event =>{
+            event.preventDefault();
+            if (event.target.querySelector("#done")){
+                this.emit("add_property");
+            }
         });
         return dialogContainer; 
     }
 }
 
-module.exports = PostPropertyDialog;
+export default PostPropertyDialog;

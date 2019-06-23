@@ -1,6 +1,6 @@
 
-const template = 
-    `<div class = "dialog-header">
+const template = `
+    <div class = "dialog-header">
         <span class = "dialog-title">Post Advert</span>
         <button class = "close-rect smaller-text">x</button>
     </div>
@@ -22,10 +22,10 @@ const template =
         <input type = "number" placeholder = "Property Price" title = "Property Price" required/>
         <input type = "file"/>
         <br><br><br>
-        <button  class = "fab tooltip">
+        <button id = "done" class = "fab tooltip">
             <img src = "./vectors/tick.svg" alt ="tick" width = "25px" height = "25px"/>
             <span class = "tooltiptext small-text">Post</span>
         </button>
     </form>`;
 
-    module.exports = template;
+    export default template;
