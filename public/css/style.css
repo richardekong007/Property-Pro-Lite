@@ -468,12 +468,25 @@ footer{
 
 .property-type-options{
     border-radius:6px;
-}
-
-
+}   
 
 @media only screen and (max-width:620px){
-    body, header, main, footer, #container{
+
+     #signin-form, #signup-form{
+        width: fit-content;
+    }
+
+     #signin-form input,
+    #signup-form input{
+        width:min-content;
+    }
+    
+    .home-image-container, .home-image-container img{
+        display: none;
+    }
+
+    .main-content, header, .form-header, .form-container{
         width:100%;
     }
+
 }
