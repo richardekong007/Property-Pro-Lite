@@ -1,4 +1,4 @@
-import Template from "../templates/signup";
+import {render} from "../templates/signup";
 import TinyEmitter from "tiny-emitter";
 
 class Signup extends TinyEmitter{
@@ -8,7 +8,7 @@ class Signup extends TinyEmitter{
     }
 
     render(){
-        this.container.innerHTML = Template.render();
+        this.container.innerHTML = render();
         this.container.querySelector("[data-first-name]").focus();
         this.addEventListener();
 
@@ -33,5 +33,4 @@ class Signup extends TinyEmitter{
         });
     }
 }
-
-module.exports = Signup;
+export default Signup;

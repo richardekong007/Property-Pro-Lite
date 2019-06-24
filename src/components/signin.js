@@ -1,4 +1,4 @@
-import Template from "../templates/signin.js";
+import {render} from "../templates/signin.js";
 import TinyEmitter from "tiny-emitter";
 
 class Signin extends TinyEmitter{
@@ -8,7 +8,7 @@ class Signin extends TinyEmitter{
     }
 
     render (){
-        this.container.innerHTML = Template.render();
+        this.container.innerHTML = render();
         this.container.querySelector("[data-username]").focus();
         this.addEventListener();
     }
@@ -36,4 +36,4 @@ class Signin extends TinyEmitter{
     }
 }
 
-module.exports = Signin;
+export default Signin;

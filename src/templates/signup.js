@@ -1,4 +1,4 @@
-exports.render = () =>{
+export function render(){
     return `
         <div class = "main-content">
              <div class = "form-container">

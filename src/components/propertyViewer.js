@@ -1,4 +1,4 @@
-import Template from "../templates/propertyViewer.js";
+import {render} from "../templates/propertyViewer.js";
 import tempProperties from "../temp/temporaryProperties.js";
 
 class PropertyViewer {
@@ -8,10 +8,10 @@ class PropertyViewer {
     }
 
     render (){
-        this.container.innerHTML = Template.render(tempProperties);
+        this.container.innerHTML = render(tempProperties);
     }
 
 
 }
 
-module.exports = PropertyViewer;
+export default PropertyViewer;

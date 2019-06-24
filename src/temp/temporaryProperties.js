@@ -67,4 +67,4 @@ const properties = [
     }
 ];
 
-module.exports = properties;
+export default properties;

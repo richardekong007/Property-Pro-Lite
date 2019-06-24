@@ -1,4 +1,4 @@
-exports.render = () =>{
+export function render(){
     return `
         <div class = 'main-content'>
             <div class = 'home-image-container'>
@@ -24,4 +24,4 @@ exports.render = () =>{
                 </p>
             </div>
         </div>`;
-};
+}
