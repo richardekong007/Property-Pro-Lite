@@ -70,6 +70,11 @@ module.exports.TinyEmitter = E;
 },{}],2:[function(require,module,exports){
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
 var _signin = _interopRequireDefault(require("./components/signin.js"));
 
 var _signup = _interopRequireDefault(require("./components/signup.js"));
@@ -170,7 +175,8 @@ function () {
   return App;
 }();
 
-module.exports = App;
+var _default = App;
+exports["default"] = _default;
 
 },{"./components/postPropertyDialog.js":5,"./components/properties.js":6,"./components/propertyDetailDialog.js":7,"./components/signin.js":9,"./components/signup.js":10,"./components/updatePropertyDialog.js":11}],3:[function(require,module,exports){
 "use strict";
@@ -182,7 +188,7 @@ exports["default"] = void 0;
 
 var _tinyEmitter = _interopRequireDefault(require("tiny-emitter"));
 
-var _overlay = _interopRequireDefault(require("./overlay.js"));
+var _overlay = require("./overlay.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -216,7 +222,7 @@ function (_TinyEmitter) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Dialog).call(this));
     _this.container = container;
-    _this.overlay = _overlay["default"].createOverlay();
+    _this.overlay = (0, _overlay.createOverlay)();
     _this.dialog = _this.createDialog();
     return _this;
   }
@@ -251,12 +257,17 @@ exports["default"] = _default;
 },{"./overlay.js":4,"tiny-emitter":1}],4:[function(require,module,exports){
 "use strict";
 
-exports.createOverlay = function () {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.createOverlay = createOverlay;
+
+function createOverlay() {
   var overlay = document.createElement("div");
   overlay.setAttribute("id", "overlay");
   overlay.setAttribute("class", "dialog-overlay");
   return overlay;
-};
+}
 
 },{}],5:[function(require,module,exports){
 "use strict";
@@ -340,7 +351,12 @@ exports["default"] = _default;
 },{"../templates/postPropertyDialog.js":13,"./dialog.js":3}],6:[function(require,module,exports){
 "use strict";
 
-var _properties = _interopRequireDefault(require("../templates/properties"));
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _properties = require("../templates/properties");
 
 var _propertyViewer = _interopRequireDefault(require("../components/propertyViewer.js"));
 
@@ -385,7 +401,7 @@ function (_TinyEmitter) {
   _createClass(Properties, [{
     key: "render",
     value: function render() {
-      this.container.innerHTML = _properties["default"].render();
+      this.container.innerHTML = (0, _properties.render)();
       var nestedContainer = document.querySelector("#properties-grid");
       this.propertyViewer = new _propertyViewer["default"](nestedContainer);
       this.propertyViewer.render();
@@ -428,7 +444,8 @@ function (_TinyEmitter) {
   return Properties;
 }(_tinyEmitter["default"]);
 
-module.exports = Properties;
+var _default = Properties;
+exports["default"] = _default;
 
 },{"../components/propertyViewer.js":8,"../templates/properties":14,"tiny-emitter":1}],7:[function(require,module,exports){
 "use strict";
@@ -518,7 +535,12 @@ exports["default"] = _default;
 },{"../templates/propertyDetailDialog.js":15,"./dialog.js":3}],8:[function(require,module,exports){
 "use strict";
 
-var _propertyViewer = _interopRequireDefault(require("../templates/propertyViewer.js"));
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _propertyViewer = require("../templates/propertyViewer.js");
 
 var _temporaryProperties = _interopRequireDefault(require("../temp/temporaryProperties.js"));
 
@@ -542,19 +564,25 @@ function () {
   _createClass(PropertyViewer, [{
     key: "render",
     value: function render() {
-      this.container.innerHTML = _propertyViewer["default"].render(_temporaryProperties["default"]);
+      this.container.innerHTML = (0, _propertyViewer.render)(_temporaryProperties["default"]);
     }
   }]);
 
   return PropertyViewer;
 }();
 
-module.exports = PropertyViewer;
+var _default = PropertyViewer;
+exports["default"] = _default;
 
 },{"../temp/temporaryProperties.js":12,"../templates/propertyViewer.js":16}],9:[function(require,module,exports){
 "use strict";
 
-var _signin = _interopRequireDefault(require("../templates/signin.js"));
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _signin = require("../templates/signin.js");
 
 var _tinyEmitter = _interopRequireDefault(require("tiny-emitter"));
 
@@ -596,7 +624,7 @@ function (_TinyEmitter) {
   _createClass(Signin, [{
     key: "render",
     value: function render() {
-      this.container.innerHTML = _signin["default"].render();
+      this.container.innerHTML = (0, _signin.render)();
       this.container.querySelector("[data-username]").focus();
       this.addEventListener();
     }
@@ -634,12 +662,18 @@ function (_TinyEmitter) {
   return Signin;
 }(_tinyEmitter["default"]);
 
-module.exports = Signin;
+var _default = Signin;
+exports["default"] = _default;
 
 },{"../templates/signin.js":17,"tiny-emitter":1}],10:[function(require,module,exports){
 "use strict";
 
-var _signup = _interopRequireDefault(require("../templates/signup"));
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _signup = require("../templates/signup");
 
 var _tinyEmitter = _interopRequireDefault(require("tiny-emitter"));
 
@@ -681,7 +715,7 @@ function (_TinyEmitter) {
   _createClass(Signup, [{
     key: "render",
     value: function render() {
-      this.container.innerHTML = _signup["default"].render();
+      this.container.innerHTML = (0, _signup.render)();
       this.container.querySelector("[data-first-name]").focus();
       this.addEventListener();
     }
@@ -715,7 +749,8 @@ function (_TinyEmitter) {
   return Signup;
 }(_tinyEmitter["default"]);
 
-module.exports = Signup;
+var _default = Signup;
+exports["default"] = _default;
 
 },{"../templates/signup":18,"tiny-emitter":1}],11:[function(require,module,exports){
 "use strict";
@@ -799,6 +834,10 @@ exports["default"] = _default;
 },{"../templates/updatePropertyDialog.js":19,"./dialog.js":3}],12:[function(require,module,exports){
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
 var properties = [{
   id: 1,
   owner: 1,
@@ -860,7 +899,8 @@ var properties = [{
   type: "3 Bedroom Flat",
   image_url: "../public/images/estate.jpg"
 }];
-module.exports = properties;
+var _default = properties;
+exports["default"] = _default;
 
 },{}],13:[function(require,module,exports){
 "use strict";
@@ -876,9 +916,14 @@ exports["default"] = _default;
 },{}],14:[function(require,module,exports){
 "use strict";
 
-exports.render = function () {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.render = render;
+
+function render() {
   return "\n        <div class = \"property-container\">\n            <div id = \"properties-title\">Property Adverts</div>\n            <div class = \"property-type-holder\">\n            <form>\n                    <label>Search by:</label>\n                        <select class = \"property-type-options\">\n                            <option value = \"Property type\"> Property type</option>\n                            <option value = \"Self-contained\">Self-contained</option>\n                            <option value = \"2 Bedroom\">2 Bedroom</option>\n                            <option value = \"3 Bedroom\">3 Bedroom</option>\n                            <option value = \"Mini flat\">Mini flat</option>\n                            <option value = \"Duplex\">Duplex</option>\n                            <option value = \"Bungalow\">Bungalow</option>\n                        </select>\n                </form>\n            </div>\n            <div id = \"properties-grid\"></div>\n            <div id = \"add-property-button\" class = \"fab tooltip\">+\n                <span class = \"tooltiptext small-text\">Add property</span>\n            </div>\n        </div>";
-};
+}
 
 },{}],15:[function(require,module,exports){
 "use strict";
@@ -894,33 +939,48 @@ exports["default"] = _default;
 },{}],16:[function(require,module,exports){
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.render = render;
+
 var renderProperties = function renderProperties(properties) {
   return properties.map(function (property) {
     return "\n            <div class = \"property-item bold-text\">\n                <img src = \"./images/estate.jpg\" alt = \"property image\" width= \"250px\" height = \"250px\"/><br>\n                <span>".concat(property.address, "</span><br>\n                <span>").concat(property.price, "</span><br>\n                <span>").concat(property.status, "</span><br>\n            </div>");
   }).join("");
 };
 
-exports.render = function (properties) {
+function render(properties) {
   if (properties && properties.length) {
     return renderProperties(properties);
   }
 
   return "<h4 class = \"text-center\">No property found</h4>";
-};
+}
 
 },{}],17:[function(require,module,exports){
 "use strict";
 
-exports.render = function () {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.render = render;
+
+function render() {
   return "\n        <div class = 'main-content'>\n            <div class = 'home-image-container'>\n                <img src = './images/estate.jpg' alt = 'image'/>\n            </div>\n            <div class = 'form-container'>\n                <div class = 'form-header smaller-text'>Sign In</div>\n                <form id ='signin-form'>\n                    <input type = 'text' placeholder = 'Username' title = 'Provide username' data-username required/> <br>\n                    <input type = 'password' placeholder = 'Password' title = 'Provide Password' required/> <br>\n                    <label class = \"checkbox small-text\"> \n                        <input type = \"checkbox\">\n                        Forget Password?\n                        <span class = \"checkmark\"></span>\n                    <label> <br>\n                    <button class = 'login-button smaller-text'>Sign in</button>\n                </form>\n                <p class= 'form-container-text'>Don't have an account?</p>\n                <p id ='signup-text' class = 'bold-text smaller-text' > \n                    <a href = '#'>\n                    SIGN UP NOW\n                    </a>\n                </p>\n            </div>\n        </div>";
-};
+}
 
 },{}],18:[function(require,module,exports){
 "use strict";
 
-exports.render = function () {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.render = render;
+
+function render() {
   return "\n        <div class = \"main-content\">\n             <div class = \"form-container\">\n                <div class = \"form-header smaller-text\">Sign up</div>\n                <form id = \"signup-form\">\n                    <input type = \"text\" placeholder = \"First Name\" title = \"Username\" data-first-name required/>\n                    <input type = \"text\" placeholder = \"Last Name\" title = \"Last Name\" required/>\n                    <br>\n                    <input type = \"text\" placeholder = \"Email\" title = \"Email\" required/>\n                    <input type = \"text\" placeholder = \"Phone\" title = \"Phone\" required/>\n                    <br>\n                    <input type = \"text\" placeholder = \"Address\" title = \"Address\" required/>\n                    <input type = \"password\" placeholder = \"Password\" title = \"Password\" required/>\n                    <br>\n                    <label class = \"checkbox small-text\">\n                        <input type = \"checkbox\" />\n                        Sign up as an Agent\n                        <span class = \"checkmark\"></span>\n                    </label>\n                    <br>\n                    <button class = 'login-button smaller-text'>Sign up</button>    \n                </form>\n                <p class = \"form-container-text small-text\">Already have an account?</p>\n                <p id = \"signin-text\" class = 'bold-text smaller-text'>\n                    <a href = \"#\">SIGN IN</a>\n                </p>    \n             </div>\n             <div class = \"home-image-container\">\n                <img src = \"./images/estate.jpg\" alt ='estate img'/>\n             </div>\n        </div>\n    ";
-};
+}
 
 },{}],19:[function(require,module,exports){
 "use strict";

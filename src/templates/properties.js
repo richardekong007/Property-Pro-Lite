@@ -1,4 +1,4 @@
-exports.render = () => {
+export function render() {
     
     return `
         <div class = "property-container">
@@ -22,6 +22,6 @@ exports.render = () => {
                 <span class = "tooltiptext small-text">Add property</span>
             </div>
         </div>`;
-};
+}
 
 

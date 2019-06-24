@@ -1,4 +1,4 @@
-import Template from "../templates/properties";
+import {render} from "../templates/properties";
 import PropertyViewer from "../components/propertyViewer.js";
 import TinyEmitter from "tiny-emitter"
 
@@ -11,7 +11,7 @@ class Properties extends TinyEmitter{
     }
 
     render() {
-        this.container.innerHTML = Template.render();
+        this.container.innerHTML = render();
         const nestedContainer =  document.querySelector("#properties-grid");
         this.propertyViewer = new PropertyViewer(nestedContainer);
         this.propertyViewer.render()
@@ -45,4 +45,4 @@ class Properties extends TinyEmitter{
 
 }
 
-module.exports = Properties;
+export default Properties;

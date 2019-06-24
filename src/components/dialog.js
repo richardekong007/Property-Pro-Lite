@@ -1,12 +1,12 @@
 import TinyEmitter from "tiny-emitter";
-import Overlay from "./overlay.js"
+import {createOverlay} from "./overlay.js"
 
 class Dialog extends TinyEmitter{
 
     constructor(container){
         super();
         this.container = container;
-        this.overlay = Overlay.createOverlay();
+        this.overlay = createOverlay();
         this.dialog = this.createDialog();
     }
 
