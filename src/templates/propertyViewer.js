@@ -10,11 +10,11 @@ const renderProperties = properties => {
     }).join("");
 };
 
-exports.render = properties =>{
+export function render(properties){
     if (properties && properties.length){
         return renderProperties(properties);
     }
 
     return `<h4 class = "text-center">No property found</h4>`;
-};
+}
 
