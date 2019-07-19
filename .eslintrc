@@ -1,0 +1,24 @@
+{
+    "extends":"eslint:recommended",
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType":"module",
+        "ecmaFeatures":{
+            "jsx":true
+        }
+
+    },
+    "env": {
+        "node":true,
+        "browser": true,
+        "es6": true,
+    },
+    "rules": {
+        "comma-dangle":"off",
+        "no-unused-vars":"warn",
+        "import/prefer-default-export":"on",
+        "import/first":"on",
+        "no-console":"off",
+        "no-dupe-class-members":"warn"
+    }
+}
