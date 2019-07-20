@@ -128,8 +128,12 @@ function () {
     value: function signinEvents() {
       var _this = this;
 
-      this.signin.on("view_properties", function () {
-        return _this.propertiesPage.render();
+      //this.signin.on("view_properties", () => this.propertiesPage.render());
+      this.signin.on("signin", function (data) {
+        alert("".concat(data.first_name, " signed in."));
+      });
+      this.signin.on("error", function (error) {
+        alert(error);
       });
       this.signin.on("signup", function () {
         return _this.signup.render();
@@ -348,7 +352,7 @@ function (_Dialog) {
 var _default = PostPropertyDialog;
 exports["default"] = _default;
 
-},{"../templates/postPropertyDialog.js":13,"./dialog.js":3}],6:[function(require,module,exports){
+},{"../templates/postPropertyDialog.js":14,"./dialog.js":3}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -447,7 +451,7 @@ function (_TinyEmitter) {
 var _default = Properties;
 exports["default"] = _default;
 
-},{"../components/propertyViewer.js":8,"../templates/properties":14,"tiny-emitter":1}],7:[function(require,module,exports){
+},{"../components/propertyViewer.js":8,"../templates/properties":15,"tiny-emitter":1}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -532,7 +536,7 @@ function (_Dialog) {
 var _default = PropertyDetailDialog;
 exports["default"] = _default;
 
-},{"../templates/propertyDetailDialog.js":15,"./dialog.js":3}],8:[function(require,module,exports){
+},{"../templates/propertyDetailDialog.js":16,"./dialog.js":3}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -574,7 +578,7 @@ function () {
 var _default = PropertyViewer;
 exports["default"] = _default;
 
-},{"../temp/temporaryProperties.js":12,"../templates/propertyViewer.js":16}],9:[function(require,module,exports){
+},{"../temp/temporaryProperties.js":13,"../templates/propertyViewer.js":17}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -585,6 +589,8 @@ exports["default"] = void 0;
 var _signin = require("../templates/signin.js");
 
 var _tinyEmitter = _interopRequireDefault(require("tiny-emitter"));
+
+var _config = _interopRequireDefault(require("../config.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -618,6 +624,7 @@ function (_TinyEmitter) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Signin).call(this));
     _this.container = container;
+    _this.baseUrl = _config["default"].baseUrl;
     return _this;
   }
 
@@ -625,13 +632,14 @@ function (_TinyEmitter) {
     key: "render",
     value: function render() {
       this.container.innerHTML = (0, _signin.render)();
-      this.container.querySelector("[data-username]").focus();
+      this.container.querySelector("[data-email]").focus();
       this.addEventListener();
     }
   }, {
     key: "addEventListener",
     value: function addEventListener() {
       this.openPropertiesPage();
+      this.signInClick();
       this.signupClick();
     }
   }, {
@@ -646,15 +654,57 @@ function (_TinyEmitter) {
       });
     }
   }, {
+    key: "signInClick",
+    value: function signInClick() {
+      var _this3 = this;
+
+      var form = this.container.querySelector("#signin-form");
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        var email = event.target.querySelector("[data-email]");
+        var password = event.target.querySelector("[data-password]");
+        var data = {
+          email: email.value,
+          password: password.value
+        };
+
+        _this3.signInUser(data);
+      });
+    }
+  }, {
     key: "signupClick",
     value: function signupClick() {
-      var _this3 = this;
+      var _this4 = this;
 
       var signupText = this.container.querySelector("#signup-text");
       signupText.addEventListener("click", function (event) {
         event.preventDefault();
 
-        _this3.emit("signup");
+        _this4.emit("signup");
+      });
+    }
+  }, {
+    key: "signInUser",
+    value: function signInUser(data) {
+      var _this5 = this;
+
+      fetch("".concat(this.baseUrl, "/api/v1/auth/signin"), {
+        mode: "cors",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      }).then(function (res) {
+        return res.json();
+      }).then(function (res) {
+        if (res.error) {
+          return Promise.reject(res.error);
+        }
+
+        _this5.emit("signin", res.data);
+      })["catch"](function (err) {
+        return _this5.emit("error", err);
       });
     }
   }]);
@@ -665,7 +715,7 @@ function (_TinyEmitter) {
 var _default = Signin;
 exports["default"] = _default;
 
-},{"../templates/signin.js":17,"tiny-emitter":1}],10:[function(require,module,exports){
+},{"../config.js":12,"../templates/signin.js":18,"tiny-emitter":1}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -752,7 +802,7 @@ function (_TinyEmitter) {
 var _default = Signup;
 exports["default"] = _default;
 
-},{"../templates/signup":18,"tiny-emitter":1}],11:[function(require,module,exports){
+},{"../templates/signup":19,"tiny-emitter":1}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -831,7 +881,20 @@ function (_Dialog) {
 var _default = UpdatePropertyDialog;
 exports["default"] = _default;
 
-},{"../templates/updatePropertyDialog.js":19,"./dialog.js":3}],12:[function(require,module,exports){
+},{"../templates/updatePropertyDialog.js":20,"./dialog.js":3}],12:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+var config = {
+  baseUrl: "https://property-pro-lite-api.herokuapp.com"
+};
+var _default = config;
+exports["default"] = _default;
+
+},{}],13:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -902,7 +965,7 @@ var properties = [{
 var _default = properties;
 exports["default"] = _default;
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -913,7 +976,7 @@ var template = "\n    <div class = \"dialog-header\">\n        <span class = \"d
 var _default = template;
 exports["default"] = _default;
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -925,7 +988,7 @@ function render() {
   return "\n        <div class = \"property-container\">\n            <div id = \"properties-title\">Property Adverts</div>\n            <div class = \"property-type-holder\">\n            <form>\n                    <label>Search by:</label>\n                        <select class = \"property-type-options\">\n                            <option value = \"Property type\"> Property type</option>\n                            <option value = \"Self-contained\">Self-contained</option>\n                            <option value = \"2 Bedroom\">2 Bedroom</option>\n                            <option value = \"3 Bedroom\">3 Bedroom</option>\n                            <option value = \"Mini flat\">Mini flat</option>\n                            <option value = \"Duplex\">Duplex</option>\n                            <option value = \"Bungalow\">Bungalow</option>\n                        </select>\n                </form>\n            </div>\n            <div id = \"properties-grid\"></div>\n            <div id = \"add-property-button\" class = \"fab tooltip\">+\n                <span class = \"tooltiptext small-text\">Add property</span>\n            </div>\n        </div>";
 }
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -936,7 +999,7 @@ var template = "\n    <div class = \"dialog-header\">\n        <span class = \"d
 var _default = template;
 exports["default"] = _default;
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -958,7 +1021,7 @@ function render(properties) {
   return "<h4 class = \"text-center\">No property found</h4>";
 }
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -967,10 +1030,10 @@ Object.defineProperty(exports, "__esModule", {
 exports.render = render;
 
 function render() {
-  return "\n        <div class = 'main-content'>\n            <div class = 'home-image-container'>\n                <img src = './images/estate.jpg' alt = 'image'/>\n            </div>\n            <div class = 'form-container'>\n                <div class = 'form-header smaller-text'>Sign In</div>\n                <form id ='signin-form'>\n                    <input type = 'text' placeholder = 'Username' title = 'Provide username' data-username required/> <br>\n                    <input type = 'password' placeholder = 'Password' title = 'Provide Password' required/> <br>\n                    <label class = \"checkbox small-text\"> \n                        <input type = \"checkbox\">\n                        Forget Password?\n                        <span class = \"checkmark\"></span>\n                    <label> <br>\n                    <button class = 'login-button smaller-text'>Sign in</button>\n                </form>\n                <p class= 'form-container-text'>Don't have an account?</p>\n                <p id ='signup-text' class = 'bold-text smaller-text' > \n                    <a href = '#'>\n                    SIGN UP NOW\n                    </a>\n                </p>\n            </div>\n        </div>";
+  return "\n        <div class = 'main-content'>\n            <div class = 'home-image-container'>\n                <img src = './images/estate.jpg' alt = 'image'/>\n            </div>\n            <div class = 'form-container'>\n                <div class = 'form-header smaller-text'>Sign In</div>\n                <form id ='signin-form'>\n                    <input type = 'text' placeholder = 'Email' title = 'Provide email' data-email required/> <br>\n                    <input type = 'password' placeholder = 'Password' title = 'Provide Password' data-password required/> <br>\n                    <label class = \"checkbox small-text\"> \n                        <input type = \"checkbox\">\n                        Forget Password?\n                        <span class = \"checkmark\"></span>\n                    <label> <br>\n                    <button class = 'login-button smaller-text'>Sign in</button>\n                </form>\n                <p class= 'form-container-text'>Don't have an account?</p>\n                <p id ='signup-text' class = 'bold-text smaller-text' > \n                    <a href = '#'>\n                    SIGN UP NOW\n                    </a>\n                </p>\n            </div>\n        </div>";
 }
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -982,7 +1045,7 @@ function render() {
   return "\n        <div class = \"main-content\">\n             <div class = \"form-container\">\n                <div class = \"form-header smaller-text\">Sign up</div>\n                <form id = \"signup-form\">\n                    <input type = \"text\" placeholder = \"First Name\" title = \"Username\" data-first-name required/>\n                    <input type = \"text\" placeholder = \"Last Name\" title = \"Last Name\" required/>\n                    <br>\n                    <input type = \"text\" placeholder = \"Email\" title = \"Email\" required/>\n                    <input type = \"text\" placeholder = \"Phone\" title = \"Phone\" required/>\n                    <br>\n                    <input type = \"text\" placeholder = \"Address\" title = \"Address\" required/>\n                    <input type = \"password\" placeholder = \"Password\" title = \"Password\" required/>\n                    <br>\n                    <label class = \"checkbox small-text\">\n                        <input type = \"checkbox\" />\n                        Sign up as an Agent\n                        <span class = \"checkmark\"></span>\n                    </label>\n                    <br>\n                    <button class = 'login-button smaller-text'>Sign up</button>    \n                </form>\n                <p class = \"form-container-text small-text\">Already have an account?</p>\n                <p id = \"signin-text\" class = 'bold-text smaller-text'>\n                    <a href = \"#\">SIGN IN</a>\n                </p>    \n             </div>\n             <div class = \"home-image-container\">\n                <img src = \"./images/estate.jpg\" alt ='estate img'/>\n             </div>\n        </div>\n    ";
 }
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -993,7 +1056,7 @@ var template = "\n    <div class = \"dialog-container\">\n        <div class = \
 var _default = template;
 exports["default"] = _default;
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 "use strict";
 
 var _app = _interopRequireDefault(require("./app.js"));
@@ -1005,4 +1068,4 @@ window.onload = function () {
   new _app["default"](main).init();
 };
 
-},{"./app.js":2}]},{},[20]);
+},{"./app.js":2}]},{},[21]);
