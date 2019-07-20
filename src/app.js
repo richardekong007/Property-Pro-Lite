@@ -41,7 +41,11 @@ class App {
 
     signupEvents (){
         this.signup.on("signin_click", () => this.signin.render());
-        this.signup.on("signin", () => this.signin.render());
+        this.signup.on("signup", data => {
+            console.log(data);
+            this.signin.render();
+        });
+        this.signup.on("error", error => console.log(error));
     }
 
     propertiesTemplateEvent (){

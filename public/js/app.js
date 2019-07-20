@@ -148,8 +148,13 @@ function () {
       this.signup.on("signin_click", function () {
         return _this2.signin.render();
       });
-      this.signup.on("signin", function () {
-        return _this2.signin.render();
+      this.signup.on("signup", function (data) {
+        console.log(data);
+
+        _this2.signin.render();
+      });
+      this.signup.on("error", function (error) {
+        return console.log(error);
       });
     }
   }, {
@@ -742,6 +747,8 @@ var _signup = require("../templates/signup");
 
 var _tinyEmitter = _interopRequireDefault(require("tiny-emitter"));
 
+var _config = _interopRequireDefault(require("../config.js"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -788,25 +795,67 @@ function (_TinyEmitter) {
     key: "addEventListener",
     value: function addEventListener() {
       this.openSigninPage();
+      this.signupClick();
     }
   }, {
     key: "openSigninPage",
     value: function openSigninPage() {
       var _this2 = this;
 
-      var form = this.container.querySelector("#signup-form");
       var signinText = this.container.querySelector("#signin-text");
-      form.addEventListener("submit", function (event) {
-        event.preventDefault();
-
-        if (event.target.querySelector("button")) {
-          _this2.emit("signin");
-        }
-      });
       signinText.addEventListener("click", function (event) {
         event.preventDefault();
 
         _this2.emit("signin_click");
+      });
+    }
+  }, {
+    key: "signupClick",
+    value: function signupClick() {
+      var _this3 = this;
+
+      var form = this.container.querySelector("#signup-form");
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        var firstName = event.target.querySelector("[data-first-name]");
+        var lastName = event.target.querySelector("[data-last-name]");
+        var email = event.target.querySelector("[data-email]");
+        var password = event.target.querySelector("[data-password]");
+        var phone = event.target.querySelector("[data-phone]");
+        var address = event.target.querySelector("[data-address]");
+
+        _this3.signupUser({
+          email: email.value,
+          first_name: firstName.value,
+          last_name: lastName.value,
+          password: password.value,
+          address: address.value,
+          phone_number: phone.value
+        });
+      });
+    }
+  }, {
+    key: "signupUser",
+    value: function signupUser(data) {
+      var _this4 = this;
+
+      fetch("".concat(_config["default"].baseUrl, "/api/v1/auth/signup"), {
+        mode: "cors",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      }).then(function (res) {
+        return res.json();
+      }).then(function (res) {
+        if (res.error) {
+          return Promise.reject(res.error);
+        }
+
+        _this4.emit("signup", res.data);
+      })["catch"](function (err) {
+        return _this4.emit("error", err);
       });
     }
   }]);
@@ -817,7 +866,7 @@ function (_TinyEmitter) {
 var _default = Signup;
 exports["default"] = _default;
 
-},{"../templates/signup":18,"tiny-emitter":1}],11:[function(require,module,exports){
+},{"../config.js":12,"../templates/signup":18,"tiny-emitter":1}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -986,7 +1035,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.render = render;
 
 function render() {
-  return "\n        <div class = \"main-content\">\n             <div class = \"form-container\">\n                <div class = \"form-header smaller-text\">Sign up</div>\n                <form id = \"signup-form\">\n                    <input type = \"text\" placeholder = \"First Name\" title = \"Username\" data-first-name required/>\n                    <input type = \"text\" placeholder = \"Last Name\" title = \"Last Name\" required/>\n                    <br>\n                    <input type = \"text\" placeholder = \"Email\" title = \"Email\" required/>\n                    <input type = \"text\" placeholder = \"Phone\" title = \"Phone\" required/>\n                    <br>\n                    <input type = \"text\" placeholder = \"Address\" title = \"Address\" required/>\n                    <input type = \"password\" placeholder = \"Password\" title = \"Password\" required/>\n                    <br>\n                    <label class = \"checkbox small-text\">\n                        <input type = \"checkbox\" />\n                        Sign up as an Agent\n                        <span class = \"checkmark\"></span>\n                    </label>\n                    <br>\n                    <button class = 'login-button smaller-text'>Sign up</button>    \n                </form>\n                <p class = \"form-container-text small-text\">Already have an account?</p>\n                <p id = \"signin-text\" class = 'bold-text smaller-text'>\n                    <a href = \"#\">SIGN IN</a>\n                </p>    \n             </div>\n             <div class = \"home-image-container\">\n                <img src = \"./images/estate.jpg\" alt ='estate img'/>\n             </div>\n        </div>\n    ";
+  return "\n        <div class = \"main-content\">\n             <div class = \"form-container\">\n                <div class = \"form-header smaller-text\">Sign up</div>\n                <form id = \"signup-form\">\n                    <input type = \"text\" placeholder = \"First Name\" title = \"Username\" data-first-name required/>\n                    <input type = \"text\" placeholder = \"Last Name\" title = \"Last Name\" data-last-name required/>\n                    <br>\n                    <input type = \"text\" placeholder = \"Email\" title = \"Email\" data-email required/>\n                    <input type = \"text\" placeholder = \"Phone\" title = \"Phone\" data-phone required/>\n                    <br>\n                    <input type = \"text\" placeholder = \"Address\" title = \"Address\" data-address required/>\n                    <input type = \"password\" placeholder = \"Password\" title = \"Password\" data-password required/>\n                    <br>\n                    <label class = \"checkbox small-text\">\n                        <input type = \"checkbox\" data-admin />\n                        Sign up as an Admin\n                        <span class = \"checkmark\"></span>\n                    </label>\n                    <br>\n                    <button class = 'login-button smaller-text'>Sign up</button>    \n                </form>\n                <p class = \"form-container-text small-text\">Already have an account?</p>\n                <p id = \"signin-text\" class = 'bold-text smaller-text'>\n                    <a href = \"#\">SIGN IN</a>\n                </p>    \n             </div>\n             <div class = \"home-image-container\">\n                <img src = \"./images/estate.jpg\" alt ='estate img'/>\n             </div>\n        </div>\n    ";
 }
 
 },{}],19:[function(require,module,exports){

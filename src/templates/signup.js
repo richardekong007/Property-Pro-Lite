@@ -5,17 +5,17 @@ export function render(){
                 <div class = "form-header smaller-text">Sign up</div>
                 <form id = "signup-form">
                     <input type = "text" placeholder = "First Name" title = "Username" data-first-name required/>
-                    <input type = "text" placeholder = "Last Name" title = "Last Name" required/>
+                    <input type = "text" placeholder = "Last Name" title = "Last Name" data-last-name required/>
                     <br>
-                    <input type = "text" placeholder = "Email" title = "Email" required/>
-                    <input type = "text" placeholder = "Phone" title = "Phone" required/>
+                    <input type = "text" placeholder = "Email" title = "Email" data-email required/>
+                    <input type = "text" placeholder = "Phone" title = "Phone" data-phone required/>
                     <br>
-                    <input type = "text" placeholder = "Address" title = "Address" required/>
-                    <input type = "password" placeholder = "Password" title = "Password" required/>
+                    <input type = "text" placeholder = "Address" title = "Address" data-address required/>
+                    <input type = "password" placeholder = "Password" title = "Password" data-password required/>
                     <br>
                     <label class = "checkbox small-text">
-                        <input type = "checkbox" />
-                        Sign up as an Agent
+                        <input type = "checkbox" data-admin />
+                        Sign up as an Admin
                         <span class = "checkmark"></span>
                     </label>
                     <br>
