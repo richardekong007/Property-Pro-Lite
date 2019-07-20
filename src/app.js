@@ -28,7 +28,13 @@ class App {
     }
 
     signinEvents (){
-        this.signin.on("view_properties", () => this.propertiesPage.render());
+        //this.signin.on("view_properties", () => this.propertiesPage.render());
+        this.signin.on("signin", data =>{
+            alert(`${data.first_name} signed in.`);
+        });
+        this.signin.on("error", error =>{
+            alert(error);
+        })
         this.signin.on("signup", () => this.signup.render());
     }
 
