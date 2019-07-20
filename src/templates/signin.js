@@ -7,8 +7,8 @@ export function render(){
             <div class = 'form-container'>
                 <div class = 'form-header smaller-text'>Sign In</div>
                 <form id ='signin-form'>
-                    <input type = 'text' placeholder = 'Username' title = 'Provide username' data-username required/> <br>
-                    <input type = 'password' placeholder = 'Password' title = 'Provide Password' required/> <br>
+                    <input type = 'text' placeholder = 'Email' title = 'Provide email' data-email required/> <br>
+                    <input type = 'password' placeholder = 'Password' title = 'Provide Password' data-password required/> <br>
                     <label class = "checkbox small-text"> 
                         <input type = "checkbox">
                         Forget Password?
