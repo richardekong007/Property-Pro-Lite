@@ -122,6 +122,7 @@ function () {
       this.signupEvents();
       this.propertiesTemplateEvent();
       this.propertyDetailDialogEvent();
+      this.postPropertyDialogEvent();
     }
   }, {
     key: "signinEvents",
@@ -178,6 +179,26 @@ function () {
         _this4.updatePropertyDialog.show();
 
         _this4.propertyDetailDialog.dismiss();
+      });
+    }
+  }, {
+    key: "postPropertyDialogEvent",
+    value: function postPropertyDialogEvent() {
+      var _this5 = this;
+
+      this.postPropertyDialog.on("add_property", function (data) {
+        console.log(data);
+        alert("Property added!");
+
+        _this5.postPropertyDialog.clear();
+
+        _this5.postPropertyDialog.dismiss();
+
+        _this5.propertiesPage.render();
+      });
+      this.postPropertyDialog.on("error", function (error) {
+        console.log(error);
+        alert(error);
       });
     }
   }]);
@@ -291,6 +312,8 @@ var _postPropertyDialog = _interopRequireDefault(require("../templates/postPrope
 
 var _dialog = _interopRequireDefault(require("./dialog.js"));
 
+var _config = _interopRequireDefault(require("../config.js"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -343,12 +366,43 @@ function (_Dialog) {
       });
       form.addEventListener("submit", function (event) {
         event.preventDefault();
+        var formData = new FormData();
+        formData.append("address", event.target.querySelector("[data-address]").value);
+        formData.append("price", event.target.querySelector("[data-price]").value);
+        formData.append("state", event.target.querySelector("[data-state]").value);
+        formData.append("city", event.target.querySelector("[data-city]").value);
+        formData.append("type", event.target.querySelector("[data-type]").value);
+        formData.append("image_url", event.target.querySelector("[data-image-url]").files[0]);
 
-        if (event.target.querySelector("#done")) {
-          _this.emit("add_property");
-        }
+        _this.addProperty(formData);
       });
       return dialogContainer;
+    }
+  }, {
+    key: "addProperty",
+    value: function addProperty(data) {
+      var _this2 = this;
+
+      fetch("".concat(_config["default"].baseUrl, "/api/v1/property"), {
+        mode: "cors",
+        method: "POST",
+        body: data
+      }).then(function (res) {
+        return res.json();
+      }).then(function (res) {
+        if (res.error) {
+          return Promise.reject(res.error);
+        }
+
+        _this2.emit("add_property", res.data);
+      })["catch"](function (err) {
+        return _this2.emit("error", err);
+      });
+    }
+  }, {
+    key: "clear",
+    value: function clear() {
+      this.container.querySelector(".property-form").reset();
     }
   }]);
 
@@ -358,7 +412,7 @@ function (_Dialog) {
 var _default = PostPropertyDialog;
 exports["default"] = _default;
 
-},{"../templates/postPropertyDialog.js":13,"./dialog.js":3}],6:[function(require,module,exports){
+},{"../config.js":12,"../templates/postPropertyDialog.js":13,"./dialog.js":3}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -965,7 +1019,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-var template = "\n    <div class = \"dialog-header\">\n        <span class = \"dialog-title\">Post Advert</span>\n        <button class = \"close-rect smaller-text\">x</button>\n    </div>\n    <form class = \"property-form\">\n        <input type = \"text\" placeholder = \"Property Address\" title = \"Property Address\" data-property-address required/>\n        <input type = \"text\" placeholder = \"Property City\" title = \"Property City\" required/>\n        <br>\n        <input type = \"text\" placeholder = \"Property State\" title = \"Property State\" required/>\n        <select class = \"property-type\">\n            <option value = \"Property type\"> Property type</option>\n            <option value = \"Self-contained\">Self-contained</option>\n            <option value = \"2 Bedroom\">2 Bedroom</option>\n            <option value = \"3 Bedroom\">3 Bedroom</option>\n            <option value = \"Mini flat\">Mini flat</option>\n            <option value = \"Duplex\">Duplex</option>\n            <option value = \"Bungalow\">Bungalow</option>\n        </select>\n        <br>\n        <input type = \"number\" placeholder = \"Property Price\" title = \"Property Price\" required/>\n        <input type = \"file\"/>\n        <br><br><br>\n        <button id = \"done\" class = \"fab tooltip\">\n            <img src = \"./vectors/tick.svg\" alt =\"tick\" width = \"25px\" height = \"25px\"/>\n            <span class = \"tooltiptext small-text\">Post</span>\n        </button>\n    </form>";
+var template = "\n    <div class = \"dialog-header\">\n        <span class = \"dialog-title\">Post Advert</span>\n        <button class = \"close-rect smaller-text\">x</button>\n    </div>\n    <form class = \"property-form\">\n        <input type = \"text\" placeholder = \"Property Address\" title = \"Property Address\" data-address required/>\n        <input type = \"text\" placeholder = \"Property City\" title = \"Property City\" data-city required/>\n        <br>\n        <input type = \"text\" placeholder = \"Property State\" title = \"Property State\" data-state required/>\n        <select class = \"property-type\" data-type>\n            <option value = \"Property type\"> Property type</option>\n            <option value = \"Self-contained\">Self-contained</option>\n            <option value = \"2 Bedroom\">2 Bedroom</option>\n            <option value = \"3 Bedroom\">3 Bedroom</option>\n            <option value = \"Mini flat\">Mini flat</option>\n            <option value = \"Duplex\">Duplex</option>\n            <option value = \"Bungalow\">Bungalow</option>\n        </select>\n        <br>\n        <input type = \"number\" placeholder = \"Property Price\" title = \"Property Price\" data-price required/>\n        <input type = \"file\" data-image-url/>\n        <br><br><br>\n        <button id = \"done\" class = \"fab tooltip\">\n            <img src = \"./vectors/tick.svg\" alt =\"tick\" width = \"25px\" height = \"25px\"/>\n            <span class = \"tooltiptext small-text\">Post</span>\n        </button>\n    </form>";
 var _default = template;
 exports["default"] = _default;
 
