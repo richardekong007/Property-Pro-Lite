@@ -14,13 +14,25 @@ class Properties extends TinyEmitter{
         this.container.innerHTML = render();
         const nestedContainer =  document.querySelector("#properties-grid");
         this.propertyViewer = new PropertyViewer(nestedContainer);
-        this.propertyViewer.render()
+        this.propertyViewer.render();
+        this.addEventListeners();
+    }
+
+    renderByType(type) {
+        this.container.innerHTML = render();
+        const nestedContainer = document.querySelector("#properties-grid");
+        this.propertyViewer = new PropertyViewer(nestedContainer);
+        this.propertyViewer.renderByType(type)
+            .catch(err => {
+                this.emit("property_type_error", err);
+            });
         this.addEventListeners();
     }
 
     addEventListeners (){
         this.addClick();
         this.propertyItemClick();
+        this.propertyTypeChange();
     }
 
     addClick (){
@@ -41,6 +53,15 @@ class Properties extends TinyEmitter{
             });
         });
 
+    }
+
+    propertyTypeChange (){
+        const propertyTypes = document.querySelector(".property-type-options");
+        propertyTypes.addEventListener("change", event =>{
+            const selectedType = event.target.value;
+            console.log("select type:",selectedType);
+            this.emit("type_change", selectedType);
+        });
     }
 
 }
