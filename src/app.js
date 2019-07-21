@@ -25,6 +25,7 @@ class App {
         this.signupEvents();
         this.propertiesTemplateEvent();
         this.propertyDetailDialogEvent();
+        this.postPropertyDialogEvent();
     }
 
     signinEvents (){
@@ -61,6 +62,21 @@ class App {
         this.propertyDetailDialog.on("edit_property", () =>{
             this.updatePropertyDialog.show();
             this.propertyDetailDialog.dismiss();
+        });
+    }
+
+    postPropertyDialogEvent (){
+        this.postPropertyDialog.on("add_property", data =>{
+            console.log(data);
+            alert("Property added!");
+            this.postPropertyDialog.clear();
+            this.postPropertyDialog.dismiss();
+            this.propertiesPage.render()
+        });
+
+        this.postPropertyDialog.on("error", error =>{
+            console.log(error);
+            alert(error);
         });
     }
 
