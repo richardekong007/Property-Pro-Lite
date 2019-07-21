@@ -169,6 +169,14 @@ function () {
       this.propertiesPage.on("property_item_click", function () {
         _this3.propertyDetailDialog.show();
       });
+      this.propertiesPage.on("type_change", function (selectedType) {
+        _this3.propertiesPage.renderByType(selectedType);
+      });
+      this.propertiesPage.on("property_type_error", function (error) {
+        _this3.propertiesPage.render();
+
+        alert(error);
+      });
     }
   }, {
     key: "propertyDetailDialogEvent",
@@ -472,35 +480,62 @@ function (_TinyEmitter) {
       this.addEventListeners();
     }
   }, {
+    key: "renderByType",
+    value: function renderByType(type) {
+      var _this2 = this;
+
+      this.container.innerHTML = (0, _properties.render)();
+      var nestedContainer = document.querySelector("#properties-grid");
+      this.propertyViewer = new _propertyViewer["default"](nestedContainer);
+      this.propertyViewer.renderByType(type)["catch"](function (err) {
+        _this2.emit("property_type_error", err);
+      });
+      this.addEventListeners();
+    }
+  }, {
     key: "addEventListeners",
     value: function addEventListeners() {
       this.addClick();
       this.propertyItemClick();
+      this.propertyTypeChange();
     }
   }, {
     key: "addClick",
     value: function addClick() {
-      var _this2 = this;
+      var _this3 = this;
 
       var addButton = this.container.querySelector("#add-property-button");
       addButton.addEventListener("click", function (event) {
         event.preventDefault();
 
-        _this2.emit("add_button_click");
+        _this3.emit("add_button_click");
       });
     }
   }, {
     key: "propertyItemClick",
     value: function propertyItemClick() {
-      var _this3 = this;
+      var _this4 = this;
 
       var propertyGrid = document.querySelector("#properties-grid").querySelectorAll(".property-item");
       propertyGrid.forEach(function (item) {
         item.addEventListener("click", function (event) {
           event.preventDefault();
 
-          _this3.emit("property_item_click");
+          _this4.emit("property_item_click");
         });
+      });
+    }
+  }, {
+    key: "propertyTypeChange",
+    value: function propertyTypeChange() {
+      var _this5 = this;
+
+      var propertyTypes = document.querySelector(".property-type-options");
+      propertyTypes.addEventListener("change", function (event) {
+        var selectedType = event.target.value;
+        console.log("select type:", selectedType);
+
+        _this5.emit("type_change", selectedType);
       });
     }
   }]);
@@ -639,9 +674,28 @@ function () {
         return res.json();
       }).then(function (res) {
         if (res.data.length > 0) {
-          var data = res.data;
-          _this.container.innerHTML = (0, _propertyViewer.render)(data);
+          _this.container.innerHTML = (0, _propertyViewer.render)(res.data);
         }
+      });
+    }
+  }, {
+    key: "renderByType",
+    value: function renderByType(type) {
+      var _this2 = this;
+
+      return fetch("".concat(_config["default"].baseUrl, "/api/v1/property/type?type=").concat(type), {
+        mode: 'cors',
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }).then(function (res) {
+        return res.json();
+      }).then(function (res) {
+        if (res.error) {
+          return Promise.reject(res.error);
+        }
+
+        _this2.container.innerHTML = (0, _propertyViewer.render)(res.data);
       });
     }
   }]);

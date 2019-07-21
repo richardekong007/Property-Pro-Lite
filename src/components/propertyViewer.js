@@ -15,9 +15,22 @@ class PropertyViewer {
         .then(res => res.json())
         .then(res =>{
             if (res.data.length > 0){
-                const data = res.data;
-                this.container.innerHTML = render(data);
+                this.container.innerHTML = render(res.data);
             }
+        });
+    }
+
+    renderByType (type) {
+       return fetch(`${config.baseUrl}/api/v1/property/type?type=${type}`,{
+            mode:'cors',
+            headers:{"Content-Type":"application/json"}
+        })
+        .then(res => res.json())
+        .then(res =>{
+            if (res.error){
+                return Promise.reject(res.error);
+            }
+            this.container.innerHTML = render(res.data);
         });
     }
 

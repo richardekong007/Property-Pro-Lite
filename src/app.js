@@ -53,8 +53,18 @@ class App {
         this.propertiesPage.on("add_button_click", () => {
             this.postPropertyDialog.show();
         });
+
         this.propertiesPage.on("property_item_click", () =>{
             this.propertyDetailDialog.show();
+        });
+
+        this.propertiesPage.on("type_change", selectedType =>{
+            this.propertiesPage.renderByType(selectedType);
+        });
+
+        this.propertiesPage.on("property_type_error", error =>{
+            this.propertiesPage.render();
+            alert(error);
         });
     }
 
