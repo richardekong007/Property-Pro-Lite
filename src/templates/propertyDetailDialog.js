@@ -6,7 +6,9 @@ const template = (property = "") =>{
             <button class = "close-rect smaller-text">x</button>
         </div>
         <div class = "property-detail-content bit-smaller-text">
-        <div class = "property-detail-images"></div>
+        <div class = "property-detail-images">
+            <img src = ${property.image_url} alt = "prop-image" width = "300px"/>
+        </div>
         <form class = "property-detail-form">
             <div>
                 <label class = "bold-text">Type:</label> 
