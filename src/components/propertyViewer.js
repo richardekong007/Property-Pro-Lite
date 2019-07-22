@@ -1,8 +1,10 @@
 import {render} from "../templates/propertyViewer.js";
 import config from "../config.js";
+import TinyEmitter from "tiny-emitter";
 
-class PropertyViewer {
+class PropertyViewer extends TinyEmitter{
     constructor(container){
+        super();
         this.container = container;
     }
 
@@ -15,7 +17,9 @@ class PropertyViewer {
         .then(res => res.json())
         .then(res =>{
             if (res.data.length > 0){
+                console.log(res.data);
                 this.container.innerHTML = render(res.data);
+                this.emitIds(res.data, this.container.querySelectorAll(".property-item")); 
             }
         });
     }
@@ -31,9 +35,17 @@ class PropertyViewer {
                 return Promise.reject(res.error);
             }
             this.container.innerHTML = render(res.data);
+            this.emitIds(res.data,this.container.querySelectorAll(".property-item"));
         });
     }
 
+    emitIds (data, container){
+        container.forEach((item, index) =>{
+            item.addEventListener("click", () =>{
+                this.emit("property_item_click", data[index]);
+            });
+        });
+    }   
 
 }
 
