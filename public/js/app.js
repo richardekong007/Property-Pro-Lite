@@ -166,7 +166,11 @@ function () {
       this.propertiesPage.on("add_button_click", function () {
         _this3.postPropertyDialog.show();
       });
-      this.propertiesPage.on("property_item_click", function () {
+      this.propertiesPage.on("property_item_click", function (data) {
+        console.log("property id:", data);
+
+        _this3.propertyDetailDialog.setContent(data);
+
         _this3.propertyDetailDialog.show();
       });
       this.propertiesPage.on("type_change", function (selectedType) {
@@ -516,13 +520,8 @@ function (_TinyEmitter) {
     value: function propertyItemClick() {
       var _this4 = this;
 
-      var propertyGrid = document.querySelector("#properties-grid").querySelectorAll(".property-item");
-      propertyGrid.forEach(function (item) {
-        item.addEventListener("click", function (event) {
-          event.preventDefault();
-
-          _this4.emit("property_item_click");
-        });
+      this.propertyViewer.on("property_item_click", function (data) {
+        _this4.emit("property_item_click", data);
       });
     }
   }, {
@@ -588,40 +587,75 @@ function (_Dialog) {
   _inherits(PropertyDetailDialog, _Dialog);
 
   function PropertyDetailDialog(container) {
+    var _this;
+
     _classCallCheck(this, PropertyDetailDialog);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(PropertyDetailDialog).call(this, container));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(PropertyDetailDialog).call(this, container));
+    _this.dialogContainer;
+    _this.property;
+    return _this;
   }
 
   _createClass(PropertyDetailDialog, [{
+    key: "addEventListener",
+    value: function addEventListener() {
+      this.onCloseClick();
+      this.onEditClick();
+      this.onDeleteClick();
+    }
+  }, {
     key: "createDialog",
     value: function createDialog() {
-      var _this = this;
+      this.dialogContainer = _get(_getPrototypeOf(PropertyDetailDialog.prototype), "createDialog", this).call(this);
+      this.dialogContainer.innerHTML = (0, _propertyDetailDialog["default"])();
+      this.addEventListener();
+      return this.dialogContainer;
+    }
+  }, {
+    key: "setContent",
+    value: function setContent(property) {
+      this.property = property;
+      this.dialogContainer.innerHTML = (0, _propertyDetailDialog["default"])(property);
+      this.addEventListener();
+    }
+  }, {
+    key: "onCloseClick",
+    value: function onCloseClick() {
+      var _this2 = this;
 
-      var dialogContainer = _get(_getPrototypeOf(PropertyDetailDialog.prototype), "createDialog", this).call(this);
-
-      dialogContainer.innerHTML = _propertyDetailDialog["default"];
-      var form = dialogContainer.querySelector("form");
-      var closeBtn = dialogContainer.querySelector(".close-rect");
-      var editBtn = dialogContainer.querySelector("#edit-action");
+      var closeBtn = this.dialogContainer.querySelector(".close-rect");
       closeBtn.addEventListener("click", function (event) {
         event.preventDefault();
 
-        _this.dismiss();
+        _this2.dismiss();
       });
+    }
+  }, {
+    key: "onEditClick",
+    value: function onEditClick() {
+      var _this3 = this;
+
+      var editBtn = this.dialogContainer.querySelector("#edit-action");
+      editBtn.addEventListener("click", function (event) {
+        event.preventDefault();
+
+        _this3.emit("edit_property");
+      });
+    }
+  }, {
+    key: "onDeleteClick",
+    value: function onDeleteClick() {
+      var _this4 = this;
+
+      var form = this.dialogContainer.querySelector("form");
       form.addEventListener("submit", function (event) {
         event.preventDefault();
 
         if (event.target.querySelector("#delete-action")) {
-          _this.emit("delete_property");
+          _this4.emit("delete_property");
         }
       });
-      editBtn.addEventListener("click", function (event) {
-        event.preventDefault();
-
-        _this.emit("edit_property");
-      });
-      return dialogContainer;
     }
   }]);
 
@@ -643,7 +677,11 @@ var _propertyViewer = require("../templates/propertyViewer.js");
 
 var _config = _interopRequireDefault(require("../config.js"));
 
+var _tinyEmitter = _interopRequireDefault(require("tiny-emitter"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -651,19 +689,35 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 var PropertyViewer =
 /*#__PURE__*/
-function () {
+function (_TinyEmitter) {
+  _inherits(PropertyViewer, _TinyEmitter);
+
   function PropertyViewer(container) {
+    var _this;
+
     _classCallCheck(this, PropertyViewer);
 
-    this.container = container;
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(PropertyViewer).call(this));
+    _this.container = container;
+    return _this;
   }
 
   _createClass(PropertyViewer, [{
     key: "render",
     value: function render() {
-      var _this = this;
+      var _this2 = this;
 
       fetch("".concat(_config["default"].baseUrl, "/api/v1/property"), {
         mode: "cors",
@@ -674,14 +728,17 @@ function () {
         return res.json();
       }).then(function (res) {
         if (res.data.length > 0) {
-          _this.container.innerHTML = (0, _propertyViewer.render)(res.data);
+          console.log(res.data);
+          _this2.container.innerHTML = (0, _propertyViewer.render)(res.data);
+
+          _this2.emitIds(res.data, _this2.container.querySelectorAll(".property-item"));
         }
       });
     }
   }, {
     key: "renderByType",
     value: function renderByType(type) {
-      var _this2 = this;
+      var _this3 = this;
 
       return fetch("".concat(_config["default"].baseUrl, "/api/v1/property/type?type=").concat(type), {
         mode: 'cors',
@@ -695,18 +752,31 @@ function () {
           return Promise.reject(res.error);
         }
 
-        _this2.container.innerHTML = (0, _propertyViewer.render)(res.data);
+        _this3.container.innerHTML = (0, _propertyViewer.render)(res.data);
+
+        _this3.emitIds(res.data, _this3.container.querySelectorAll(".property-item"));
+      });
+    }
+  }, {
+    key: "emitIds",
+    value: function emitIds(data, container) {
+      var _this4 = this;
+
+      container.forEach(function (item, index) {
+        item.addEventListener("click", function () {
+          _this4.emit("property_item_click", data[index]);
+        });
       });
     }
   }]);
 
   return PropertyViewer;
-}();
+}(_tinyEmitter["default"]);
 
 var _default = PropertyViewer;
 exports["default"] = _default;
 
-},{"../config.js":12,"../templates/propertyViewer.js":16}],9:[function(require,module,exports){
+},{"../config.js":12,"../templates/propertyViewer.js":16,"tiny-emitter":1}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1096,7 +1166,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-var template = "\n    <div class = \"dialog-header\">\n        <span class = \"dialog-title\">Property Detail</span>\n        <button class = \"close-rect smaller-text\">x</button>\n    </div>\n    <div class = \"property-detail-content bit-smaller-text\">\n    <div class = \"property-detail-images\"></div>\n    <form class = \"property-detail-form\">\n        <div>\n            <label class = \"bold-text\">Type:</label> \n            <span data-property-type>Sample Text</span>\n            <br>\n            <label class = \"bold-text\">Address:</label> \n            <span data-property-address>Sample Text</span>\n            <br>\n            <label class = \"bold-text\">Price:</label>\n            <span data-property-price>Sample Text</span>\n            <br>\n            <label class = \"bold-text\">Status:</label>\n            <span data-property-status>Sample Text</span>\n            <br>\n            <p class = \"bold-text\">Owner Contact Information</p>\n            <label class = \"bold-text\">Owner:</label>\n            <span data-property-owner>Sample Text</span>\n            <br>\n            <label class = \"bold-text\">Phone:</label>\n            <span data-property-phone>Sample Text</span>\n            <br>\n            <label class = \"bold-text\">Posted On:</label>\n            <span data-property-post-date>Sample Text</span>\n        </div>   \n        <div class = \"action-section\">\n            <button id = \"edit-action\" class = \"fab tooltip\">\n                <img src = \"./vectors/edit.svg\" alt = \"edit-icon\" width = \"20px\" height = \"20px\"/>\n                <span class = \"tooltiptext small-text\">Edit property</span>\n            </button>\n            <br><br>    \n            <button id = \"delete-action\" class = \"fab tooltip\">\n                <img src = \"./vectors/dustbin.svg\" alt = \"delete-icon\" width = \"20px\" height = \"20px\"/>\n                <span class = \"tooltiptext small-text\">Delete Property</span>\n            </button>    \n        </div> \n    </form>\n    </div>";
+
+var template = function template() {
+  var property = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+  var template = "\n        <div class = \"dialog-header\">\n            <span class = \"dialog-title\">Property Detail</span>\n            <button class = \"close-rect smaller-text\">x</button>\n        </div>\n        <div class = \"property-detail-content bit-smaller-text\">\n        <div class = \"property-detail-images\">\n            <img src = ".concat(property.image_url, " alt = \"prop-image\" width = \"300px\"/>\n        </div>\n        <form class = \"property-detail-form\">\n            <div>\n                <label class = \"bold-text\">Type:</label> \n                <span data-property-type>").concat(property.type, "</span>\n                <br>\n                <label class = \"bold-text\">Address:</label> \n                <span data-property-address>").concat(property.address, "</span>\n                <br>\n                <label class = \"bold-text\">Price:</label>\n                <span data-property-price>").concat(property.price, "</span>\n                <br>\n                <label class = \"bold-text\">Status:</label>\n                <span data-property-status>").concat(property.status, "</span>\n                <br>\n                <p class = \"bold-text\">Owner Contact Information</p>\n                <label class = \"bold-text\">Email:</label>\n                <span data-property-owner>").concat(property.owner_email, "</span>\n                <br>\n                <label class = \"bold-text\">Phone:</label>\n                <span data-property-phone>").concat(property.owner_phone_number, "</span>\n                <br>\n                <label class = \"bold-text\">Posted On:</label>\n                <span data-property-post-date>").concat(property.created_on, "</span>\n            </div>   \n            <div class = \"action-section\">\n                <button id = \"edit-action\" class = \"fab tooltip\">\n                    <img src = \"./vectors/edit.svg\" alt = \"edit-icon\" width = \"20px\" height = \"20px\"/>\n                    <span class = \"tooltiptext small-text\">Edit property</span>\n                </button>\n                <br><br>    \n                <button id = \"delete-action\" class = \"fab tooltip\">\n                    <img src = \"./vectors/dustbin.svg\" alt = \"delete-icon\" width = \"20px\" height = \"20px\"/>\n                    <span class = \"tooltiptext small-text\">Delete Property</span>\n                </button>    \n            </div> \n        </form>\n        </div>");
+  return template;
+};
+
 var _default = template;
 exports["default"] = _default;
 
