@@ -44,13 +44,9 @@ class Properties extends TinyEmitter{
     }
 
     propertyItemClick(){
-        const propertyGrid = document.querySelector("#properties-grid")
-            .querySelectorAll(".property-item");
-        propertyGrid.forEach(item =>{
-            item.addEventListener("click", event =>{
-                event.preventDefault();
-                this.emit("property_item_click");
-            });
+       
+        this.propertyViewer.on("property_item_click", data =>{
+            this.emit("property_item_click", data);
         });
 
     }

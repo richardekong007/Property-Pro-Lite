@@ -54,7 +54,9 @@ class App {
             this.postPropertyDialog.show();
         });
 
-        this.propertiesPage.on("property_item_click", () =>{
+        this.propertiesPage.on("property_item_click", data =>{
+            console.log("property id:",data)
+            this.propertyDetailDialog.setContent(data);
             this.propertyDetailDialog.show();
         });
 
