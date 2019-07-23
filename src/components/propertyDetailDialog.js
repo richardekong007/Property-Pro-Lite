@@ -42,7 +42,7 @@ class PropertyDetailDialog extends Dialog{
         const editBtn = this.dialogContainer.querySelector("#edit-action");
         editBtn.addEventListener("click", event =>{
             event.preventDefault();
-            this.emit("edit_property");
+            this.emit("edit_property", this.property.id);
         });
     }
 

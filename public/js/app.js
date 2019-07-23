@@ -123,6 +123,7 @@ function () {
       this.propertiesTemplateEvent();
       this.propertyDetailDialogEvent();
       this.postPropertyDialogEvent();
+      this.updatePropertyDialogEvent();
     }
   }, {
     key: "signinEvents",
@@ -187,7 +188,9 @@ function () {
     value: function propertyDetailDialogEvent() {
       var _this4 = this;
 
-      this.propertyDetailDialog.on("edit_property", function () {
+      this.propertyDetailDialog.on("edit_property", function (data) {
+        _this4.updatePropertyDialog.setPropertyId(data);
+
         _this4.updatePropertyDialog.show();
 
         _this4.propertyDetailDialog.dismiss();
@@ -220,6 +223,18 @@ function () {
       });
       this.postPropertyDialog.on("error", function (error) {
         console.log(error);
+        alert(error);
+      });
+    }
+  }, {
+    key: "updatePropertyDialogEvent",
+    value: function updatePropertyDialogEvent() {
+      var _this6 = this;
+
+      this.updatePropertyDialog.on("mark_sold", function () {
+        _this6.propertiesPage.render();
+      });
+      this.updatePropertyDialog.on("mark_sold_error", function (error) {
         alert(error);
       });
     }
@@ -652,7 +667,7 @@ function (_Dialog) {
       editBtn.addEventListener("click", function (event) {
         event.preventDefault();
 
-        _this3.emit("edit_property");
+        _this3.emit("edit_property", _this3.property.id);
       });
     }
   }, {
@@ -1089,6 +1104,8 @@ var _updatePropertyDialog = _interopRequireDefault(require("../templates/updateP
 
 var _dialog = _interopRequireDefault(require("./dialog.js"));
 
+var _config = _interopRequireDefault(require("../config.js"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -1119,34 +1136,87 @@ function (_Dialog) {
   _inherits(UpdatePropertyDialog, _Dialog);
 
   function UpdatePropertyDialog(container) {
+    var _this;
+
     _classCallCheck(this, UpdatePropertyDialog);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(UpdatePropertyDialog).call(this, container));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(UpdatePropertyDialog).call(this, container));
+    _this.dialogContainer;
+    _this.propertyId;
+    return _this;
   }
 
   _createClass(UpdatePropertyDialog, [{
     key: "createDialog",
     value: function createDialog() {
-      var _this = this;
+      this.dialogContainer = _get(_getPrototypeOf(UpdatePropertyDialog.prototype), "createDialog", this).call(this);
+      this.dialogContainer.innerHTML = _updatePropertyDialog["default"]; //const form = this.dialogContainer.querySelector("form");
 
-      var dialogContainer = _get(_getPrototypeOf(UpdatePropertyDialog.prototype), "createDialog", this).call(this);
+      this.addEventListener();
+      return this.dialogContainer;
+    }
+  }, {
+    key: "addEventListener",
+    value: function addEventListener() {
+      this.onCloseClick();
+      this.onSoldClick();
+    }
+  }, {
+    key: "setPropertyId",
+    value: function setPropertyId(id) {
+      this.propertyId = id;
+    }
+  }, {
+    key: "onCloseClick",
+    value: function onCloseClick() {
+      var _this2 = this;
 
-      dialogContainer.innerHTML = _updatePropertyDialog["default"];
-      var form = dialogContainer.querySelector("form");
-      var closeBtn = dialogContainer.querySelector(".close-rect");
-      form.addEventListener("submit", function (event) {
-        event.preventDefault();
-
-        if (event.target.querySelector("#done")) {
-          _this.emit("update_property");
-        }
-      });
+      var closeBtn = this.dialogContainer.querySelector(".close-rect");
       closeBtn.addEventListener("click", function (event) {
         event.preventDefault();
 
-        _this.dismiss();
+        _this2.dismiss();
       });
-      return dialogContainer;
+    }
+  }, {
+    key: "onSoldClick",
+    value: function onSoldClick() {
+      var _this3 = this;
+
+      var form = this.dialogContainer.querySelector("form");
+      var soldCheckBox = this.dialogContainer.querySelector(".checkbox");
+      soldCheckBox.addEventListener("change", function (event) {
+        event.preventDefault();
+
+        if (event.target.checked) {
+          _this3.markAsSold(_this3.propertyId);
+
+          form.reset();
+        }
+      });
+    }
+  }, {
+    key: "markAsSold",
+    value: function markAsSold(id) {
+      var _this4 = this;
+
+      fetch("".concat(_config["default"].baseUrl, "/api/v1/property/").concat(id, "/sold"), {
+        mode: "cors",
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }).then(function (res) {
+        return res.json();
+      }).then(function (res) {
+        if (res.error) {
+          return Promise.reject(res.error);
+        }
+
+        _this4.emit("mark_sold");
+      })["catch"](function (err) {
+        return _this4.emit("mark_sold_error", err);
+      });
     }
   }]);
 
@@ -1156,7 +1226,7 @@ function (_Dialog) {
 var _default = UpdatePropertyDialog;
 exports["default"] = _default;
 
-},{"../templates/updatePropertyDialog.js":19,"./dialog.js":3}],12:[function(require,module,exports){
+},{"../config.js":12,"../templates/updatePropertyDialog.js":19,"./dialog.js":3}],12:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1262,7 +1332,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-var template = "\n    <div class = \"dialog-container\">\n        <div class = \"dialog-header\">\n            <span class = \"dialog-title\">Edit Advert</span>\n            <button class = \"close-rect smaller-text\">x</button>\n        </div>\n        <form class = \"property-form\">\n            <input type = \"text\" placeholder = \"Property Address\" title = \"Property Address\" required/>\n            <input type = \"text\" placeholder = \"Property City\" title = \"Property City\" required/>\n            <br>\n            <input type = \"text\" placeholder = \"Property State\" title = \"Property State\" required/>\n            <select class = \"property-type\">\n                <option value = \"Property type\"> Property type</option>\n                <option value = \"Self-contained\">Self-contained</option>\n                <option value = \"2 Bedroom\">2 Bedroom</option>\n                <option value = \"3 Bedroom\">3 Bedroom</option>\n                <option value = \"Mini flat\">Mini flat</option>\n                <option value = \"Duplex\">Duplex</option>\n                <option value = \"Bungalow\">Bungalow</option>\n            </select>\n            <br>\n            <input type = \"number\" placeholder = \"Property Price\" title = \"Property Price\" required/>\n            <input type = \"file\"/>\n            <br>\n            <label class = \"checkbox bit-smaller-text\">\n                <input type = \"checkbox\" />\n                Sold\n                <span class = \"checkmark\"></span>\n            </label>\n            <br><br>\n            <button id = \"done\" class = \"fab tooltip\">\n                <img src = \"./vectors/tick.svg\" alt =\"tick\" width = \"25px\" height = \"25px\"/>\n                <span class = \"tooltiptext small-text\">Edit</span>\n            </button>\n        </form>\n    <div>";
+var template = "\n    <div class = \"dialog-container\">\n        <div class = \"dialog-header\">\n            <span class = \"dialog-title\">Edit Advert</span>\n            <button class = \"close-rect smaller-text\">x</button>\n        </div>\n        <form class = \"property-form\">\n            <input type = \"text\" placeholder = \"Property Address\" title = \"Property Address\" required/>\n            <input type = \"text\" placeholder = \"Property City\" title = \"Property City\" required/>\n            <br>\n            <input type = \"text\" placeholder = \"Property State\" title = \"Property State\" required/>\n            <select class = \"property-type\">\n                <option value = \"Property type\"> Property type</option>\n                <option value = \"Self-contained\">Self-contained</option>\n                <option value = \"2 Bedroom\">2 Bedroom</option>\n                <option value = \"3 Bedroom\">3 Bedroom</option>\n                <option value = \"Mini flat\">Mini flat</option>\n                <option value = \"Duplex\">Duplex</option>\n                <option value = \"Bungalow\">Bungalow</option>\n            </select>\n            <br>\n            <input type = \"number\" placeholder = \"Property Price\" title = \"Property Price\" required/>\n            <input type = \"file\"/>\n            <br>\n            <label class = \"checkbox bit-smaller-text\">\n                <input type = \"checkbox\" />\n                Mark as sold\n                <span class = \"checkmark\"></span>\n            </label>\n            <br><br>\n            <button id = \"done\" class = \"fab tooltip\">\n                <img src = \"./vectors/tick.svg\" alt =\"tick\" width = \"25px\" height = \"25px\"/>\n                <span class = \"tooltiptext small-text\">Edit</span>\n            </button>\n        </form>\n    <div>";
 var _default = template;
 exports["default"] = _default;
 

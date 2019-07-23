@@ -24,7 +24,7 @@ const template = `
             <br>
             <label class = "checkbox bit-smaller-text">
                 <input type = "checkbox" />
-                Sold
+                Mark as sold
                 <span class = "checkmark"></span>
             </label>
             <br><br>
