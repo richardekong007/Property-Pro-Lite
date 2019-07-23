@@ -38,7 +38,11 @@ const template = (property = "") =>{
                     <img src = "./vectors/edit.svg" alt = "edit-icon" width = "20px" height = "20px"/>
                     <span class = "tooltiptext small-text">Edit property</span>
                 </button>
-                <br><br>    
+                <br><br>  
+                <button id = "report-action" class = "fab tooltip" style = "color:#fff;">
+                    !<span class = "tooltiptext small-text">Report property</span>
+                </button>
+                <br><br>  
                 <button id = "delete-action" class = "fab tooltip">
                     <img src = "./vectors/dustbin.svg" alt = "delete-icon" width = "20px" height = "20px"/>
                     <span class = "tooltiptext small-text">Delete Property</span>

@@ -25,6 +25,7 @@ class Dialog extends TinyEmitter{
         this.container.removeChild(this.overlay);
         this.container.removeChild(this.dialog);
     }
+
 }
 
 export default Dialog;
