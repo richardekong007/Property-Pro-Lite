@@ -1,5 +1,6 @@
 import template from "../templates/propertyDetailDialog.js";
 import Dialog from "./dialog.js";
+import config from "../config.js";
 
 
 class PropertyDetailDialog extends Dialog{
@@ -46,13 +47,27 @@ class PropertyDetailDialog extends Dialog{
     }
 
     onDeleteClick (){
-        const form = this.dialogContainer.querySelector("form");
-        form.addEventListener("submit", event =>{
+        const delBtn = this.dialogContainer.querySelector("#delete-action");
+        delBtn.addEventListener("click", event =>{
             event.preventDefault();
-            if (event.target.querySelector("#delete-action")){
-                this.emit("delete_property");
-            }
+            this.deleteProperty(this.property.id);
         });
+    }
+
+    deleteProperty(id){
+        fetch(`${config.baseUrl}/api/v1/property/${id}`, {
+            mode:"cors",
+            method:"DELETE",
+            headers:{"Content-Type":"application/json"}
+        })
+        .then(res => res.json())
+        .then(res => {
+            if (res.error){
+                return Promise.reject(res.error);
+            }
+            this.emit("delete_property");
+        })
+        .catch(err => this.emit("deletion_error",err));
     }
 }
 
