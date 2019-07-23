@@ -237,6 +237,12 @@ function () {
       this.updatePropertyDialog.on("mark_sold_error", function (error) {
         alert(error);
       });
+      this.updatePropertyDialog.on("update_property", function () {
+        _this6.propertiesPage.render();
+      });
+      this.updatePropertyDialog.on("update_property_error", function (error) {
+        alert(error);
+      });
     }
   }]);
 
@@ -1150,8 +1156,7 @@ function (_Dialog) {
     key: "createDialog",
     value: function createDialog() {
       this.dialogContainer = _get(_getPrototypeOf(UpdatePropertyDialog.prototype), "createDialog", this).call(this);
-      this.dialogContainer.innerHTML = _updatePropertyDialog["default"]; //const form = this.dialogContainer.querySelector("form");
-
+      this.dialogContainer.innerHTML = _updatePropertyDialog["default"];
       this.addEventListener();
       return this.dialogContainer;
     }
@@ -1160,6 +1165,7 @@ function (_Dialog) {
     value: function addEventListener() {
       this.onCloseClick();
       this.onSoldClick();
+      this.onDoneClick();
     }
   }, {
     key: "setPropertyId",
@@ -1196,9 +1202,25 @@ function (_Dialog) {
       });
     }
   }, {
+    key: "onDoneClick",
+    value: function onDoneClick() {
+      var _this4 = this;
+
+      var form = this.dialogContainer.querySelector("form");
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        var price = parseFloat(event.target.querySelector("[data-price]").value);
+        var data = {
+          price: price
+        };
+
+        _this4.updateProperty(data);
+      });
+    }
+  }, {
     key: "markAsSold",
     value: function markAsSold(id) {
-      var _this4 = this;
+      var _this5 = this;
 
       fetch("".concat(_config["default"].baseUrl, "/api/v1/property/").concat(id, "/sold"), {
         mode: "cors",
@@ -1213,9 +1235,31 @@ function (_Dialog) {
           return Promise.reject(res.error);
         }
 
-        _this4.emit("mark_sold");
+        _this5.emit("mark_sold");
       })["catch"](function (err) {
-        return _this4.emit("mark_sold_error", err);
+        return _this5.emit("mark_sold_error", err);
+      });
+    }
+  }, {
+    key: "updateProperty",
+    value: function updateProperty(data) {
+      var _this6 = this;
+
+      fetch("".concat(_config["default"].baseUrl, "/api/v1/property/").concat(this.propertyId), {
+        mode: "cors",
+        method: "PATCH",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }).then(function (res) {
+        return res.json();
+      }).then(function (res) {
+        if (res.error) return Promise.reject(res.error);
+
+        _this6.emit("update_property");
+      })["catch"](function (err) {
+        return _this6.emit("update_property_error", err);
       });
     }
   }]);
@@ -1332,7 +1376,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-var template = "\n    <div class = \"dialog-container\">\n        <div class = \"dialog-header\">\n            <span class = \"dialog-title\">Edit Advert</span>\n            <button class = \"close-rect smaller-text\">x</button>\n        </div>\n        <form class = \"property-form\">\n            <input type = \"text\" placeholder = \"Property Address\" title = \"Property Address\" required/>\n            <input type = \"text\" placeholder = \"Property City\" title = \"Property City\" required/>\n            <br>\n            <input type = \"text\" placeholder = \"Property State\" title = \"Property State\" required/>\n            <select class = \"property-type\">\n                <option value = \"Property type\"> Property type</option>\n                <option value = \"Self-contained\">Self-contained</option>\n                <option value = \"2 Bedroom\">2 Bedroom</option>\n                <option value = \"3 Bedroom\">3 Bedroom</option>\n                <option value = \"Mini flat\">Mini flat</option>\n                <option value = \"Duplex\">Duplex</option>\n                <option value = \"Bungalow\">Bungalow</option>\n            </select>\n            <br>\n            <input type = \"number\" placeholder = \"Property Price\" title = \"Property Price\" required/>\n            <input type = \"file\"/>\n            <br>\n            <label class = \"checkbox bit-smaller-text\">\n                <input type = \"checkbox\" />\n                Mark as sold\n                <span class = \"checkmark\"></span>\n            </label>\n            <br><br>\n            <button id = \"done\" class = \"fab tooltip\">\n                <img src = \"./vectors/tick.svg\" alt =\"tick\" width = \"25px\" height = \"25px\"/>\n                <span class = \"tooltiptext small-text\">Edit</span>\n            </button>\n        </form>\n    <div>";
+var template = "\n    <div class = \"dialog-container\">\n        <div class = \"dialog-header\">\n            <span class = \"dialog-title\">Edit Advert</span>\n            <button class = \"close-rect smaller-text\">x</button>\n        </div>\n        <form class = \"property-form\">\n            <input type = \"number\" placeholder = \"Property Price\" title = \"Property Price\" data-price required/>\n            <br>\n            <label class = \"checkbox bit-smaller-text\">\n                <input type = \"checkbox\" />\n                Mark as sold\n                <span class = \"checkmark\"></span>\n            </label>\n            <br><br>\n            <button id = \"done\" class = \"fab tooltip\">\n                <img src = \"./vectors/tick.svg\" alt =\"tick\" width = \"25px\" height = \"25px\"/>\n                <span class = \"tooltiptext small-text\">Edit</span>\n            </button>\n        </form>\n    <div>";
 var _default = template;
 exports["default"] = _default;
 

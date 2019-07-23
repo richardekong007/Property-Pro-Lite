@@ -13,7 +13,6 @@ class UpdatePropertyDialog extends Dialog {
     createDialog (){
         this.dialogContainer = super.createDialog();
         this.dialogContainer.innerHTML = Template;
-        //const form = this.dialogContainer.querySelector("form");
         this.addEventListener();
         return this.dialogContainer;
     }
@@ -21,6 +20,7 @@ class UpdatePropertyDialog extends Dialog {
     addEventListener (){
         this.onCloseClick();
         this.onSoldClick();
+        this.onDoneClick();
     }
 
     setPropertyId (id){
@@ -48,6 +48,15 @@ class UpdatePropertyDialog extends Dialog {
         });
     }
 
+    onDoneClick (){
+        const form = this.dialogContainer.querySelector("form");
+        form.addEventListener("submit", event => {
+            event.preventDefault();
+            const price = parseFloat(event.target.querySelector("[data-price]").value);
+            const data = {price:price};
+            this.updateProperty(data);
+        });
+    }
 
     markAsSold (id){
         fetch(`${config.baseUrl}/api/v1/property/${id}/sold`,{
@@ -63,6 +72,21 @@ class UpdatePropertyDialog extends Dialog {
             this.emit("mark_sold")
         })
         .catch(err => this.emit("mark_sold_error", err));
+    }
+
+    updateProperty (data){
+        fetch(`${config.baseUrl}/api/v1/property/${this.propertyId}`, {
+            mode:"cors",
+            method:"PATCH",
+            body:JSON.stringify(data),
+            headers:{"Content-Type":"application/json"}
+        })
+        .then(res => res.json())
+        .then(res =>{
+            if (res.error) return Promise.reject(res.error);
+            this.emit("update_property")
+        })
+        .catch(err => this.emit("update_property_error", err));
     }
     
 }
