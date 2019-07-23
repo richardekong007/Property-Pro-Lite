@@ -75,6 +75,16 @@ class App {
             this.updatePropertyDialog.show();
             this.propertyDetailDialog.dismiss();
         });
+
+        this.propertyDetailDialog.on("delete_property", () => {
+            alert("Property deleted!");
+            this.propertyDetailDialog.dismiss();
+            this.propertiesPage.render();
+        });
+
+        this.propertyDetailDialog.on("deletion_error", error =>{
+            alert(error);
+        });
     }
 
     postPropertyDialogEvent (){

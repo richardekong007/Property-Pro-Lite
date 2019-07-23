@@ -192,6 +192,16 @@ function () {
 
         _this4.propertyDetailDialog.dismiss();
       });
+      this.propertyDetailDialog.on("delete_property", function () {
+        alert("Property deleted!");
+
+        _this4.propertyDetailDialog.dismiss();
+
+        _this4.propertiesPage.render();
+      });
+      this.propertyDetailDialog.on("deletion_error", function (error) {
+        alert(error);
+      });
     }
   }, {
     key: "postPropertyDialogEvent",
@@ -557,6 +567,8 @@ var _propertyDetailDialog = _interopRequireDefault(require("../templates/propert
 
 var _dialog = _interopRequireDefault(require("./dialog.js"));
 
+var _config = _interopRequireDefault(require("../config.js"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -648,13 +660,34 @@ function (_Dialog) {
     value: function onDeleteClick() {
       var _this4 = this;
 
-      var form = this.dialogContainer.querySelector("form");
-      form.addEventListener("submit", function (event) {
+      var delBtn = this.dialogContainer.querySelector("#delete-action");
+      delBtn.addEventListener("click", function (event) {
         event.preventDefault();
 
-        if (event.target.querySelector("#delete-action")) {
-          _this4.emit("delete_property");
+        _this4.deleteProperty(_this4.property.id);
+      });
+    }
+  }, {
+    key: "deleteProperty",
+    value: function deleteProperty(id) {
+      var _this5 = this;
+
+      fetch("".concat(_config["default"].baseUrl, "/api/v1/property/").concat(id), {
+        mode: "cors",
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json"
         }
+      }).then(function (res) {
+        return res.json();
+      }).then(function (res) {
+        if (res.error) {
+          return Promise.reject(res.error);
+        }
+
+        _this5.emit("delete_property");
+      })["catch"](function (err) {
+        return _this5.emit("deletion_error", err);
       });
     }
   }]);
@@ -665,7 +698,7 @@ function (_Dialog) {
 var _default = PropertyDetailDialog;
 exports["default"] = _default;
 
-},{"../templates/propertyDetailDialog.js":15,"./dialog.js":3}],8:[function(require,module,exports){
+},{"../config.js":12,"../templates/propertyDetailDialog.js":15,"./dialog.js":3}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
