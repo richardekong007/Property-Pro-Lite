@@ -26,6 +26,7 @@ class App {
         this.propertiesTemplateEvent();
         this.propertyDetailDialogEvent();
         this.postPropertyDialogEvent();
+        this.updatePropertyDialogEvent();
     }
 
     signinEvents (){
@@ -71,7 +72,8 @@ class App {
     }
 
     propertyDetailDialogEvent (){
-        this.propertyDetailDialog.on("edit_property", () =>{
+        this.propertyDetailDialog.on("edit_property", data =>{
+            this.updatePropertyDialog.setPropertyId(data)
             this.updatePropertyDialog.show();
             this.propertyDetailDialog.dismiss();
         });
@@ -98,6 +100,16 @@ class App {
 
         this.postPropertyDialog.on("error", error =>{
             console.log(error);
+            alert(error);
+        });
+    }
+
+    updatePropertyDialogEvent (){
+        this.updatePropertyDialog.on("mark_sold", () =>{
+            this.propertiesPage.render();
+        });
+
+        this.updatePropertyDialog.on("mark_sold_error", error => {
             alert(error);
         });
     }
