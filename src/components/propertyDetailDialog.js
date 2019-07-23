@@ -14,6 +14,7 @@ class PropertyDetailDialog extends Dialog{
     addEventListener (){
         this.onCloseClick();
         this.onEditClick();
+        this.onReportClick();
         this.onDeleteClick();
     }
 
@@ -46,6 +47,14 @@ class PropertyDetailDialog extends Dialog{
         });
     }
 
+    onReportClick (){
+        const reportBtn = this.dialogContainer .querySelector("#report-action");
+        reportBtn.addEventListener("click", event =>{
+            event.preventDefault();
+            this.emit("report_click", this.property.id);
+        });
+    }
+
     onDeleteClick (){
         const delBtn = this.dialogContainer.querySelector("#delete-action");
         delBtn.addEventListener("click", event =>{
@@ -67,8 +76,10 @@ class PropertyDetailDialog extends Dialog{
             }
             this.emit("delete_property");
         })
-        .catch(err => this.emit("deletion_error",err));
+        .catch(err => this.emit("deletion_error", err));
     }
+
+    
 }
 
 export default PropertyDetailDialog;

@@ -4,6 +4,7 @@ import PostPropertyDialog from "./components/postPropertyDialog.js";
 import UpdatePropertyDialog from "./components/updatePropertyDialog.js";
 import PropertyDetailDialog from "./components/propertyDetailDialog.js";
 import PropertiesPage from "./components/properties.js";
+import PropertyFlag from "./components/propertyFlag.js";
 
 class App {
     constructor (container){
@@ -13,6 +14,7 @@ class App {
         this.updatePropertyDialog = new UpdatePropertyDialog(container);
         this.propertyDetailDialog = new PropertyDetailDialog(container);
         this.propertiesPage = new PropertiesPage(container);
+        this.propertyFlag = new PropertyFlag(container);
     }
 
     init (){
@@ -27,6 +29,7 @@ class App {
         this.propertyDetailDialogEvent();
         this.postPropertyDialogEvent();
         this.updatePropertyDialogEvent();
+        this.propertyFlagDialogEvent();
     }
 
     signinEvents (){
@@ -87,6 +90,12 @@ class App {
         this.propertyDetailDialog.on("deletion_error", error =>{
             alert(error);
         });
+
+        this.propertyDetailDialog.on("report_click", data =>{
+            this.propertyFlag.setPropertyId(data);
+            this.propertyFlag.show();
+            this.propertyDetailDialog.dismiss();
+        });
     }
 
     postPropertyDialogEvent (){
@@ -119,6 +128,18 @@ class App {
 
         this.updatePropertyDialog.on("update_property_error", error =>{
             alert(error);
+        });
+    }
+
+    propertyFlagDialogEvent (){
+
+        this.propertyFlag.on("property_reported", () =>{
+            alert("Report submitted");
+            this.propertyFlag.dismiss();
+        });
+
+        this.propertyFlag.on("reported_error", err =>{
+            alert(err);
         });
     }
 

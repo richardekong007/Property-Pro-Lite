@@ -87,6 +87,8 @@ var _propertyDetailDialog = _interopRequireDefault(require("./components/propert
 
 var _properties = _interopRequireDefault(require("./components/properties.js"));
 
+var _propertyFlag = _interopRequireDefault(require("./components/propertyFlag.js"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -107,6 +109,7 @@ function () {
     this.updatePropertyDialog = new _updatePropertyDialog["default"](container);
     this.propertyDetailDialog = new _propertyDetailDialog["default"](container);
     this.propertiesPage = new _properties["default"](container);
+    this.propertyFlag = new _propertyFlag["default"](container);
   }
 
   _createClass(App, [{
@@ -124,6 +127,7 @@ function () {
       this.propertyDetailDialogEvent();
       this.postPropertyDialogEvent();
       this.updatePropertyDialogEvent();
+      this.propertyFlagDialogEvent();
     }
   }, {
     key: "signinEvents",
@@ -205,6 +209,13 @@ function () {
       this.propertyDetailDialog.on("deletion_error", function (error) {
         alert(error);
       });
+      this.propertyDetailDialog.on("report_click", function (data) {
+        _this4.propertyFlag.setPropertyId(data);
+
+        _this4.propertyFlag.show();
+
+        _this4.propertyDetailDialog.dismiss();
+      });
     }
   }, {
     key: "postPropertyDialogEvent",
@@ -244,6 +255,20 @@ function () {
         alert(error);
       });
     }
+  }, {
+    key: "propertyFlagDialogEvent",
+    value: function propertyFlagDialogEvent() {
+      var _this7 = this;
+
+      this.propertyFlag.on("property_reported", function () {
+        alert("Report submitted");
+
+        _this7.propertyFlag.dismiss();
+      });
+      this.propertyFlag.on("reported_error", function (err) {
+        alert(err);
+      });
+    }
   }]);
 
   return App;
@@ -252,7 +277,7 @@ function () {
 var _default = App;
 exports["default"] = _default;
 
-},{"./components/postPropertyDialog.js":5,"./components/properties.js":6,"./components/propertyDetailDialog.js":7,"./components/signin.js":9,"./components/signup.js":10,"./components/updatePropertyDialog.js":11}],3:[function(require,module,exports){
+},{"./components/postPropertyDialog.js":5,"./components/properties.js":6,"./components/propertyDetailDialog.js":7,"./components/propertyFlag.js":8,"./components/signin.js":10,"./components/signup.js":11,"./components/updatePropertyDialog.js":12}],3:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -455,7 +480,7 @@ function (_Dialog) {
 var _default = PostPropertyDialog;
 exports["default"] = _default;
 
-},{"../config.js":12,"../templates/postPropertyDialog.js":13,"./dialog.js":3}],6:[function(require,module,exports){
+},{"../config.js":13,"../templates/postPropertyDialog.js":14,"./dialog.js":3}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -576,7 +601,7 @@ function (_TinyEmitter) {
 var _default = Properties;
 exports["default"] = _default;
 
-},{"../components/propertyViewer.js":8,"../templates/properties":14,"tiny-emitter":1}],7:[function(require,module,exports){
+},{"../components/propertyViewer.js":9,"../templates/properties":15,"tiny-emitter":1}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -635,6 +660,7 @@ function (_Dialog) {
     value: function addEventListener() {
       this.onCloseClick();
       this.onEditClick();
+      this.onReportClick();
       this.onDeleteClick();
     }
   }, {
@@ -677,21 +703,33 @@ function (_Dialog) {
       });
     }
   }, {
+    key: "onReportClick",
+    value: function onReportClick() {
+      var _this4 = this;
+
+      var reportBtn = this.dialogContainer.querySelector("#report-action");
+      reportBtn.addEventListener("click", function (event) {
+        event.preventDefault();
+
+        _this4.emit("report_click", _this4.property.id);
+      });
+    }
+  }, {
     key: "onDeleteClick",
     value: function onDeleteClick() {
-      var _this4 = this;
+      var _this5 = this;
 
       var delBtn = this.dialogContainer.querySelector("#delete-action");
       delBtn.addEventListener("click", function (event) {
         event.preventDefault();
 
-        _this4.deleteProperty(_this4.property.id);
+        _this5.deleteProperty(_this5.property.id);
       });
     }
   }, {
     key: "deleteProperty",
     value: function deleteProperty(id) {
-      var _this5 = this;
+      var _this6 = this;
 
       fetch("".concat(_config["default"].baseUrl, "/api/v1/property/").concat(id), {
         mode: "cors",
@@ -706,9 +744,9 @@ function (_Dialog) {
           return Promise.reject(res.error);
         }
 
-        _this5.emit("delete_property");
+        _this6.emit("delete_property");
       })["catch"](function (err) {
-        return _this5.emit("deletion_error", err);
+        return _this6.emit("deletion_error", err);
       });
     }
   }]);
@@ -719,7 +757,148 @@ function (_Dialog) {
 var _default = PropertyDetailDialog;
 exports["default"] = _default;
 
-},{"../config.js":12,"../templates/propertyDetailDialog.js":15,"./dialog.js":3}],8:[function(require,module,exports){
+},{"../config.js":13,"../templates/propertyDetailDialog.js":16,"./dialog.js":3}],8:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _propertyFlag = _interopRequireDefault(require("../templates/propertyFlag.js"));
+
+var _dialog = _interopRequireDefault(require("./dialog.js"));
+
+var _config = _interopRequireDefault(require("../config.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
+
+function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var PropertyFlag =
+/*#__PURE__*/
+function (_Dialog) {
+  _inherits(PropertyFlag, _Dialog);
+
+  function PropertyFlag(container) {
+    var _this;
+
+    _classCallCheck(this, PropertyFlag);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(PropertyFlag).call(this, container));
+    _this.dialogContainer;
+    _this.propertyId;
+    return _this;
+  }
+
+  _createClass(PropertyFlag, [{
+    key: "addEventListener",
+    value: function addEventListener() {
+      this.onDoneClick();
+      this.onCloseClick();
+    }
+  }, {
+    key: "createDialog",
+    value: function createDialog() {
+      this.dialogContainer = _get(_getPrototypeOf(PropertyFlag.prototype), "createDialog", this).call(this);
+      this.dialogContainer.innerHTML = _propertyFlag["default"];
+      this.addEventListener();
+      return this.dialogContainer;
+    }
+  }, {
+    key: "reset",
+    value: function reset() {
+      this.dialogContainer.querySelector("form").reset();
+    }
+  }, {
+    key: "setPropertyId",
+    value: function setPropertyId(id) {
+      this.propertyId = id;
+    }
+  }, {
+    key: "onCloseClick",
+    value: function onCloseClick() {
+      var _this2 = this;
+
+      var closeBtn = this.dialogContainer.querySelector(".close-rect");
+      closeBtn.addEventListener("click", function (event) {
+        event.preventDefault();
+
+        _this2.dismiss();
+      });
+    }
+  }, {
+    key: "onDoneClick",
+    value: function onDoneClick() {
+      var _this3 = this;
+
+      var form = this.dialogContainer.querySelector("form");
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        var reason = event.target.querySelector("[data-reason]").value;
+        var description = event.target.querySelector("[data-desc]").value;
+        var data = {
+          property_id: _this3.propertyId,
+          reason: reason,
+          description: description
+        };
+
+        _this3.reportAds(data);
+      });
+    }
+  }, {
+    key: "reportAds",
+    value: function reportAds(data) {
+      var _this4 = this;
+
+      fetch("".concat(_config["default"].baseUrl, "/api/v1/flag"), {
+        mode: "cors",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      }).then(function (res) {
+        return res.json();
+      }).then(function (res) {
+        if (res.error) return Promise.reject(res.error);
+
+        _this4.emit("property_reported");
+
+        _this4.reset();
+      })["catch"](function (err) {
+        return _this4.emit("reported_error", err);
+      });
+    }
+  }]);
+
+  return PropertyFlag;
+}(_dialog["default"]);
+
+var _default = PropertyFlag;
+exports["default"] = _default;
+
+},{"../config.js":13,"../templates/propertyFlag.js":17,"./dialog.js":3}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -830,7 +1009,7 @@ function (_TinyEmitter) {
 var _default = PropertyViewer;
 exports["default"] = _default;
 
-},{"../config.js":12,"../templates/propertyViewer.js":16,"tiny-emitter":1}],9:[function(require,module,exports){
+},{"../config.js":13,"../templates/propertyViewer.js":18,"tiny-emitter":1}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -967,7 +1146,7 @@ function (_TinyEmitter) {
 var _default = Signin;
 exports["default"] = _default;
 
-},{"../config.js":12,"../templates/signin.js":17,"tiny-emitter":1}],10:[function(require,module,exports){
+},{"../config.js":13,"../templates/signin.js":19,"tiny-emitter":1}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1098,7 +1277,7 @@ function (_TinyEmitter) {
 var _default = Signup;
 exports["default"] = _default;
 
-},{"../config.js":12,"../templates/signup":18,"tiny-emitter":1}],11:[function(require,module,exports){
+},{"../config.js":13,"../templates/signup":20,"tiny-emitter":1}],12:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1270,7 +1449,7 @@ function (_Dialog) {
 var _default = UpdatePropertyDialog;
 exports["default"] = _default;
 
-},{"../config.js":12,"../templates/updatePropertyDialog.js":19,"./dialog.js":3}],12:[function(require,module,exports){
+},{"../config.js":13,"../templates/updatePropertyDialog.js":21,"./dialog.js":3}],13:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1283,7 +1462,7 @@ var config = {
 var _default = config;
 exports["default"] = _default;
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1294,7 +1473,7 @@ var template = "\n    <div class = \"dialog-header\">\n        <span class = \"d
 var _default = template;
 exports["default"] = _default;
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1306,7 +1485,7 @@ function render() {
   return "\n        <div class = \"property-container\">\n            <div id = \"properties-title\">Property Adverts</div>\n            <div class = \"property-type-holder\">\n            <form>\n                    <label>Search by:</label>\n                        <select class = \"property-type-options\">\n                            <option value = \"Property type\"> Property type</option>\n                            <option value = \"Self-contained\">Self-contained</option>\n                            <option value = \"2 Bedroom\">2 Bedroom</option>\n                            <option value = \"3 Bedroom\">3 Bedroom</option>\n                            <option value = \"Mini flat\">Mini flat</option>\n                            <option value = \"Duplex\">Duplex</option>\n                            <option value = \"Bungalow\">Bungalow</option>\n                        </select>\n                </form>\n            </div>\n            <div id = \"properties-grid\"></div>\n            <div id = \"add-property-button\" class = \"fab tooltip\">+\n                <span class = \"tooltiptext small-text\">Add property</span>\n            </div>\n        </div>";
 }
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1316,14 +1495,25 @@ exports["default"] = void 0;
 
 var template = function template() {
   var property = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
-  var template = "\n        <div class = \"dialog-header\">\n            <span class = \"dialog-title\">Property Detail</span>\n            <button class = \"close-rect smaller-text\">x</button>\n        </div>\n        <div class = \"property-detail-content bit-smaller-text\">\n        <div class = \"property-detail-images\">\n            <img src = ".concat(property.image_url, " alt = \"prop-image\" width = \"300px\"/>\n        </div>\n        <form class = \"property-detail-form\">\n            <div>\n                <label class = \"bold-text\">Type:</label> \n                <span data-property-type>").concat(property.type, "</span>\n                <br>\n                <label class = \"bold-text\">Address:</label> \n                <span data-property-address>").concat(property.address, "</span>\n                <br>\n                <label class = \"bold-text\">Price:</label>\n                <span data-property-price>").concat(property.price, "</span>\n                <br>\n                <label class = \"bold-text\">Status:</label>\n                <span data-property-status>").concat(property.status, "</span>\n                <br>\n                <p class = \"bold-text\">Owner Contact Information</p>\n                <label class = \"bold-text\">Email:</label>\n                <span data-property-owner>").concat(property.owner_email, "</span>\n                <br>\n                <label class = \"bold-text\">Phone:</label>\n                <span data-property-phone>").concat(property.owner_phone_number, "</span>\n                <br>\n                <label class = \"bold-text\">Posted On:</label>\n                <span data-property-post-date>").concat(property.created_on, "</span>\n            </div>   \n            <div class = \"action-section\">\n                <button id = \"edit-action\" class = \"fab tooltip\">\n                    <img src = \"./vectors/edit.svg\" alt = \"edit-icon\" width = \"20px\" height = \"20px\"/>\n                    <span class = \"tooltiptext small-text\">Edit property</span>\n                </button>\n                <br><br>    \n                <button id = \"delete-action\" class = \"fab tooltip\">\n                    <img src = \"./vectors/dustbin.svg\" alt = \"delete-icon\" width = \"20px\" height = \"20px\"/>\n                    <span class = \"tooltiptext small-text\">Delete Property</span>\n                </button>    \n            </div> \n        </form>\n        </div>");
+  var template = "\n        <div class = \"dialog-header\">\n            <span class = \"dialog-title\">Property Detail</span>\n            <button class = \"close-rect smaller-text\">x</button>\n        </div>\n        <div class = \"property-detail-content bit-smaller-text\">\n        <div class = \"property-detail-images\">\n            <img src = ".concat(property.image_url, " alt = \"prop-image\" width = \"300px\"/>\n        </div>\n        <form class = \"property-detail-form\">\n            <div>\n                <label class = \"bold-text\">Type:</label> \n                <span data-property-type>").concat(property.type, "</span>\n                <br>\n                <label class = \"bold-text\">Address:</label> \n                <span data-property-address>").concat(property.address, "</span>\n                <br>\n                <label class = \"bold-text\">Price:</label>\n                <span data-property-price>").concat(property.price, "</span>\n                <br>\n                <label class = \"bold-text\">Status:</label>\n                <span data-property-status>").concat(property.status, "</span>\n                <br>\n                <p class = \"bold-text\">Owner Contact Information</p>\n                <label class = \"bold-text\">Email:</label>\n                <span data-property-owner>").concat(property.owner_email, "</span>\n                <br>\n                <label class = \"bold-text\">Phone:</label>\n                <span data-property-phone>").concat(property.owner_phone_number, "</span>\n                <br>\n                <label class = \"bold-text\">Posted On:</label>\n                <span data-property-post-date>").concat(property.created_on, "</span>\n            </div>   \n            <div class = \"action-section\">\n                <button id = \"edit-action\" class = \"fab tooltip\">\n                    <img src = \"./vectors/edit.svg\" alt = \"edit-icon\" width = \"20px\" height = \"20px\"/>\n                    <span class = \"tooltiptext small-text\">Edit property</span>\n                </button>\n                <br><br>  \n                <button id = \"report-action\" class = \"fab tooltip\" style = \"color:#fff;\">\n                    !<span class = \"tooltiptext small-text\">Report property</span>\n                </button>\n                <br><br>  \n                <button id = \"delete-action\" class = \"fab tooltip\">\n                    <img src = \"./vectors/dustbin.svg\" alt = \"delete-icon\" width = \"20px\" height = \"20px\"/>\n                    <span class = \"tooltiptext small-text\">Delete Property</span>\n                </button>    \n            </div> \n        </form>\n        </div>");
   return template;
 };
 
 var _default = template;
 exports["default"] = _default;
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+var template = "\n    <div class = \"dialog-container\">\n        <div class = \"dialog-header\">\n            <span class = \"dialog-title\">Report Advert</span>\n            <button class = \"close-rect smaller-text\">x</button>\n        </div>\n        <form class = \"property-form\">\n            <textarea class = \"flag-text-area\" rows = \"4\" cols = \"50\" placeholder = \"Reason\"  title = \"Reason\" data-reason required></textarea>\n            <br><br>\n            <textarea class = \"flag-text-area\" rows = \"4\" cols = \"50\" placeholder = \"Description\" title = \"Description\" data-desc required></textarea>\n            <br><br>\n            <button id = \"done\" class = \"fab tooltip\">\n                <img src = \"./vectors/tick.svg\" alt =\"tick\" width = \"25px\" height = \"25px\"/>\n                <span class = \"tooltiptext small-text\">Submit report</span>\n            </button>\n        </form>\n    <div>";
+var _default = template;
+exports["default"] = _default;
+
+},{}],18:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1345,7 +1535,7 @@ function render(properties) {
   return "<h4 class = \"text-center\">No property found</h4>";
 }
 
-},{}],17:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1357,7 +1547,7 @@ function render() {
   return "\n        <div class = 'main-content'>\n            <div class = 'home-image-container'>\n                <img src = './images/estate.jpg' alt = 'image'/>\n            </div>\n            <div class = 'form-container'>\n                <div class = 'form-header smaller-text'>Sign In</div>\n                <form id ='signin-form'>\n                    <input type = 'text' placeholder = 'Email' title = 'Provide email' data-email required/> <br>\n                    <input type = 'password' placeholder = 'Password' title = 'Provide Password' data-password required/> <br>\n                    <label class = \"checkbox small-text\"> \n                        <input type = \"checkbox\">\n                        Forget Password?\n                        <span class = \"checkmark\"></span>\n                    <label> <br>\n                    <button class = 'login-button smaller-text'>Sign in</button>\n                </form>\n                <p class= 'form-container-text'>Don't have an account?</p>\n                <p id ='signup-text' class = 'bold-text smaller-text' > \n                    <a href = '#'>\n                    SIGN UP NOW\n                    </a>\n                </p>\n            </div>\n        </div>";
 }
 
-},{}],18:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1369,7 +1559,7 @@ function render() {
   return "\n        <div class = \"main-content\">\n             <div class = \"form-container\">\n                <div class = \"form-header smaller-text\">Sign up</div>\n                <form id = \"signup-form\">\n                    <input type = \"text\" placeholder = \"First Name\" title = \"Username\" data-first-name required/>\n                    <input type = \"text\" placeholder = \"Last Name\" title = \"Last Name\" data-last-name required/>\n                    <br>\n                    <input type = \"text\" placeholder = \"Email\" title = \"Email\" data-email required/>\n                    <input type = \"text\" placeholder = \"Phone\" title = \"Phone\" data-phone required/>\n                    <br>\n                    <input type = \"text\" placeholder = \"Address\" title = \"Address\" data-address required/>\n                    <input type = \"password\" placeholder = \"Password\" title = \"Password\" data-password required/>\n                    <br>\n                    <label class = \"checkbox small-text\">\n                        <input type = \"checkbox\" data-admin />\n                        Sign up as an Admin\n                        <span class = \"checkmark\"></span>\n                    </label>\n                    <br>\n                    <button class = 'login-button smaller-text'>Sign up</button>    \n                </form>\n                <p class = \"form-container-text small-text\">Already have an account?</p>\n                <p id = \"signin-text\" class = 'bold-text smaller-text'>\n                    <a href = \"#\">SIGN IN</a>\n                </p>    \n             </div>\n             <div class = \"home-image-container\">\n                <img src = \"./images/estate.jpg\" alt ='estate img'/>\n             </div>\n        </div>\n    ";
 }
 
-},{}],19:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1380,7 +1570,7 @@ var template = "\n    <div class = \"dialog-container\">\n        <div class = \
 var _default = template;
 exports["default"] = _default;
 
-},{}],20:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 "use strict";
 
 var _app = _interopRequireDefault(require("./app.js"));
@@ -1392,4 +1582,4 @@ window.onload = function () {
   new _app["default"](main).init();
 };
 
-},{"./app.js":2}]},{},[20]);
+},{"./app.js":2}]},{},[22]);
