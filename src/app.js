@@ -112,6 +112,14 @@ class App {
         this.updatePropertyDialog.on("mark_sold_error", error => {
             alert(error);
         });
+
+        this.updatePropertyDialog.on("update_property", ()=>{
+            this.propertiesPage.render();
+        });
+
+        this.updatePropertyDialog.on("update_property_error", error =>{
+            alert(error);
+        });
     }
 
 }
