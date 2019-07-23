@@ -470,6 +470,12 @@ footer{
     border-radius:6px;
 }   
 
+.flag-text-area{
+    border-radius:6px;
+    border:1px solid rgba(7, 133, 252, 0.839);
+    resize: none;
+}
+
 @media only screen and (max-width:620px){
 
      #signin-form, #signup-form{
