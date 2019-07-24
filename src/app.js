@@ -5,6 +5,9 @@ import UpdatePropertyDialog from "./components/updatePropertyDialog.js";
 import PropertyDetailDialog from "./components/propertyDetailDialog.js";
 import PropertiesPage from "./components/properties.js";
 import PropertyFlag from "./components/propertyFlag.js";
+import ErrorDialog from "./components/errorDialog.js"
+import InformationDialog from "./components/informationDialog.js";
+
 
 class App {
     constructor (container){
@@ -35,11 +38,11 @@ class App {
     signinEvents (){
         
         this.signin.on("signin", data =>{
-            alert(`${data.first_name} signed in.`);
-            this.propertiesPage.render()
+            this.propertiesPage.render();
+            InformationDialog.getInstance().setMessage(`${data.first_name} signed in.`).show();
         });
         this.signin.on("error", error =>{
-            alert(error);
+            ErrorDialog.getInstance().setMessage(error).show();
         })
         this.signin.on("signup", () => this.signup.render());
     }
@@ -70,7 +73,7 @@ class App {
 
         this.propertiesPage.on("property_type_error", error =>{
             this.propertiesPage.render();
-            alert(error);
+            ErrorDialog.getInstance().setMessage(error).show();
         });
     }
 
@@ -82,13 +85,14 @@ class App {
         });
 
         this.propertyDetailDialog.on("delete_property", () => {
-            alert("Property deleted!");
+            //alert("Property deleted!");
             this.propertyDetailDialog.dismiss();
             this.propertiesPage.render();
+            InformationDialog.getInstance().setMessage("Property deleted!").show();
         });
 
         this.propertyDetailDialog.on("deletion_error", error =>{
-            alert(error);
+            ErrorDialog.getInstance().setMessage(error).show();
         });
 
         this.propertyDetailDialog.on("report_click", data =>{
@@ -101,15 +105,15 @@ class App {
     postPropertyDialogEvent (){
         this.postPropertyDialog.on("add_property", data =>{
             console.log(data);
-            alert("Property added!");
             this.postPropertyDialog.clear();
             this.postPropertyDialog.dismiss();
             this.propertiesPage.render()
+            InformationDialog.getInstance().setMessage("Property added!").show();
         });
 
         this.postPropertyDialog.on("error", error =>{
             console.log(error);
-            alert(error);
+            ErrorDialog.getInstance().setMessage(error).show();
         });
     }
 
@@ -119,7 +123,7 @@ class App {
         });
 
         this.updatePropertyDialog.on("mark_sold_error", error => {
-            alert(error);
+            ErrorDialog.getInstance().setMessage(error).show();
         });
 
         this.updatePropertyDialog.on("update_property", ()=>{
@@ -127,19 +131,20 @@ class App {
         });
 
         this.updatePropertyDialog.on("update_property_error", error =>{
-            alert(error);
+            ErrorDialog.getInstance().setMessage(error).show();
         });
     }
 
     propertyFlagDialogEvent (){
 
         this.propertyFlag.on("property_reported", () =>{
-            alert("Report submitted");
+            //alert("Report submitted");
             this.propertyFlag.dismiss();
+            InformationDialog.getInstance().setMessage("Report submitted").show()
         });
 
-        this.propertyFlag.on("reported_error", err =>{
-            alert(err);
+        this.propertyFlag.on("reported_error", error =>{
+            ErrorDialog.getInstance().setMessage(error).show();
         });
     }
 

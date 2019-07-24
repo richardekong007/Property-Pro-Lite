@@ -2,6 +2,7 @@ import {render} from "../templates/signin.js";
 import TinyEmitter from "tiny-emitter";
 import config from "../config.js";
 
+
 class Signin extends TinyEmitter{
     constructor (container){
         super();
@@ -65,6 +66,7 @@ class Signin extends TinyEmitter{
                 return Promise.reject(res.error);
             }
             this.emit("signin", res.data);
+
         })
         .catch(err => this.emit("error",err));
     }
