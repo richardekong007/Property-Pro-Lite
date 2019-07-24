@@ -1,38 +1,55 @@
 
+
+
 .tiny-text{
-    font-family: 6px;
-}
-
-.small-text{
-    font-size: 10px;
-}
-
-.bit-smaller-text {
-    font-size: 15px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size:10px;
 }
 
 .smaller-text{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 15px;
+}
+
+.bit-small-text {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;;
     font-size: 20px;
 }
 
+.small-text{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;;
+    font-size: 25px;
+}
+
 .medium-text{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 30px;
 }
 
 .large-text{
-    font-size: 40px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 35px;
 }
 
 .bold-text{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-weight: bold;
 }
 
-.italic-text{
-    font-style: italic
+.bolder-text {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bolder;
 }
+
+.italic-text{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-style: italic;
+}
+
 
 body{
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
 }
 
 header{
@@ -285,13 +302,17 @@ footer{
 
 .property-form {
     padding: 10px;
+    width: max-content;
+    height:60vh
 }
 
 .property-form input, .property-form select{
     border-radius: 6px;
     border:1px solid rgba(7, 133, 252, 0.839);
     padding :6px;
-    margin-bottom: 10px;
+    width: 27vw;
+    height: 5vh;
+    margin-bottom: 25px;
     margin-left:10px;
     
 }
@@ -367,7 +388,6 @@ footer{
 }
 
 /*Property Detail dialog*/
-
 .property-detail-content {
     display:flex;
     flex-direction: row;
