@@ -13,7 +13,7 @@ export function render(){
                     <input type = "text" placeholder = "Address" title = "Address" data-address required/>
                     <input type = "password" placeholder = "Password" title = "Password" data-password required/>
                     <br>
-                    <label class = "checkbox small-text">
+                    <label class = "checkbox tiny-text">
                         <input type = "checkbox" data-admin />
                         Sign up as an Admin
                         <span class = "checkmark"></span>
@@ -21,7 +21,7 @@ export function render(){
                     <br>
                     <button class = 'login-button smaller-text'>Sign up</button>    
                 </form>
-                <p class = "form-container-text small-text">Already have an account?</p>
+                <p class = "form-container-text bit-smaller-text">Already have an account?</p>
                 <p id = "signin-text" class = 'bold-text smaller-text'>
                     <a href = "#">SIGN IN</a>
                 </p>    

@@ -2,8 +2,8 @@
 const template = (property = "") =>{
     const template = `
         <div class = "dialog-header">
-            <span class = "dialog-title">Property Detail</span>
-            <button class = "close-rect smaller-text">x</button>
+            <span class = "dialog-title small-text">Property Detail</span>
+            <button class = "close-rect small-text">x</button>
         </div>
         <div class = "property-detail-content bit-smaller-text">
         <div class = "property-detail-images">
@@ -36,16 +36,17 @@ const template = (property = "") =>{
             <div class = "action-section">
                 <button id = "edit-action" class = "fab tooltip">
                     <img src = "./vectors/edit.svg" alt = "edit-icon" width = "20px" height = "20px"/>
-                    <span class = "tooltiptext small-text">Edit property</span>
+                    <span class = "tooltiptext tiny-text">Edit property</span>
                 </button>
                 <br><br>  
                 <button id = "report-action" class = "fab tooltip" style = "color:#fff;">
-                    !<span class = "tooltiptext small-text">Report property</span>
+                    <img src = "./vectors/report.svg" alt = "report-icon" width = "20px" height = "20px"/>
+                    <span class = "tooltiptext tiny-text">Report property</span>
                 </button>
                 <br><br>  
                 <button id = "delete-action" class = "fab tooltip">
                     <img src = "./vectors/dustbin.svg" alt = "delete-icon" width = "20px" height = "20px"/>
-                    <span class = "tooltiptext small-text">Delete Property</span>
+                    <span class = "tooltiptext tiny-text">Delete Property</span>
                 </button>    
             </div> 
         </form>
