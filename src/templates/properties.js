@@ -2,7 +2,7 @@ export function render() {
     
     return `
         <div class = "property-container">
-            <div id = "properties-title">Property Adverts</div>
+            <div id = "properties-title" class = "small-text">Property Adverts</div>
             <div class = "property-type-holder">
             <form>
                     <label>Search by:</label>
@@ -19,7 +19,7 @@ export function render() {
             </div>
             <div id = "properties-grid"></div>
             <div id = "add-property-button" class = "fab tooltip">+
-                <span class = "tooltiptext small-text">Add property</span>
+                <span class = "tooltiptext tiny-text">Add property</span>
             </div>
         </div>`;
 }

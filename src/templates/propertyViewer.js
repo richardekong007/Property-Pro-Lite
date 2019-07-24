@@ -3,9 +3,9 @@ const renderProperties = properties => {
         return `
             <div class = "property-item bold-text">
                 <img src = ${property.image_url} alt = "property image" width= "250px" height = "250px"/><br>
-                <span>${property.address}</span><br>
-                <span>${property.price}</span><br>
-                <span>${property.status}</span><br>
+                <span class = "bolder-text small-text">${property.address}</span><br>
+                <span class = "bold-text small-text">${property.price}</span><br>
+                <span class = "italic-text smaller">${property.status}</span><br>
             </div>`;
     }).join("");
 };
