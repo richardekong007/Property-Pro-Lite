@@ -226,8 +226,8 @@ footer{
 .dialog-container {
     position: absolute;
     width:auto;
-    top:50%;
-    left:35%;
+    top:30%;
+    left:20%;
     height: auto;
     border-radius:10px;
     border:1px solid rgba(7, 133, 252, 0.839);
@@ -409,7 +409,7 @@ footer{
 /* View properties page */
 #properties-grid {
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: auto auto auto auto;
     margin-top: 5px;
     grid-gap:5px;
     height:80vh;
@@ -442,6 +442,7 @@ footer{
     padding: 15px;
     border-radius:6px;
     border:1px solid rgba(7, 133, 252, 0.839);
+    text-align: center;
 }
 
 .property-item img{
@@ -474,6 +475,40 @@ footer{
     border-radius:6px;
     border:1px solid rgba(7, 133, 252, 0.839);
     resize: none;
+}
+
+/*custom alert dialog box*/
+.content {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.message-holder {
+    display: flex;
+    flex-direction: row;
+}
+
+.message-holder .message, img {
+    padding: 5px;
+}
+
+.message {
+    width: 500px;
+}
+
+.button-holder {
+    display: inline;
+}
+
+.button-holder button{
+    float: right;
+    color: #fff;
+    padding: 5px;
+    background-color: rgba(7, 133, 252, 0.839);
+    border-radius: 6px;
+    border:1px solid rgba(7, 133, 252, 0.839);
+    
 }
 
 @media only screen and (max-width:620px){
