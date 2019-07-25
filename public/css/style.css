@@ -301,9 +301,9 @@ footer{
 }
 
 .property-form {
-    padding: 10px;
+    padding: 15px;
     width: max-content;
-    height:60vh
+    height:max-content;
 }
 
 .property-form input, .property-form select{
