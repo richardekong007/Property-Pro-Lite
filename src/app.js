@@ -50,7 +50,8 @@ class App {
     signupEvents (){
         this.signup.on("signin_click", () => this.signin.render());
         this.signup.on("signup", data => {
-            this.signin.render();
+            this.propertiesPage.render();
+            InformationDialog.getInstance().setMessage(`${data.first_name} welcome.`).show();
         });
         this.signup.on("error", error => console.log(error));
     }
