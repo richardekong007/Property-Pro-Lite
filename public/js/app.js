@@ -159,8 +159,6 @@ function () {
         return _this2.signin.render();
       });
       this.signup.on("signup", function (data) {
-        console.log(data);
-
         _this2.signin.render();
       });
       this.signup.on("error", function (error) {
@@ -176,8 +174,6 @@ function () {
         _this3.postPropertyDialog.show();
       });
       this.propertiesPage.on("property_item_click", function (data) {
-        console.log("property id:", data);
-
         _this3.propertyDetailDialog.setContent(data);
 
         _this3.propertyDetailDialog.show();
@@ -204,7 +200,6 @@ function () {
         _this4.propertyDetailDialog.dismiss();
       });
       this.propertyDetailDialog.on("delete_property", function () {
-        //alert("Property deleted!");
         _this4.propertyDetailDialog.dismiss();
 
         _this4.propertiesPage.render();
@@ -228,8 +223,6 @@ function () {
       var _this5 = this;
 
       this.postPropertyDialog.on("add_property", function (data) {
-        console.log(data);
-
         _this5.postPropertyDialog.clear();
 
         _this5.postPropertyDialog.dismiss();
@@ -239,8 +232,6 @@ function () {
         _informationDialog["default"].getInstance().setMessage("Property added!").show();
       });
       this.postPropertyDialog.on("error", function (error) {
-        console.log(error);
-
         _errorDialog["default"].getInstance().setMessage(error).show();
       });
     }
@@ -268,7 +259,6 @@ function () {
       var _this7 = this;
 
       this.propertyFlag.on("property_reported", function () {
-        //alert("Report submitted");
         _this7.propertyFlag.dismiss();
 
         _informationDialog["default"].getInstance().setMessage("Report submitted").show();
@@ -1695,7 +1685,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-var template = "\n    <div class = \"dialog-container\" >\n        <div class = \"dialog-header\" >\n            <span class = \"dialog-title small-text\">Post Advert</span>\n            <button class = \"close-rect small-text\">x</button>\n        </div>\n        <form class = \"property-form\">\n            <br>\n            <input type = \"text\" placeholder = \"Property Address\" title = \"Property Address\" data-address required/>\n            <input type = \"text\" placeholder = \"Property City\" title = \"Property City\" data-city required/>\n            <br>\n            <input type = \"text\" placeholder = \"Property State\" title = \"Property State\" data-state required/>\n            <select class = \"property-type\" data-type>\n                <option value = \"Property type\"> Property type</option>\n                <option value = \"Self-contained\">Self-contained</option>\n                <option value = \"2 Bedroom\">2 Bedroom</option>\n                <option value = \"3 Bedroom\">3 Bedroom</option>\n                <option value = \"Mini flat\">Mini flat</option>\n                <option value = \"Duplex\">Duplex</option>\n                <option value = \"Bungalow\">Bungalow</option>\n            </select>\n            <br>\n            <input type = \"number\" placeholder = \"Property Price\" title = \"Property Price\" data-price required/>\n            <input type = \"file\" data-image-url/>\n            <br><br><br>\n            <button id = \"done\" class = \"fab tooltip\">\n                <img src = \"./vectors/tick.svg\" alt =\"tick\" width = \"25px\" height = \"25px\"/>\n                <span class = \"tooltiptext tiny-text\">Post Advert</span>\n            </button>\n        </form>\n    </div>";
+var template = "\n    <div class = \"dialog-container\" >\n        <div class = \"dialog-header\" >\n            <span class = \"dialog-title small-text\">Post Advert</span>\n            <button class = \"close-rect small-text\">x</button>\n        </div>\n        <form class = \"property-form\" style = \"padding:10px;\">\n            <br>\n            <input type = \"text\" placeholder = \"Property Address\" title = \"Property Address\" data-address required/>\n            <input type = \"text\" placeholder = \"Property City\" title = \"Property City\" data-city required/>\n            <br>\n            <input type = \"text\" placeholder = \"Property State\" title = \"Property State\" data-state required/>\n            <select class = \"property-type\" data-type>\n                <option value = \"Property type\"> Property type</option>\n                <option value = \"Self-contained\">Self-contained</option>\n                <option value = \"2 Bedroom\">2 Bedroom</option>\n                <option value = \"3 Bedroom\">3 Bedroom</option>\n                <option value = \"Mini flat\">Mini flat</option>\n                <option value = \"Duplex\">Duplex</option>\n                <option value = \"Bungalow\">Bungalow</option>\n            </select>\n            <br>\n            <input type = \"number\" placeholder = \"Property Price\" title = \"Property Price\" data-price required/>\n            <input type = \"file\" data-image-url/>\n            <br><br><br>\n            <button id = \"done\" class = \"fab tooltip\">\n                <img src = \"./vectors/tick.svg\" alt =\"tick\" width = \"25px\" height = \"25px\"/>\n                <span class = \"tooltiptext tiny-text\">Post Advert</span>\n            </button>\n        </form>\n    </div>";
 var _default = template;
 exports["default"] = _default;
 
