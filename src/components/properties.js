@@ -1,6 +1,7 @@
 import {render} from "../templates/properties";
 import PropertyViewer from "../components/propertyViewer.js";
 import TinyEmitter from "tiny-emitter"
+import Authenticator from "../authenticator.js";
 
 class Properties extends TinyEmitter{
 
@@ -8,6 +9,7 @@ class Properties extends TinyEmitter{
         super();
         this.container = container;
         this.propertyViewer = null;
+        
     }
 
     render() {

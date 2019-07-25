@@ -7,6 +7,7 @@ import PropertiesPage from "./components/properties.js";
 import PropertyFlag from "./components/propertyFlag.js";
 import ErrorDialog from "./components/errorDialog.js"
 import InformationDialog from "./components/informationDialog.js";
+import Authenticator from "./authenticator.js";
 
 
 class App {
@@ -21,8 +22,9 @@ class App {
     }
 
     init (){
-        this.signin.render();
-        this.addEventListener();
+        // this.signin.render();
+        // this.addEventListener();
+        this.render();
     }
 
     addEventListener(){
@@ -40,11 +42,21 @@ class App {
         this.signin.on("signin", data =>{
             this.propertiesPage.render();
             InformationDialog.getInstance().setMessage(`${data.first_name} signed in.`).show();
+            this.setCredentials(data);
         });
         this.signin.on("error", error =>{
             ErrorDialog.getInstance().setMessage(error).show();
         })
         this.signin.on("signup", () => this.signup.render());
+
+        this.signin.on("token_expired", message => {
+            this.signin.render();
+            InformationDialog.getInstance().setMessage(message).show();
+        });
+
+        this.signin.on("reloading", () =>{
+            this.propertiesPage.render();
+        });
     }
 
     signupEvents (){
@@ -52,8 +64,9 @@ class App {
         this.signup.on("signup", data => {
             this.propertiesPage.render();
             InformationDialog.getInstance().setMessage(`${data.first_name} welcome.`).show();
+            this.setCredentials(data);
         });
-        this.signup.on("error", error => console.log(error));
+        this.signup.on("error", error => ErrorDialog.getInstance().setMessage(error).show());
     }
 
     propertiesPageEvent (){
@@ -76,9 +89,13 @@ class App {
         });
 
         this.propertiesPage.on("signout", () =>{
-            //remove token
+            InformationDialog.getInstance()
+            .setMessage(`Good bye ${this.getUsername()}`)
+            .show();
             this.signin.render();
+            localStorage.clear();
         });
+
     }
 
     propertyDetailDialogEvent (){
@@ -146,6 +163,32 @@ class App {
         this.propertyFlag.on("reported_error", error =>{
             ErrorDialog.getInstance().setMessage(error).show();
         });
+    }
+
+    setCredentials (data){
+        localStorage.setItem("token",data.token);
+        localStorage.setItem("username", `${data.first_name} ${data.last_name}`);
+    }
+
+    getUsername (){
+        return !(localStorage.getItem("username"))? "": localStorage.getItem("username");
+    }
+
+    render (){
+        const token = localStorage.getItem("token");
+        if (!token){
+            this.signin.render();
+        } else if (Authenticator.isExpired()){
+            this.signin.render();
+            InformationDialog.getInstance().setMessage("Session Timeout!").show();
+            localStorage.clear();
+        } else{
+            this.propertiesPage.render();
+            InformationDialog.getInstance()
+            .setMessage(`Welcome back ${this.getUsername()}`).show();
+        }
+
+        this.addEventListener();
     }
 
 }
