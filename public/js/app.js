@@ -127,7 +127,7 @@ function () {
     value: function addEventListener() {
       this.signinEvents();
       this.signupEvents();
-      this.propertiesTemplateEvent();
+      this.propertiesPageEvent();
       this.propertyDetailDialogEvent();
       this.postPropertyDialogEvent();
       this.updatePropertyDialogEvent();
@@ -168,8 +168,8 @@ function () {
       });
     }
   }, {
-    key: "propertiesTemplateEvent",
-    value: function propertiesTemplateEvent() {
+    key: "propertiesPageEvent",
+    value: function propertiesPageEvent() {
       var _this3 = this;
 
       this.propertiesPage.on("add_button_click", function () {
@@ -187,6 +187,10 @@ function () {
         _this3.propertiesPage.render();
 
         _errorDialog["default"].getInstance().setMessage(error).show();
+      });
+      this.propertiesPage.on("signout", function () {
+        //remove token
+        _this3.signin.render();
       });
     }
   }, {
@@ -754,6 +758,7 @@ function (_TinyEmitter) {
       this.addClick();
       this.propertyItemClick();
       this.propertyTypeChange();
+      this.signoutClick();
     }
   }, {
     key: "addClick",
@@ -784,9 +789,20 @@ function (_TinyEmitter) {
       var propertyTypes = document.querySelector(".property-type-options");
       propertyTypes.addEventListener("change", function (event) {
         var selectedType = event.target.value;
-        console.log("select type:", selectedType);
 
         _this5.emit("type_change", selectedType);
+      });
+    }
+  }, {
+    key: "signoutClick",
+    value: function signoutClick() {
+      var _this6 = this;
+
+      var signout = document.querySelector("#sign-out");
+      signout.addEventListener("click", function (event) {
+        event.preventDefault();
+
+        _this6.emit("signout");
       });
     }
   }]);
@@ -1157,7 +1173,6 @@ function (_TinyEmitter) {
         return res.json();
       }).then(function (res) {
         if (res.data.length > 0) {
-          console.log(res.data);
           _this2.container.innerHTML = (0, _propertyViewer.render)(res.data);
 
           _this2.emitIds(res.data, _this2.container.querySelectorAll(".property-item"));
@@ -1700,7 +1715,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.render = render;
 
 function render() {
-  return "\n        <div class = \"property-container\">\n            <div id = \"properties-title\" class = \"small-text\">Property Adverts</div>\n            <div class = \"property-type-holder\">\n            <form>\n                    <label>Search by:</label>\n                        <select class = \"property-type-options\">\n                            <option value = \"Property type\"> Property type</option>\n                            <option value = \"Self-contained\">Self-contained</option>\n                            <option value = \"2 Bedroom\">2 Bedroom</option>\n                            <option value = \"3 Bedroom\">3 Bedroom</option>\n                            <option value = \"Mini flat\">Mini flat</option>\n                            <option value = \"Duplex\">Duplex</option>\n                            <option value = \"Bungalow\">Bungalow</option>\n                        </select>\n                </form>\n            </div>\n            <div id = \"properties-grid\"></div>\n            <div id = \"add-property-button\" class = \"fab tooltip\">+\n                <span class = \"tooltiptext tiny-text\">Add property</span>\n            </div>\n        </div>";
+  return "\n        <div class = \"property-container\">\n            <div id = \"properties-title\" class = \"small-text\">Property Adverts</div>\n            <div class = \"property-type-holder\">\n                <form>\n                    <label>Search by:</label>\n                        <select class = \"property-type-options\">\n                            <option value = \"Property type\"> Property type</option>\n                            <option value = \"Self-contained\">Self-contained</option>\n                            <option value = \"2 Bedroom\">2 Bedroom</option>\n                            <option value = \"3 Bedroom\">3 Bedroom</option>\n                            <option value = \"Mini flat\">Mini flat</option>\n                            <option value = \"Duplex\">Duplex</option>\n                            <option value = \"Bungalow\">Bungalow</option>\n                        </select>\n                    </form>\n                    <br>\n                    <br>\n                    <button id = \"sign-out\" class = \"smaller-text\">Sign out</button>\n            </div>\n            <div id = \"properties-grid\"></div>\n            <div id = \"add-property-button\" class = \"fab tooltip\">+\n                <span class = \"tooltiptext tiny-text\">Add property</span>\n            </div>\n        </div>";
 }
 
 },{}],20:[function(require,module,exports){

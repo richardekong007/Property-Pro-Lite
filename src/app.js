@@ -28,7 +28,7 @@ class App {
     addEventListener(){
         this.signinEvents();
         this.signupEvents();
-        this.propertiesTemplateEvent();
+        this.propertiesPageEvent();
         this.propertyDetailDialogEvent();
         this.postPropertyDialogEvent();
         this.updatePropertyDialogEvent();
@@ -56,7 +56,7 @@ class App {
         this.signup.on("error", error => console.log(error));
     }
 
-    propertiesTemplateEvent (){
+    propertiesPageEvent (){
         this.propertiesPage.on("add_button_click", () => {
             this.postPropertyDialog.show();
         });
@@ -73,6 +73,11 @@ class App {
         this.propertiesPage.on("property_type_error", error =>{
             this.propertiesPage.render();
             ErrorDialog.getInstance().setMessage(error).show();
+        });
+
+        this.propertiesPage.on("signout", () =>{
+            //remove token
+            this.signin.render();
         });
     }
 
