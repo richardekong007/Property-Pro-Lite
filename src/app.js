@@ -50,7 +50,6 @@ class App {
     signupEvents (){
         this.signup.on("signin_click", () => this.signin.render());
         this.signup.on("signup", data => {
-            console.log(data);
             this.signin.render();
         });
         this.signup.on("error", error => console.log(error));
@@ -62,7 +61,6 @@ class App {
         });
 
         this.propertiesPage.on("property_item_click", data =>{
-            console.log("property id:",data)
             this.propertyDetailDialog.setContent(data);
             this.propertyDetailDialog.show();
         });
@@ -85,7 +83,6 @@ class App {
         });
 
         this.propertyDetailDialog.on("delete_property", () => {
-            //alert("Property deleted!");
             this.propertyDetailDialog.dismiss();
             this.propertiesPage.render();
             InformationDialog.getInstance().setMessage("Property deleted!").show();
@@ -104,7 +101,6 @@ class App {
 
     postPropertyDialogEvent (){
         this.postPropertyDialog.on("add_property", data =>{
-            console.log(data);
             this.postPropertyDialog.clear();
             this.postPropertyDialog.dismiss();
             this.propertiesPage.render()
@@ -112,7 +108,6 @@ class App {
         });
 
         this.postPropertyDialog.on("error", error =>{
-            console.log(error);
             ErrorDialog.getInstance().setMessage(error).show();
         });
     }
@@ -138,7 +133,6 @@ class App {
     propertyFlagDialogEvent (){
 
         this.propertyFlag.on("property_reported", () =>{
-            //alert("Report submitted");
             this.propertyFlag.dismiss();
             InformationDialog.getInstance().setMessage("Report submitted").show()
         });
