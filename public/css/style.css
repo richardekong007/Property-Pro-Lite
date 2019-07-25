@@ -487,6 +487,15 @@ footer{
     float: right;
 }
 
+.property-type-holder #sign-out {
+    float: right;
+    color:rgba(7, 133, 252, 0.839);
+    background-color: #fff;
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid rgba(7, 133, 252, 0.839);
+}
+
 .property-type-options{
     border-radius:6px;
 }   

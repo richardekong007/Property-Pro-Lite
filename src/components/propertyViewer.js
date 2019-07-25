@@ -17,7 +17,6 @@ class PropertyViewer extends TinyEmitter{
         .then(res => res.json())
         .then(res =>{
             if (res.data.length > 0){
-                console.log(res.data);
                 this.container.innerHTML = render(res.data);
                 this.emitIds(res.data, this.container.querySelectorAll(".property-item")); 
             }

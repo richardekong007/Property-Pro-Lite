@@ -33,6 +33,7 @@ class Properties extends TinyEmitter{
         this.addClick();
         this.propertyItemClick();
         this.propertyTypeChange();
+        this.signoutClick();
     }
 
     addClick (){
@@ -55,8 +56,15 @@ class Properties extends TinyEmitter{
         const propertyTypes = document.querySelector(".property-type-options");
         propertyTypes.addEventListener("change", event =>{
             const selectedType = event.target.value;
-            console.log("select type:",selectedType);
             this.emit("type_change", selectedType);
+        });
+    }
+
+    signoutClick (){
+        const signout = document.querySelector("#sign-out");
+        signout.addEventListener("click", event => {
+            event.preventDefault();
+            this.emit("signout");
         });
     }
 

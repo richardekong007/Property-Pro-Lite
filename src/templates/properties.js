@@ -4,7 +4,7 @@ export function render() {
         <div class = "property-container">
             <div id = "properties-title" class = "small-text">Property Adverts</div>
             <div class = "property-type-holder">
-            <form>
+                <form>
                     <label>Search by:</label>
                         <select class = "property-type-options">
                             <option value = "Property type"> Property type</option>
@@ -15,7 +15,10 @@ export function render() {
                             <option value = "Duplex">Duplex</option>
                             <option value = "Bungalow">Bungalow</option>
                         </select>
-                </form>
+                    </form>
+                    <br>
+                    <br>
+                    <button id = "sign-out" class = "smaller-text">Sign out</button>
             </div>
             <div id = "properties-grid"></div>
             <div id = "add-property-button" class = "fab tooltip">+
