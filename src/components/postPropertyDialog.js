@@ -35,7 +35,7 @@ class PostPropertyDialog extends Dialog{
 
     addProperty (data){
     
-        fetch(`${config.baseUrl}/api/v1/property`,{
+        fetch(`${config.host}/api/v1/property`,{
             mode:"cors",
             method:"POST",
             body:data

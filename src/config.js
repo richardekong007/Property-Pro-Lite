@@ -1,5 +1,6 @@
 const config = {
-    baseUrl: "https://property-pro-lite-api.herokuapp.com"
+    host: "https://property-pro-lite-api.herokuapp.com" //"http://localhost:3999"
+    
 }
 
 export default config;

@@ -10,7 +10,7 @@ class PropertyViewer extends TinyEmitter{
 
     render (){
         
-        fetch(`${config.baseUrl}/api/v1/property`,{
+        fetch(`${config.host}/api/v1/property`,{
             mode:"cors",
             headers:{"Content-Type":"application/json"}
         })
@@ -24,7 +24,7 @@ class PropertyViewer extends TinyEmitter{
     }
 
     renderByType (type) {
-       return fetch(`${config.baseUrl}/api/v1/property/type?type=${type}`,{
+       return fetch(`${config.host}/api/v1/property/type?type=${type}`,{
             mode:'cors',
             headers:{"Content-Type":"application/json"}
         })

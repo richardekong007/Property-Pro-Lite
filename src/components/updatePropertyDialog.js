@@ -59,7 +59,7 @@ class UpdatePropertyDialog extends Dialog {
     }
 
     markAsSold (id){
-        fetch(`${config.baseUrl}/api/v1/property/${id}/sold`,{
+        fetch(`${config.host}/api/v1/property/${id}/sold`,{
             mode:"cors",
             method:"PATCH",
             headers:{"Content-Type":"application/json"}
@@ -75,7 +75,7 @@ class UpdatePropertyDialog extends Dialog {
     }
 
     updateProperty (data){
-        fetch(`${config.baseUrl}/api/v1/property/${this.propertyId}`, {
+        fetch(`${config.host}/api/v1/property/${this.propertyId}`, {
             mode:"cors",
             method:"PATCH",
             body:JSON.stringify(data),

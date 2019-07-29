@@ -64,7 +64,7 @@ class PropertyDetailDialog extends Dialog{
     }
 
     deleteProperty(id){
-        fetch(`${config.baseUrl}/api/v1/property/${id}`, {
+        fetch(`${config.host}/api/v1/property/${id}`, {
             mode:"cors",
             method:"DELETE",
             headers:{"Content-Type":"application/json"}
