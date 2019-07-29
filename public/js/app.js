@@ -27814,6 +27814,10 @@ var _informationDialog = _interopRequireDefault(require("./components/informatio
 
 var _authenticator = _interopRequireDefault(require("./authenticator.js"));
 
+var _resetPasswordStep = _interopRequireDefault(require("./components/resetPasswordStep1.js"));
+
+var _resetPasswordStep2 = _interopRequireDefault(require("./components/resetPasswordStep2.js"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -27835,13 +27839,13 @@ function () {
     this.propertyDetailDialog = new _propertyDetailDialog["default"](container);
     this.propertiesPage = new _properties["default"](container);
     this.propertyFlag = new _propertyFlag["default"](container);
+    this.resetPasswordStep1 = new _resetPasswordStep["default"](container);
+    this.resetPasswordStep2 = new _resetPasswordStep2["default"](container);
   }
 
   _createClass(App, [{
     key: "init",
     value: function init() {
-      // this.signin.render();
-      // this.addEventListener();
       this.render();
     }
   }, {
@@ -27854,6 +27858,8 @@ function () {
       this.postPropertyDialogEvent();
       this.updatePropertyDialogEvent();
       this.propertyFlagDialogEvent();
+      this.receiveResetParams();
+      this.passwordReset();
     }
   }, {
     key: "signinEvents",
@@ -27880,6 +27886,9 @@ function () {
       });
       this.signin.on("reloading", function () {
         _this.propertiesPage.render();
+      });
+      this.signin.on("forget_password_checked", function () {
+        _this.resetPasswordStep1.render();
       });
     }
   }, {
@@ -28011,6 +28020,40 @@ function () {
       });
     }
   }, {
+    key: "receiveResetParams",
+    value: function receiveResetParams() {
+      var _this8 = this;
+
+      this.resetPasswordStep1.on("submit_email", function (data) {
+        _this8.resetPasswordStep1.setPasswordResetLink(data);
+      });
+      this.resetPasswordStep1.on("receive_reset_params", function (data) {
+        console.log(data);
+
+        _this8.resetPasswordStep2.setData(data).render();
+      });
+      this.resetPasswordStep1.on("submit_email_error", function (err) {
+        _errorDialog["default"].getInstance().setMessage(err).show();
+      });
+      this.resetPasswordStep1.on("receive_params_error", function (err) {
+        _errorDialog["default"].getInstance().setMessage(err).show();
+      });
+    }
+  }, {
+    key: "passwordReset",
+    value: function passwordReset() {
+      var _this9 = this;
+
+      this.resetPasswordStep2.on("password_reset", function (data) {
+        _informationDialog["default"].getInstance().setMessage(data).show();
+
+        _this9.signin.render();
+      });
+      this.resetPasswordStep2.on("password_reset_error", function (err) {
+        _errorDialog["default"].getInstance().setMessage(err).show();
+      });
+    }
+  }, {
     key: "setCredentials",
     value: function setCredentials(data) {
       localStorage.setItem("token", data.token);
@@ -28050,7 +28093,7 @@ function () {
 var _default = App;
 exports["default"] = _default;
 
-},{"./authenticator.js":186,"./components/errorDialog.js":188,"./components/informationDialog.js":189,"./components/postPropertyDialog.js":191,"./components/properties.js":192,"./components/propertyDetailDialog.js":193,"./components/propertyFlag.js":194,"./components/signin.js":196,"./components/signup.js":197,"./components/updatePropertyDialog.js":198}],186:[function(require,module,exports){
+},{"./authenticator.js":186,"./components/errorDialog.js":188,"./components/informationDialog.js":189,"./components/postPropertyDialog.js":191,"./components/properties.js":192,"./components/propertyDetailDialog.js":193,"./components/propertyFlag.js":194,"./components/resetPasswordStep1.js":196,"./components/resetPasswordStep2.js":197,"./components/signin.js":198,"./components/signup.js":199,"./components/updatePropertyDialog.js":200}],186:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28273,7 +28316,7 @@ function (_Dialog) {
 var _default = ErrorDialog;
 exports["default"] = _default;
 
-},{"../components/dialog.js":187,"../templates/errorDialog.js":200}],189:[function(require,module,exports){
+},{"../components/dialog.js":187,"../templates/errorDialog.js":202}],189:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28371,7 +28414,7 @@ function (_Dialog) {
 var _default = InformationDialog;
 exports["default"] = _default;
 
-},{"../components/dialog.js":187,"../templates/informationDialog.js":201}],190:[function(require,module,exports){
+},{"../components/dialog.js":187,"../templates/informationDialog.js":203}],190:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28469,7 +28512,7 @@ function (_Dialog) {
     value: function addProperty(data) {
       var _this2 = this;
 
-      fetch("".concat(_config["default"].baseUrl, "/api/v1/property"), {
+      fetch("".concat(_config["default"].host, "/api/v1/property"), {
         mode: "cors",
         method: "POST",
         body: data
@@ -28498,7 +28541,7 @@ function (_Dialog) {
 var _default = PostPropertyDialog;
 exports["default"] = _default;
 
-},{"../config.js":199,"../templates/postPropertyDialog.js":202,"./dialog.js":187}],192:[function(require,module,exports){
+},{"../config.js":201,"../templates/postPropertyDialog.js":206,"./dialog.js":187}],192:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28633,7 +28676,7 @@ function (_TinyEmitter) {
 var _default = Properties;
 exports["default"] = _default;
 
-},{"../authenticator.js":186,"../components/propertyViewer.js":195,"../templates/properties":203,"tiny-emitter":180}],193:[function(require,module,exports){
+},{"../authenticator.js":186,"../components/propertyViewer.js":195,"../templates/properties":207,"tiny-emitter":180}],193:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28763,7 +28806,7 @@ function (_Dialog) {
     value: function deleteProperty(id) {
       var _this6 = this;
 
-      fetch("".concat(_config["default"].baseUrl, "/api/v1/property/").concat(id), {
+      fetch("".concat(_config["default"].host, "/api/v1/property/").concat(id), {
         mode: "cors",
         method: "DELETE",
         headers: {
@@ -28789,7 +28832,7 @@ function (_Dialog) {
 var _default = PropertyDetailDialog;
 exports["default"] = _default;
 
-},{"../config.js":199,"../templates/propertyDetailDialog.js":204,"./dialog.js":187}],194:[function(require,module,exports){
+},{"../config.js":201,"../templates/propertyDetailDialog.js":208,"./dialog.js":187}],194:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28903,7 +28946,7 @@ function (_Dialog) {
     value: function reportAds(data) {
       var _this4 = this;
 
-      fetch("".concat(_config["default"].baseUrl, "/api/v1/flag"), {
+      fetch("".concat(_config["default"].host, "/api/v1/flag"), {
         mode: "cors",
         method: "POST",
         headers: {
@@ -28930,7 +28973,7 @@ function (_Dialog) {
 var _default = PropertyFlag;
 exports["default"] = _default;
 
-},{"../config.js":199,"../templates/propertyFlag.js":205,"./dialog.js":187}],195:[function(require,module,exports){
+},{"../config.js":201,"../templates/propertyFlag.js":209,"./dialog.js":187}],195:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28984,7 +29027,7 @@ function (_TinyEmitter) {
     value: function render() {
       var _this2 = this;
 
-      fetch("".concat(_config["default"].baseUrl, "/api/v1/property"), {
+      fetch("".concat(_config["default"].host, "/api/v1/property"), {
         mode: "cors",
         headers: {
           "Content-Type": "application/json"
@@ -29004,7 +29047,7 @@ function (_TinyEmitter) {
     value: function renderByType(type) {
       var _this3 = this;
 
-      return fetch("".concat(_config["default"].baseUrl, "/api/v1/property/type?type=").concat(type), {
+      return fetch("".concat(_config["default"].host, "/api/v1/property/type?type=").concat(type), {
         mode: 'cors',
         headers: {
           "Content-Type": "application/json"
@@ -29040,7 +29083,278 @@ function (_TinyEmitter) {
 var _default = PropertyViewer;
 exports["default"] = _default;
 
-},{"../config.js":199,"../templates/propertyViewer.js":206,"tiny-emitter":180}],196:[function(require,module,exports){
+},{"../config.js":201,"../templates/propertyViewer.js":210,"tiny-emitter":180}],196:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _tinyEmitter = _interopRequireDefault(require("tiny-emitter"));
+
+var _passwordResetStep = require("../templates/passwordResetStep1.js");
+
+var _config = _interopRequireDefault(require("../config.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var ResetPasswordStep1 =
+/*#__PURE__*/
+function (_TinyEmitter) {
+  _inherits(ResetPasswordStep1, _TinyEmitter);
+
+  function ResetPasswordStep1(container) {
+    var _this;
+
+    _classCallCheck(this, ResetPasswordStep1);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(ResetPasswordStep1).call(this));
+    _this.container = container;
+    _this.passwordResetLink;
+    return _this;
+  }
+
+  _createClass(ResetPasswordStep1, [{
+    key: "render",
+    value: function render() {
+      this.container.innerHTML = (0, _passwordResetStep.render)();
+      this.container.querySelector('[data-email]').focus();
+      this.addEventListener();
+    }
+  }, {
+    key: "setPasswordResetLink",
+    value: function setPasswordResetLink(link) {
+      var linkContainer = this.container.querySelector("#reset-link-container");
+      linkContainer.innerHTML = link;
+      this.passwordResetLink = linkContainer.querySelector("a");
+    }
+  }, {
+    key: "addEventListener",
+    value: function addEventListener() {
+      this.onNext();
+      this.onResetLinkClick();
+    }
+  }, {
+    key: "onNext",
+    value: function onNext() {
+      var _this2 = this;
+
+      var form = this.container.querySelector('form');
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        var email = event.target.querySelector('[data-email]').value;
+        var data = {
+          email: email
+        };
+
+        _this2.submitEmail(data);
+      });
+    }
+  }, {
+    key: "onResetLinkClick",
+    value: function onResetLinkClick() {
+      var _this3 = this;
+
+      var linkContainer = this.container.querySelector("#reset-link-container");
+      linkContainer.addEventListener('click', function (event) {
+        event.preventDefault();
+
+        if (_this3.passwordResetLink) {
+          var url = "".concat(_this3.passwordResetLink.href);
+          console.log(url);
+
+          _this3.receiveResetParams(url);
+        }
+      });
+    }
+  }, {
+    key: "submitEmail",
+    value: function submitEmail(data) {
+      var _this4 = this;
+
+      fetch("".concat(_config["default"].host, "/api/v1/auth/reset-password-step1"), {
+        mode: 'cors',
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }).then(function (res) {
+        return res.json();
+      }).then(function (res) {
+        if (res.error) {
+          return Promise.reject(res.error);
+        }
+
+        _this4.emit("submit_email", res.data);
+      })["catch"](function (err) {
+        return _this4.emit("submit_email_error", err);
+      });
+    }
+  }, {
+    key: "receiveResetParams",
+    value: function receiveResetParams(url) {
+      var _this5 = this;
+
+      fetch(url, {
+        mode: 'cors',
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }).then(function (res) {
+        return res.json();
+      }).then(function (res) {
+        if (res.error) {
+          return Promise.reject(res.error);
+        }
+
+        _this5.emit("receive_reset_params", res.data);
+      })["catch"](function (err) {
+        return _this5.emit("receive_params_error", err);
+      });
+    }
+  }]);
+
+  return ResetPasswordStep1;
+}(_tinyEmitter["default"]);
+
+var _default = ResetPasswordStep1;
+exports["default"] = _default;
+
+},{"../config.js":201,"../templates/passwordResetStep1.js":204,"tiny-emitter":180}],197:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _tinyEmitter = _interopRequireDefault(require("tiny-emitter"));
+
+var _passwordResetstep = require("../templates/passwordResetstep2.js");
+
+var _config = _interopRequireDefault(require("../config.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var ResetPasswordStep2 =
+/*#__PURE__*/
+function (_TinyEmitter) {
+  _inherits(ResetPasswordStep2, _TinyEmitter);
+
+  function ResetPasswordStep2(container) {
+    var _this;
+
+    _classCallCheck(this, ResetPasswordStep2);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(ResetPasswordStep2).call(this));
+    _this.container = container;
+    _this.data;
+    return _this;
+  }
+
+  _createClass(ResetPasswordStep2, [{
+    key: "setData",
+    value: function setData(data) {
+      this.data = data;
+      return this;
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      this.container.innerHTML = (0, _passwordResetstep.render)(this.data);
+      this.container.querySelector('[data-password]').focus();
+      this.addEventListener();
+    }
+  }, {
+    key: "addEventListener",
+    value: function addEventListener() {
+      this.onResetClick();
+    }
+  }, {
+    key: "onResetClick",
+    value: function onResetClick() {
+      var _this2 = this;
+
+      var form = this.container.querySelector('form');
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        var password = event.target.querySelector('[data-password]').value;
+        _this2.data.password = password;
+
+        _this2.resetPassword(_this2.data);
+      });
+    }
+  }, {
+    key: "resetPassword",
+    value: function resetPassword(data) {
+      var _this3 = this;
+
+      fetch("".concat(_config["default"].host, "/auth/reset-password-step2"), {
+        mode: 'cors',
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }).then(function (res) {
+        return res.json();
+      }).then(function (res) {
+        if (res.error) {
+          return Promise.reject(res.error);
+        }
+
+        _this3.emit("password_reset", res.data);
+      })["catch"](function (err) {
+        return _this3.emit("password_reset_error", err);
+      });
+    }
+  }]);
+
+  return ResetPasswordStep2;
+}(_tinyEmitter["default"]);
+
+var _default = ResetPasswordStep2;
+exports["default"] = _default;
+
+},{"../config.js":201,"../templates/passwordResetstep2.js":205,"tiny-emitter":180}],198:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29086,7 +29400,7 @@ function (_TinyEmitter) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Signin).call(this));
     _this.container = container;
-    _this.baseUrl = _config["default"].baseUrl;
+    _this.baseUrl = _config["default"].host;
     return _this;
   }
 
@@ -29098,11 +29412,19 @@ function (_TinyEmitter) {
       this.addEventListener();
     }
   }, {
+    key: "reset",
+    value: function reset() {
+      if (this.container) {
+        this.container.querySelector("#signin-form").reset();
+      }
+    }
+  }, {
     key: "addEventListener",
     value: function addEventListener() {
       this.openPropertiesPage();
       this.signInClick();
       this.signupClick();
+      this.forgetPasswordCheck();
     }
   }, {
     key: "openPropertiesPage",
@@ -29134,21 +29456,35 @@ function (_TinyEmitter) {
       });
     }
   }, {
+    key: "forgetPasswordCheck",
+    value: function forgetPasswordCheck() {
+      var _this4 = this;
+
+      var forgetPassword = this.container.querySelector("#forget-pass");
+      forgetPassword.addEventListener("change", function (event) {
+        event.preventDefault();
+
+        if (event.target.checked) {
+          _this4.emit("forget_password_checked");
+        }
+      });
+    }
+  }, {
     key: "signupClick",
     value: function signupClick() {
-      var _this4 = this;
+      var _this5 = this;
 
       var signupText = this.container.querySelector("#signup-text");
       signupText.addEventListener("click", function (event) {
         event.preventDefault();
 
-        _this4.emit("signup");
+        _this5.emit("signup");
       });
     }
   }, {
     key: "signInUser",
     value: function signInUser(data) {
-      var _this5 = this;
+      var _this6 = this;
 
       fetch("".concat(this.baseUrl, "/api/v1/auth/signin"), {
         mode: "cors",
@@ -29164,9 +29500,9 @@ function (_TinyEmitter) {
           return Promise.reject(res.error);
         }
 
-        _this5.emit("signin", res.data);
+        _this6.emit("signin", res.data);
       })["catch"](function (err) {
-        return _this5.emit("error", err);
+        return _this6.emit("error", err);
       });
     }
   }]);
@@ -29177,7 +29513,7 @@ function (_TinyEmitter) {
 var _default = Signin;
 exports["default"] = _default;
 
-},{"../config.js":199,"../templates/signin.js":207,"tiny-emitter":180}],197:[function(require,module,exports){
+},{"../config.js":201,"../templates/signin.js":211,"tiny-emitter":180}],199:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29281,7 +29617,7 @@ function (_TinyEmitter) {
     value: function signupUser(data) {
       var _this4 = this;
 
-      fetch("".concat(_config["default"].baseUrl, "/api/v1/auth/signup"), {
+      fetch("".concat(_config["default"].host, "/api/v1/auth/signup"), {
         mode: "cors",
         method: "POST",
         headers: {
@@ -29308,7 +29644,7 @@ function (_TinyEmitter) {
 var _default = Signup;
 exports["default"] = _default;
 
-},{"../config.js":199,"../templates/signup":208,"tiny-emitter":180}],198:[function(require,module,exports){
+},{"../config.js":201,"../templates/signup":212,"tiny-emitter":180}],200:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29432,7 +29768,7 @@ function (_Dialog) {
     value: function markAsSold(id) {
       var _this5 = this;
 
-      fetch("".concat(_config["default"].baseUrl, "/api/v1/property/").concat(id, "/sold"), {
+      fetch("".concat(_config["default"].host, "/api/v1/property/").concat(id, "/sold"), {
         mode: "cors",
         method: "PATCH",
         headers: {
@@ -29455,7 +29791,7 @@ function (_Dialog) {
     value: function updateProperty(data) {
       var _this6 = this;
 
-      fetch("".concat(_config["default"].baseUrl, "/api/v1/property/").concat(this.propertyId), {
+      fetch("".concat(_config["default"].host, "/api/v1/property/").concat(this.propertyId), {
         mode: "cors",
         method: "PATCH",
         body: JSON.stringify(data),
@@ -29480,7 +29816,7 @@ function (_Dialog) {
 var _default = UpdatePropertyDialog;
 exports["default"] = _default;
 
-},{"../config.js":199,"../templates/updatePropertyDialog.js":209,"./dialog.js":187}],199:[function(require,module,exports){
+},{"../config.js":201,"../templates/updatePropertyDialog.js":213,"./dialog.js":187}],201:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29488,12 +29824,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 var config = {
-  baseUrl: "https://property-pro-lite-api.herokuapp.com"
+  host: "https://property-pro-lite-api.herokuapp.com" //"http://localhost:3999"
+
 };
 var _default = config;
 exports["default"] = _default;
 
-},{}],200:[function(require,module,exports){
+},{}],202:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29504,7 +29841,7 @@ var template = "\n    <div class = \"dialog-container\">\n        <div class = \
 var _default = template;
 exports["default"] = _default;
 
-},{}],201:[function(require,module,exports){
+},{}],203:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29515,7 +29852,31 @@ var template = "\n<div class = \"dialog-container\">\n    <div class = \"dialog-
 var _default = template;
 exports["default"] = _default;
 
-},{}],202:[function(require,module,exports){
+},{}],204:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.render = render;
+
+function render() {
+  return "\n        <div class = 'main-content'>\n            <div class = 'home-image-container'>\n                <img src = './images/estate.jpg' alt = 'image'/>\n            </div>\n            <div class = 'form-container'>\n                <div class = 'form-header smaller-text'>Reset Password</div>\n                <form id ='pass-reset-form'>\n                    <input type = 'text' placeholder = 'Provide your email for this account' title = 'Provide email' data-email required/>\n                    <br>\n                    <button class = 'reset-pwd-button smaller-text'>Next</button>\n                    <br><br>\n                    <span id = \"reset-link-container\"/>\n                </form>\n            </div>\n        </div>";
+}
+
+},{}],205:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.render = render;
+
+function render(data) {
+  return "\n        <div class = 'main-content'>\n            <div class = 'home-image-container'>\n                <img src = './images/estate.jpg' alt = 'image'/>\n            </div>\n            <div class = 'form-container'>\n                <div class = 'form-header smaller-text'>Reset Password</div>\n                <form id ='pass-reset-form'>\n                    <input type = 'hidden' data-id value = ".concat(data.id, " />\n                    <input type = 'hidden' data-token value = ").concat(data.token, " />\n                    <input type = 'password' placeholder = 'New password' title = 'Provide new password' data-password required/> <br>\n                    <br>\n                    <button class = 'reset-pwd-button smaller-text'>Reset</button>\n                </form>\n            </div>\n        </div>");
+}
+
+},{}],206:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29526,7 +29887,7 @@ var template = "\n    <div class = \"dialog-container\" >\n        <div class = 
 var _default = template;
 exports["default"] = _default;
 
-},{}],203:[function(require,module,exports){
+},{}],207:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29538,7 +29899,7 @@ function render() {
   return "\n        <div class = \"property-container\">\n            <div id = \"properties-title\" class = \"small-text\">Property Adverts</div>\n            <div class = \"property-type-holder\">\n                <form>\n                    <label>Search by:</label>\n                        <select class = \"property-type-options\">\n                            <option value = \"Property type\"> Property type</option>\n                            <option value = \"Self-contained\">Self-contained</option>\n                            <option value = \"2 Bedroom\">2 Bedroom</option>\n                            <option value = \"3 Bedroom\">3 Bedroom</option>\n                            <option value = \"Mini flat\">Mini flat</option>\n                            <option value = \"Duplex\">Duplex</option>\n                            <option value = \"Bungalow\">Bungalow</option>\n                        </select>\n                    </form>\n                    <br>\n                    <br>\n                    <button id = \"sign-out\" class = \"smaller-text\">Sign out</button>\n            </div>\n            <div id = \"properties-grid\"></div>\n            <div id = \"add-property-button\" class = \"fab tooltip\">+\n                <span class = \"tooltiptext tiny-text\">Add property</span>\n            </div>\n        </div>";
 }
 
-},{}],204:[function(require,module,exports){
+},{}],208:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29555,7 +29916,7 @@ var template = function template() {
 var _default = template;
 exports["default"] = _default;
 
-},{}],205:[function(require,module,exports){
+},{}],209:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29566,7 +29927,7 @@ var template = "\n    <div class = \"dialog-container\">\n        <div class = \
 var _default = template;
 exports["default"] = _default;
 
-},{}],206:[function(require,module,exports){
+},{}],210:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29588,7 +29949,7 @@ function render(properties) {
   return "<h4 class = \"text-center\">No property found</h4>";
 }
 
-},{}],207:[function(require,module,exports){
+},{}],211:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29597,10 +29958,10 @@ Object.defineProperty(exports, "__esModule", {
 exports.render = render;
 
 function render() {
-  return "\n        <div class = 'main-content'>\n            <div class = 'home-image-container'>\n                <img src = './images/estate.jpg' alt = 'image'/>\n            </div>\n            <div class = 'form-container'>\n                <div class = 'form-header smaller-text'>Sign In</div>\n                <form id ='signin-form'>\n                    <input type = 'text' placeholder = 'Email' title = 'Provide email' data-email required/> <br>\n                    <input type = 'password' placeholder = 'Password' title = 'Provide Password' data-password required/> <br>\n                    <label class = \"checkbox tiny-text\"> \n                        <input type = \"checkbox\">\n                        Forget Password?\n                        <span class = \"checkmark\"></span>\n                    <label> <br>\n                    <button class = 'login-button smaller-text'>Sign in</button>\n                </form>\n                <p class= 'form-container-text smaller-text'>Don't have an account?</p>\n                <p id ='signup-text' class = 'bold-text smaller-text' > \n                    <a href = '#'>\n                    SIGN UP NOW\n                    </a>\n                </p>\n            </div>\n        </div>";
+  return "\n        <div class = 'main-content'>\n            <div class = 'home-image-container'>\n                <img src = './images/estate.jpg' alt = 'image'/>\n            </div>\n            <div class = 'form-container'>\n                <div class = 'form-header smaller-text'>Sign In</div>\n                <form id ='signin-form'>\n                    <input type = 'text' placeholder = 'Email' title = 'Provide email' data-email required/> <br>\n                    <input type = 'password' placeholder = 'Password' title = 'Provide Password' data-password required/> <br>\n                    <label class = \"checkbox tiny-text\"> \n                        <input type = \"checkbox\" id = \"forget-pass\">\n                        Forget Password?\n                        <span class = \"checkmark\"></span>\n                    <label> <br>\n                    <button class = 'login-button smaller-text'>Sign in</button>\n                </form>\n                <p class = 'form-container-text smaller-text'>Don't have an account?</p>\n                <p id = 'signup-text' class = 'bold-text smaller-text' > \n                    <a href = '#'>\n                    SIGN UP NOW\n                    </a>\n                </p>\n            </div>\n        </div>";
 }
 
-},{}],208:[function(require,module,exports){
+},{}],212:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29612,7 +29973,7 @@ function render() {
   return "\n        <div class = \"main-content\">\n             <div class = \"form-container\">\n                <div class = \"form-header smaller-text\">Sign up</div>\n                <form id = \"signup-form\">\n                    <input type = \"text\" placeholder = \"First Name\" title = \"Username\" data-first-name required/>\n                    <input type = \"text\" placeholder = \"Last Name\" title = \"Last Name\" data-last-name required/>\n                    <br>\n                    <input type = \"text\" placeholder = \"Email\" title = \"Email\" data-email required/>\n                    <input type = \"text\" placeholder = \"Phone\" title = \"Phone\" data-phone required/>\n                    <br>\n                    <input type = \"text\" placeholder = \"Address\" title = \"Address\" data-address required/>\n                    <input type = \"password\" placeholder = \"Password\" title = \"Password\" data-password required/>\n                    <br>\n                    <label class = \"checkbox tiny-text\">\n                        <input type = \"checkbox\" data-admin />\n                        Sign up as an Admin\n                        <span class = \"checkmark\"></span>\n                    </label>\n                    <br>\n                    <button class = 'login-button smaller-text'>Sign up</button>    \n                </form>\n                <p class = \"form-container-text bit-smaller-text\">Already have an account?</p>\n                <p id = \"signin-text\" class = 'bold-text smaller-text'>\n                    <a href = \"#\">SIGN IN</a>\n                </p>    \n             </div>\n             <div class = \"home-image-container\">\n                <img src = \"./images/estate.jpg\" alt ='estate img'/>\n             </div>\n        </div>\n    ";
 }
 
-},{}],209:[function(require,module,exports){
+},{}],213:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29623,7 +29984,7 @@ var template = "\n    <div class = \"dialog-container\" >\n        <div class = 
 var _default = template;
 exports["default"] = _default;
 
-},{}],210:[function(require,module,exports){
+},{}],214:[function(require,module,exports){
 "use strict";
 
 var _app = _interopRequireDefault(require("./app.js"));
@@ -29635,4 +29996,4 @@ window.onload = function () {
   new _app["default"](main).init();
 };
 
-},{"./app.js":185}]},{},[210]);
+},{"./app.js":185}]},{},[214]);

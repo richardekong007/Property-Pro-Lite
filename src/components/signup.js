@@ -50,7 +50,7 @@ class Signup extends TinyEmitter{
     }
 
     signupUser (data){
-        fetch(`${config.baseUrl}/api/v1/auth/signup`,{
+        fetch(`${config.host}/api/v1/auth/signup`,{
             mode:"cors",
             method:"POST",
             headers:{"Content-Type":"application/json"},
