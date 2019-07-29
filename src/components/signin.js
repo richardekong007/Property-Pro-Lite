@@ -7,7 +7,7 @@ class Signin extends TinyEmitter{
     constructor (container){
         super();
         this.container = container;
-        this.baseUrl = config.baseUrl;
+        this.baseUrl = config.host;
     }
 
     render (){
@@ -16,10 +16,17 @@ class Signin extends TinyEmitter{
         this.addEventListener();
     }
 
+    reset (){
+        if (this.container){
+            this.container.querySelector("#signin-form").reset();
+        }
+    }
+
     addEventListener(){
         this.openPropertiesPage();
         this.signInClick();
         this.signupClick();
+        this.forgetPasswordCheck();
     }
 
     openPropertiesPage(){
@@ -42,6 +49,16 @@ class Signin extends TinyEmitter{
                 password:password.value
             };
             this.signInUser(data);        
+        });
+    }
+
+    forgetPasswordCheck (){
+        const forgetPassword = this.container.querySelector("#forget-pass");
+        forgetPassword.addEventListener("change", event =>{
+            event.preventDefault();
+            if (event.target.checked){
+                this.emit("forget_password_checked");
+            }
         });
     }
 

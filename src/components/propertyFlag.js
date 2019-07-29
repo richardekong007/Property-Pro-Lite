@@ -55,7 +55,7 @@ class PropertyFlag extends Dialog {
     }
 
     reportAds (data){
-        fetch(`${config.baseUrl}/api/v1/flag`,{
+        fetch(`${config.host}/api/v1/flag`,{
             mode:"cors",
             method:"POST",
             headers:{"Content-Type":"application/json"},

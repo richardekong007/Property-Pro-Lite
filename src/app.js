@@ -8,6 +8,8 @@ import PropertyFlag from "./components/propertyFlag.js";
 import ErrorDialog from "./components/errorDialog.js"
 import InformationDialog from "./components/informationDialog.js";
 import Authenticator from "./authenticator.js";
+import ResetPasswordStep1 from "./components/resetPasswordStep1.js";
+import ResetPasswordStep2 from "./components/resetPasswordStep2.js";
 
 
 class App {
@@ -19,11 +21,11 @@ class App {
         this.propertyDetailDialog = new PropertyDetailDialog(container);
         this.propertiesPage = new PropertiesPage(container);
         this.propertyFlag = new PropertyFlag(container);
+        this.resetPasswordStep1 = new ResetPasswordStep1(container);
+        this.resetPasswordStep2 = new ResetPasswordStep2(container);
     }
 
     init (){
-        // this.signin.render();
-        // this.addEventListener();
         this.render();
     }
 
@@ -35,6 +37,8 @@ class App {
         this.postPropertyDialogEvent();
         this.updatePropertyDialogEvent();
         this.propertyFlagDialogEvent();
+        this.receiveResetParams();
+        this.passwordReset();
     }
 
     signinEvents (){
@@ -56,6 +60,10 @@ class App {
 
         this.signin.on("reloading", () =>{
             this.propertiesPage.render();
+        });
+
+        this.signin.on("forget_password_checked", () =>{
+            this.resetPasswordStep1.render();
         });
     }
 
@@ -165,6 +173,36 @@ class App {
         });
     }
 
+    receiveResetParams (){
+        this.resetPasswordStep1.on("submit_email", data =>{
+            this.resetPasswordStep1.setPasswordResetLink(data);
+        });
+
+        this.resetPasswordStep1.on("receive_reset_params", data =>{
+            console.log(data);
+            this.resetPasswordStep2.setData(data).render();
+        });
+
+        this.resetPasswordStep1.on("submit_email_error", err =>{
+            ErrorDialog.getInstance().setMessage(err).show();
+        });
+
+        this.resetPasswordStep1.on("receive_params_error", err =>{
+            ErrorDialog.getInstance().setMessage(err).show();
+        });
+    }
+
+    passwordReset (){
+        this.resetPasswordStep2.on("password_reset", data =>{
+            InformationDialog.getInstance().setMessage(data).show();
+            this.signin.render();
+        });
+
+        this.resetPasswordStep2.on("password_reset_error", err =>{
+            ErrorDialog.getInstance().setMessage(err).show();
+        });
+    }
+    
     setCredentials (data){
         localStorage.setItem("token",data.token);
         localStorage.setItem("username", `${data.first_name} ${data.last_name}`);
