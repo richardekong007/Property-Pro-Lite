@@ -1,8 +1,11 @@
 export function render() {
-    
     return `
         <div class = "property-container">
-            <div id = "properties-title" class = "small-text">Property Adverts</div>
+            <div id = "properties-title" class = "small-text">
+                Property Adverts
+                <img id = "profile" src = "./vectors/user.svg" alt = "profile-icon" width = "25px" height = "25px" />
+                <span class = 'menu'></span>
+            </div>
             <div class = "property-type-holder">
                 <form>
                     <label>Search by:</label>
@@ -16,9 +19,6 @@ export function render() {
                             <option value = "Bungalow">Bungalow</option>
                         </select>
                     </form>
-                    <br>
-                    <br>
-                    <button id = "sign-out" class = "smaller-text">Sign out</button>
             </div>
             <div id = "properties-grid"></div>
             <div id = "add-property-button" class = "fab tooltip">+
@@ -26,5 +26,4 @@ export function render() {
             </div>
         </div>`;
 }
-
 
