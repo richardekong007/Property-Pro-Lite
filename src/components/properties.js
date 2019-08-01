@@ -9,14 +9,34 @@ class Properties extends TinyEmitter{
         super();
         this.container = container;
         this.user;
+        this.properties;
         this.menu = new Menu(this.container);
         this.propertyViewer = null;
+        this.numberOfCurrentUserProperties;
+        this.propertiesSoldByCurrentUser;
+        this.availablePropertiesOfUser;
         
     }
 
     setCurrentUser (user){
         this.user = user;
         return this;
+    }
+
+    getUserProperties (properties) {
+        return properties.filter(({owner_email:owner_email}) => owner_email === this.user.email);
+    }
+
+    getAvailableProperties (properties){
+        return properties
+            .filter(({status:status}) => (status === "available") || (status === "Available"))
+            .length;
+    }
+
+    getSoldProperties (properties) {
+        return properties
+            .filter(({status:status}) => (status === "sold") || (status === "Sold"))
+            .length;
     }
 
     render () {
@@ -42,6 +62,7 @@ class Properties extends TinyEmitter{
 
     addEventListeners (){
         this.addClick();
+        this.onPropertyFetch();
         this.propertyItemClick();
         this.propertyTypeChange();
         this.signoutClick();
@@ -57,8 +78,7 @@ class Properties extends TinyEmitter{
         });
     }
 
-    propertyItemClick (){
-       
+    propertyItemClick (){  
         this.propertyViewer.on("property_item_click", data =>{
             this.emit("property_item_click", data);
         });
@@ -81,8 +101,24 @@ class Properties extends TinyEmitter{
         });
     }
 
+    onPropertyFetch (){
+
+        this.propertyViewer.on("properties_fetched", data => {
+            this.properties = this.getUserProperties(data);
+            this.numberOfCurrentUserProperties = this.properties.length;
+            this.availablePropertiesOfUser = this.getAvailableProperties(this.properties);
+            this.propertiesSoldByCurrentUser = this.getSoldProperties(this.properties);
+        });
+    }
+
     onOpenMenu (){
         this.menu.on("menu_opened", () =>{
+            document.querySelector("[data-prop-posted]")
+                .textContent = `${!(this.numberOfCurrentUserProperties)?"None":this.numberOfCurrentUserProperties} Posted`;
+            document.querySelector("[data-prop-available]")
+                .textContent = `${!(this.availablePropertiesOfUser)?"None":this.availablePropertiesOfUser} Available`;
+            document.querySelector("[data-prop-sold]")
+                .textContent = `${!(this.propertiesSoldByCurrentUser)?"None":this.propertiesSoldByCurrentUser} Sold`;
             this.menu.open();
         });
     }
