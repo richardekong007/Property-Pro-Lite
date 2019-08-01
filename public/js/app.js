@@ -28713,8 +28713,12 @@ function (_TinyEmitter) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Properties).call(this));
     _this.container = container;
     _this.user;
+    _this.properties;
     _this.menu = new _menu["default"](_this.container);
     _this.propertyViewer = null;
+    _this.numberOfCurrentUserProperties;
+    _this.propertiesSoldByCurrentUser;
+    _this.availablePropertiesOfUser;
     return _this;
   }
 
@@ -28723,6 +28727,32 @@ function (_TinyEmitter) {
     value: function setCurrentUser(user) {
       this.user = user;
       return this;
+    }
+  }, {
+    key: "getUserProperties",
+    value: function getUserProperties(properties) {
+      var _this2 = this;
+
+      return properties.filter(function (_ref) {
+        var owner_email = _ref.owner_email;
+        return owner_email === _this2.user.email;
+      });
+    }
+  }, {
+    key: "getAvailableProperties",
+    value: function getAvailableProperties(properties) {
+      return properties.filter(function (_ref2) {
+        var status = _ref2.status;
+        return status === "available" || status === "Available";
+      }).length;
+    }
+  }, {
+    key: "getSoldProperties",
+    value: function getSoldProperties(properties) {
+      return properties.filter(function (_ref3) {
+        var status = _ref3.status;
+        return status === "sold" || status === "Sold";
+      }).length;
     }
   }, {
     key: "render",
@@ -28737,14 +28767,14 @@ function (_TinyEmitter) {
   }, {
     key: "renderByType",
     value: function renderByType(type) {
-      var _this2 = this;
+      var _this3 = this;
 
       this.container.innerHTML = (0, _properties.render)();
       this.menu.setData(this.user).render();
       var nestedContainer = document.querySelector("#properties-grid");
       this.propertyViewer = new _propertyViewer["default"](nestedContainer);
       this.propertyViewer.renderByType(type)["catch"](function (err) {
-        _this2.emit("property_type_error", err);
+        _this3.emit("property_type_error", err);
       });
       this.addEventListeners();
     }
@@ -28752,6 +28782,7 @@ function (_TinyEmitter) {
     key: "addEventListeners",
     value: function addEventListeners() {
       this.addClick();
+      this.onPropertyFetch();
       this.propertyItemClick();
       this.propertyTypeChange();
       this.signoutClick();
@@ -28761,64 +28792,80 @@ function (_TinyEmitter) {
   }, {
     key: "addClick",
     value: function addClick() {
-      var _this3 = this;
+      var _this4 = this;
 
       var addButton = this.container.querySelector("#add-property-button");
       addButton.addEventListener("click", function (event) {
         event.preventDefault();
 
-        _this3.emit("add_button_click");
+        _this4.emit("add_button_click");
       });
     }
   }, {
     key: "propertyItemClick",
     value: function propertyItemClick() {
-      var _this4 = this;
+      var _this5 = this;
 
       this.propertyViewer.on("property_item_click", function (data) {
-        _this4.emit("property_item_click", data);
+        _this5.emit("property_item_click", data);
       });
     }
   }, {
     key: "propertyTypeChange",
     value: function propertyTypeChange() {
-      var _this5 = this;
+      var _this6 = this;
 
       var propertyTypes = document.querySelector(".property-type-options");
       propertyTypes.addEventListener("change", function (event) {
         var selectedType = event.target.value;
 
-        _this5.emit("type_change", selectedType);
+        _this6.emit("type_change", selectedType);
       });
     }
   }, {
     key: "signoutClick",
     value: function signoutClick() {
-      var _this6 = this;
+      var _this7 = this;
 
       var signout = document.querySelector("#signout");
       signout.addEventListener("click", function (event) {
         event.preventDefault();
 
-        _this6.emit("signout");
+        _this7.emit("signout");
+      });
+    }
+  }, {
+    key: "onPropertyFetch",
+    value: function onPropertyFetch() {
+      var _this8 = this;
+
+      this.propertyViewer.on("properties_fetched", function (data) {
+        _this8.properties = _this8.getUserProperties(data);
+        _this8.numberOfCurrentUserProperties = _this8.properties.length;
+        _this8.availablePropertiesOfUser = _this8.getAvailableProperties(_this8.properties);
+        _this8.propertiesSoldByCurrentUser = _this8.getSoldProperties(_this8.properties);
       });
     }
   }, {
     key: "onOpenMenu",
     value: function onOpenMenu() {
-      var _this7 = this;
+      var _this9 = this;
 
       this.menu.on("menu_opened", function () {
-        _this7.menu.open();
+        document.querySelector("[data-prop-posted]").textContent = "".concat(!_this9.numberOfCurrentUserProperties ? "None" : _this9.numberOfCurrentUserProperties, " Posted");
+        document.querySelector("[data-prop-available]").textContent = "".concat(!_this9.availablePropertiesOfUser ? "None" : _this9.availablePropertiesOfUser, " Available");
+        document.querySelector("[data-prop-sold]").textContent = "".concat(!_this9.propertiesSoldByCurrentUser ? "None" : _this9.propertiesSoldByCurrentUser, " Sold");
+
+        _this9.menu.open();
       });
     }
   }, {
     key: "onCloseMenu",
     value: function onCloseMenu() {
-      var _this8 = this;
+      var _this10 = this;
 
       this.menu.on("menu_closed", function () {
-        _this8.menu.dismiss();
+        _this10.menu.dismiss();
       });
     }
   }]);
@@ -29191,6 +29238,8 @@ function (_TinyEmitter) {
         if (res.data.length > 0) {
           _this2.container.innerHTML = (0, _propertyViewer.render)(res.data);
 
+          _this2.emitData(res.data);
+
           _this2.emitIds(res.data, _this2.container.querySelectorAll(".property-item"));
         }
       });
@@ -29227,6 +29276,11 @@ function (_TinyEmitter) {
           _this4.emit("property_item_click", data[index]);
         });
       });
+    }
+  }, {
+    key: "emitData",
+    value: function emitData(data) {
+      this.emit("properties_fetched", data);
     }
   }]);
 
@@ -29976,7 +30030,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 var config = {
-  host: "https://property-pro-lite-api.herokuapp.com"
+host: "https://property-pro-lite-api.herokuapp.com"
 };
 var _default = config;
 exports["default"] = _default;
@@ -30012,7 +30066,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.render = render;
 
 function render(user) {
-  return "\n            <img id = 'menu-closer' src = './vectors/error.svg' alt = 'close' width = '25px' height = '25px'/>\n            <span class = 'menu-item smaller-text bold-text'>".concat(user.first_name, " ").concat(user.last_name, "</span><br>\n            <span class = 'menu-item smaller-text'>").concat(user.email, "</span><br>\n            <span class = 'menu-item smaller-text'>Properties:</span><br>\n            <span class = 'menu-item smaller-text'>Available:</span><br>\n            <span class = 'menu-item smaller-text'>Sold:</span><br><br>\n            <span id = 'signout' class = 'menu-item smaller-text bold-text'>Sign out</span>\n    ");
+  return "\n            <img id = 'menu-closer' src = './vectors/error.svg' alt = 'close' width = '25px' height = '25px'/>\n            <span class = 'menu-item smaller-text bold-text'>".concat(user.first_name, " ").concat(user.last_name, "</span><br>\n            <span class = 'menu-item smaller-text'>").concat(user.email, "</span><br>\n            <span class = 'menu-item smaller-text' data-prop-posted>Properties:</span><br>\n            <span class = 'menu-item smaller-text' data-prop-available>Available:</span><br>\n            <span class = 'menu-item smaller-text' data-prop-sold>Sold:</span><br><br>\n            <span id = 'signout' class = 'menu-item smaller-text bold-text'>Sign out</span>\n    ");
 }
 
 ;

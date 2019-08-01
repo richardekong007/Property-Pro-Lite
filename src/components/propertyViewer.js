@@ -18,6 +18,7 @@ class PropertyViewer extends TinyEmitter{
         .then(res =>{
             if (res.data.length > 0){
                 this.container.innerHTML = render(res.data);
+                this.emitData(res.data);
                 this.emitIds(res.data, this.container.querySelectorAll(".property-item")); 
             }
         });
@@ -45,6 +46,10 @@ class PropertyViewer extends TinyEmitter{
             });
         });
     }   
+
+    emitData (data){
+        this.emit("properties_fetched", data);
+    }
 
 }
 
