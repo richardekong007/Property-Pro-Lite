@@ -1,27 +1,36 @@
 import {render} from "../templates/properties";
 import PropertyViewer from "../components/propertyViewer.js";
 import TinyEmitter from "tiny-emitter"
-import Authenticator from "../authenticator.js";
+import Menu from "../components/menu.js";
 
 class Properties extends TinyEmitter{
 
     constructor(container){
         super();
         this.container = container;
+        this.user;
+        this.menu = new Menu(this.container);
         this.propertyViewer = null;
         
     }
 
-    render() {
+    setCurrentUser (user){
+        this.user = user;
+        return this;
+    }
+
+    render () {
         this.container.innerHTML = render();
         const nestedContainer =  document.querySelector("#properties-grid");
+        this.menu.setData(this.user).render();
         this.propertyViewer = new PropertyViewer(nestedContainer);
         this.propertyViewer.render();
         this.addEventListeners();
     }
 
-    renderByType(type) {
+    renderByType (type) {
         this.container.innerHTML = render();
+        this.menu.setData(this.user).render();
         const nestedContainer = document.querySelector("#properties-grid");
         this.propertyViewer = new PropertyViewer(nestedContainer);
         this.propertyViewer.renderByType(type)
@@ -36,6 +45,8 @@ class Properties extends TinyEmitter{
         this.propertyItemClick();
         this.propertyTypeChange();
         this.signoutClick();
+        this.onOpenMenu();
+        this.onCloseMenu();
     }
 
     addClick (){
@@ -46,7 +57,7 @@ class Properties extends TinyEmitter{
         });
     }
 
-    propertyItemClick(){
+    propertyItemClick (){
        
         this.propertyViewer.on("property_item_click", data =>{
             this.emit("property_item_click", data);
@@ -63,11 +74,24 @@ class Properties extends TinyEmitter{
     }
 
     signoutClick (){
-        const signout = document.querySelector("#sign-out");
+        const signout = document.querySelector("#signout");
         signout.addEventListener("click", event => {
             event.preventDefault();
             this.emit("signout");
         });
+    }
+
+    onOpenMenu (){
+        this.menu.on("menu_opened", () =>{
+            this.menu.open();
+        });
+    }
+
+    onCloseMenu (){
+        this.menu.on("menu_closed", () =>{
+            this.menu.dismiss();
+        });
+
     }
 
 }

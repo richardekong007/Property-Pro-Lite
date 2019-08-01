@@ -455,6 +455,14 @@ footer{
 
 }
 
+#properties-title #profile {
+    float:left;
+}
+
+#profile:hover {
+  cursor: pointer;
+}
+
 .property-item {
     display: flex;
     flex-direction: column;
@@ -479,21 +487,11 @@ footer{
     background-color: rgba(7, 133, 252, 0.839);
     border-bottom-left-radius:6px;
     border-bottom-right-radius:6px;
-    border:1px solid rgba(7, 133, 252, 0.839);
     color:#fff;
 }
 
 .property-type-holder form{
     float: right;
-}
-
-.property-type-holder #sign-out {
-    float: right;
-    color:rgba(7, 133, 252, 0.839);
-    background-color: #fff;
-    padding: 6px;
-    border-radius: 6px;
-    border: 1px solid rgba(7, 133, 252, 0.839);
 }
 
 .property-type-options{
@@ -544,22 +542,67 @@ footer{
     text-align: center;
 }
 
+/*menu*/
+.menu {
+    height:40%;
+    width:0;
+    position:fixed;
+    top:10.2%;
+    left:0.6%;
+    padding: 15px;
+    z-index: 1;
+    background-color:rgba(7, 133, 252, 0.839);
+    border-top-right-radius: 15px;
+    border:1px solid #fff;
+    visibility: hidden;
+    overflow-x: hidden;
+    padding-top: 60px;
+    transition: 0.5s;
+}
+
+.menu-item {
+    /* padding: 8px 8px 8px 32px; */
+    float: left;
+    color:#fff;
+}
+
+.menu #menu-closer {
+    position:absolute;
+    top:0;
+    right:0;
+    margin-left:50px;
+}
+
+.menu #menu-closer:hover { 
+    cursor: pointer;
+}
+
+.menu #signout:hover {
+    cursor: pointer;
+}
+
+
+
 @media only screen and (max-width:620px){
+
+    .menu{
+        padding-top:15px;
+    }
 
      #signin-form, #signup-form{
         width: fit-content;
     }
 
-     #signin-form input,
+    #signin-form input,
     #signup-form input{
         width:min-content;
     }
     
-    .home-image-container, .home-image-container img{
+    .home-image-container, .home-image-container img {
         display: none;
     }
 
-    .main-content, header, .form-header, .form-container{
+    .main-content, header, .form-header, .form-container {
         width:100%;
     }
 
