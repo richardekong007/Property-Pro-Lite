@@ -27867,7 +27867,7 @@ function () {
       var _this = this;
 
       this.signin.on("signin", function (data) {
-        _this.propertiesPage.render();
+        _this.propertiesPage.setCurrentUser(data).render();
 
         _informationDialog["default"].getInstance().setMessage("".concat(data.first_name, " signed in.")).show();
 
@@ -27885,7 +27885,7 @@ function () {
         _informationDialog["default"].getInstance().setMessage(message).show();
       });
       this.signin.on("reloading", function () {
-        _this.propertiesPage.render();
+        _this.propertiesPage.setCurrentUser(_this.getCredential()).render();
       });
       this.signin.on("forget_password_checked", function () {
         _this.resetPasswordStep1.render();
@@ -27900,7 +27900,7 @@ function () {
         return _this2.signin.render();
       });
       this.signup.on("signup", function (data) {
-        _this2.propertiesPage.render();
+        _this2.propertiesPage.setCurrentUser(data).render();
 
         _informationDialog["default"].getInstance().setMessage("".concat(data.first_name, " welcome.")).show();
 
@@ -27927,7 +27927,7 @@ function () {
         _this3.propertiesPage.renderByType(selectedType);
       });
       this.propertiesPage.on("property_type_error", function (error) {
-        _this3.propertiesPage.render();
+        _this3.propertiesPage.setCurrentUser(_this3.getCredential()).render();
 
         _errorDialog["default"].getInstance().setMessage(error).show();
       });
@@ -27954,7 +27954,7 @@ function () {
       this.propertyDetailDialog.on("delete_property", function () {
         _this4.propertyDetailDialog.dismiss();
 
-        _this4.propertiesPage.render();
+        _this4.propertiesPage.setCurrentUser(_this4.getCredential()).render();
 
         _informationDialog["default"].getInstance().setMessage("Property deleted!").show();
       });
@@ -27979,7 +27979,7 @@ function () {
 
         _this5.postPropertyDialog.dismiss();
 
-        _this5.propertiesPage.render();
+        _this5.propertiesPage.setCurrentUser(_this5.getCredential()).render();
 
         _informationDialog["default"].getInstance().setMessage("Property added!").show();
       });
@@ -27993,13 +27993,13 @@ function () {
       var _this6 = this;
 
       this.updatePropertyDialog.on("mark_sold", function () {
-        _this6.propertiesPage.render();
+        _this6.propertiesPage.setCurrentUser(_this6.getCredential()).render();
       });
       this.updatePropertyDialog.on("mark_sold_error", function (error) {
         _errorDialog["default"].getInstance().setMessage(error).show();
       });
       this.updatePropertyDialog.on("update_property", function () {
-        _this6.propertiesPage.render();
+        _this6.propertiesPage.setCurrentUser(_this6.getCredential()).render();
       });
       this.updatePropertyDialog.on("update_property_error", function (error) {
         _errorDialog["default"].getInstance().setMessage(error).show();
@@ -28056,20 +28056,29 @@ function () {
   }, {
     key: "setCredentials",
     value: function setCredentials(data) {
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("username", "".concat(data.first_name, " ").concat(data.last_name));
+      this.user = data;
+      localStorage.setItem("user", JSON.stringify(data));
+    }
+  }, {
+    key: "getCredential",
+    value: function getCredential() {
+      return JSON.parse(localStorage.getItem("user"));
     }
   }, {
     key: "getUsername",
     value: function getUsername() {
-      return !localStorage.getItem("username") ? "" : localStorage.getItem("username");
+      var _this$getCredential = this.getCredential(),
+          first_name = _this$getCredential.first_name,
+          last_name = _this$getCredential.last_name;
+
+      return !(first_name || last_name) ? "" : "".concat(first_name, " ").concat(last_name);
     }
   }, {
     key: "render",
     value: function render() {
-      var token = localStorage.getItem("token");
+      var user = this.getCredential();
 
-      if (!token) {
+      if (!user) {
         this.signin.render();
       } else if (_authenticator["default"].isExpired()) {
         this.signin.render();
@@ -28078,7 +28087,7 @@ function () {
 
         localStorage.clear();
       } else {
-        this.propertiesPage.render();
+        this.propertiesPage.setCurrentUser(user).render();
 
         _informationDialog["default"].getInstance().setMessage("Welcome back ".concat(this.getUsername())).show();
       }
@@ -28093,7 +28102,7 @@ function () {
 var _default = App;
 exports["default"] = _default;
 
-},{"./authenticator.js":186,"./components/errorDialog.js":188,"./components/informationDialog.js":189,"./components/postPropertyDialog.js":191,"./components/properties.js":192,"./components/propertyDetailDialog.js":193,"./components/propertyFlag.js":194,"./components/resetPasswordStep1.js":196,"./components/resetPasswordStep2.js":197,"./components/signin.js":198,"./components/signup.js":199,"./components/updatePropertyDialog.js":200}],186:[function(require,module,exports){
+},{"./authenticator.js":186,"./components/errorDialog.js":188,"./components/informationDialog.js":189,"./components/postPropertyDialog.js":192,"./components/properties.js":193,"./components/propertyDetailDialog.js":194,"./components/propertyFlag.js":195,"./components/resetPasswordStep1.js":197,"./components/resetPasswordStep2.js":198,"./components/signin.js":199,"./components/signup.js":200,"./components/updatePropertyDialog.js":201}],186:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28218,7 +28227,7 @@ function (_TinyEmitter) {
 var _default = Dialog;
 exports["default"] = _default;
 
-},{"./overlay.js":190,"tiny-emitter":180}],188:[function(require,module,exports){
+},{"./overlay.js":191,"tiny-emitter":180}],188:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28316,7 +28325,7 @@ function (_Dialog) {
 var _default = ErrorDialog;
 exports["default"] = _default;
 
-},{"../components/dialog.js":187,"../templates/errorDialog.js":202}],189:[function(require,module,exports){
+},{"../components/dialog.js":187,"../templates/errorDialog.js":203}],189:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28414,7 +28423,121 @@ function (_Dialog) {
 var _default = InformationDialog;
 exports["default"] = _default;
 
-},{"../components/dialog.js":187,"../templates/informationDialog.js":203}],190:[function(require,module,exports){
+},{"../components/dialog.js":187,"../templates/informationDialog.js":204}],190:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _menu = require("../templates/menu.js");
+
+var _tinyEmitter = _interopRequireDefault(require("tiny-emitter"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var Menu =
+/*#__PURE__*/
+function (_TinyEmitter) {
+  _inherits(Menu, _TinyEmitter);
+
+  function Menu(container) {
+    var _this;
+
+    _classCallCheck(this, Menu);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Menu).call(this, container));
+    _this.container = container;
+    _this.data;
+    return _this;
+  }
+
+  _createClass(Menu, [{
+    key: "setData",
+    value: function setData(data) {
+      this.data = data;
+      return this;
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var menu = this.container.querySelector('.menu');
+      menu.innerHTML = (0, _menu.render)(this.data);
+      this.addEventListener();
+    }
+  }, {
+    key: "dismiss",
+    value: function dismiss() {
+      var menu = document.querySelector('.menu');
+      menu.style.width = '0';
+      menu.style.visibility = 'hidden';
+    }
+  }, {
+    key: "open",
+    value: function open() {
+      var menu = document.querySelector('.menu');
+      menu.style.width = '150px';
+      menu.style.height = '40%';
+      menu.style.visibility = 'visible';
+    }
+  }, {
+    key: "addEventListener",
+    value: function addEventListener() {
+      this.onOpen();
+      this.onCloseClick();
+    }
+  }, {
+    key: "onCloseClick",
+    value: function onCloseClick() {
+      var _this2 = this;
+
+      var close = document.querySelector('#menu-closer');
+      close.addEventListener('click', function (event) {
+        event.preventDefault();
+
+        _this2.emit('menu_closed');
+      });
+    }
+  }, {
+    key: "onOpen",
+    value: function onOpen() {
+      var _this3 = this;
+
+      var openPoint = document.querySelector('#profile');
+      openPoint.addEventListener('click', function (event) {
+        event.preventDefault();
+
+        _this3.emit('menu_opened');
+      });
+    }
+  }]);
+
+  return Menu;
+}(_tinyEmitter["default"]);
+
+var _default = Menu;
+exports["default"] = _default;
+
+},{"../templates/menu.js":205,"tiny-emitter":180}],191:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28429,7 +28552,7 @@ function createOverlay() {
   return overlay;
 }
 
-},{}],191:[function(require,module,exports){
+},{}],192:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28541,7 +28664,7 @@ function (_Dialog) {
 var _default = PostPropertyDialog;
 exports["default"] = _default;
 
-},{"../config.js":201,"../templates/postPropertyDialog.js":206,"./dialog.js":187}],192:[function(require,module,exports){
+},{"../config.js":202,"../templates/postPropertyDialog.js":208,"./dialog.js":187}],193:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28555,7 +28678,7 @@ var _propertyViewer = _interopRequireDefault(require("../components/propertyView
 
 var _tinyEmitter = _interopRequireDefault(require("tiny-emitter"));
 
-var _authenticator = _interopRequireDefault(require("../authenticator.js"));
+var _menu = _interopRequireDefault(require("../components/menu.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -28589,15 +28712,24 @@ function (_TinyEmitter) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Properties).call(this));
     _this.container = container;
+    _this.user;
+    _this.menu = new _menu["default"](_this.container);
     _this.propertyViewer = null;
     return _this;
   }
 
   _createClass(Properties, [{
+    key: "setCurrentUser",
+    value: function setCurrentUser(user) {
+      this.user = user;
+      return this;
+    }
+  }, {
     key: "render",
     value: function render() {
       this.container.innerHTML = (0, _properties.render)();
       var nestedContainer = document.querySelector("#properties-grid");
+      this.menu.setData(this.user).render();
       this.propertyViewer = new _propertyViewer["default"](nestedContainer);
       this.propertyViewer.render();
       this.addEventListeners();
@@ -28608,6 +28740,7 @@ function (_TinyEmitter) {
       var _this2 = this;
 
       this.container.innerHTML = (0, _properties.render)();
+      this.menu.setData(this.user).render();
       var nestedContainer = document.querySelector("#properties-grid");
       this.propertyViewer = new _propertyViewer["default"](nestedContainer);
       this.propertyViewer.renderByType(type)["catch"](function (err) {
@@ -28622,6 +28755,8 @@ function (_TinyEmitter) {
       this.propertyItemClick();
       this.propertyTypeChange();
       this.signoutClick();
+      this.onOpenMenu();
+      this.onCloseMenu();
     }
   }, {
     key: "addClick",
@@ -28661,11 +28796,29 @@ function (_TinyEmitter) {
     value: function signoutClick() {
       var _this6 = this;
 
-      var signout = document.querySelector("#sign-out");
+      var signout = document.querySelector("#signout");
       signout.addEventListener("click", function (event) {
         event.preventDefault();
 
         _this6.emit("signout");
+      });
+    }
+  }, {
+    key: "onOpenMenu",
+    value: function onOpenMenu() {
+      var _this7 = this;
+
+      this.menu.on("menu_opened", function () {
+        _this7.menu.open();
+      });
+    }
+  }, {
+    key: "onCloseMenu",
+    value: function onCloseMenu() {
+      var _this8 = this;
+
+      this.menu.on("menu_closed", function () {
+        _this8.menu.dismiss();
       });
     }
   }]);
@@ -28676,7 +28829,7 @@ function (_TinyEmitter) {
 var _default = Properties;
 exports["default"] = _default;
 
-},{"../authenticator.js":186,"../components/propertyViewer.js":195,"../templates/properties":207,"tiny-emitter":180}],193:[function(require,module,exports){
+},{"../components/menu.js":190,"../components/propertyViewer.js":196,"../templates/properties":209,"tiny-emitter":180}],194:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28832,7 +28985,7 @@ function (_Dialog) {
 var _default = PropertyDetailDialog;
 exports["default"] = _default;
 
-},{"../config.js":201,"../templates/propertyDetailDialog.js":208,"./dialog.js":187}],194:[function(require,module,exports){
+},{"../config.js":202,"../templates/propertyDetailDialog.js":210,"./dialog.js":187}],195:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28973,7 +29126,7 @@ function (_Dialog) {
 var _default = PropertyFlag;
 exports["default"] = _default;
 
-},{"../config.js":201,"../templates/propertyFlag.js":209,"./dialog.js":187}],195:[function(require,module,exports){
+},{"../config.js":202,"../templates/propertyFlag.js":211,"./dialog.js":187}],196:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29083,7 +29236,7 @@ function (_TinyEmitter) {
 var _default = PropertyViewer;
 exports["default"] = _default;
 
-},{"../config.js":201,"../templates/propertyViewer.js":210,"tiny-emitter":180}],196:[function(require,module,exports){
+},{"../config.js":202,"../templates/propertyViewer.js":212,"tiny-emitter":180}],197:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29240,7 +29393,7 @@ function (_TinyEmitter) {
 var _default = ResetPasswordStep1;
 exports["default"] = _default;
 
-},{"../config.js":201,"../templates/passwordResetStep1.js":204,"tiny-emitter":180}],197:[function(require,module,exports){
+},{"../config.js":202,"../templates/passwordResetStep1.js":206,"tiny-emitter":180}],198:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29354,7 +29507,7 @@ function (_TinyEmitter) {
 var _default = ResetPasswordStep2;
 exports["default"] = _default;
 
-},{"../config.js":201,"../templates/passwordResetstep2.js":205,"tiny-emitter":180}],198:[function(require,module,exports){
+},{"../config.js":202,"../templates/passwordResetstep2.js":207,"tiny-emitter":180}],199:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29400,7 +29553,6 @@ function (_TinyEmitter) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Signin).call(this));
     _this.container = container;
-    _this.baseUrl = _config["default"].host;
     return _this;
   }
 
@@ -29486,7 +29638,7 @@ function (_TinyEmitter) {
     value: function signInUser(data) {
       var _this6 = this;
 
-      fetch("".concat(this.baseUrl, "/api/v1/auth/signin"), {
+      fetch("".concat(_config["default"].host, "/api/v1/auth/signin"), {
         mode: "cors",
         method: "POST",
         headers: {
@@ -29513,7 +29665,7 @@ function (_TinyEmitter) {
 var _default = Signin;
 exports["default"] = _default;
 
-},{"../config.js":201,"../templates/signin.js":211,"tiny-emitter":180}],199:[function(require,module,exports){
+},{"../config.js":202,"../templates/signin.js":213,"tiny-emitter":180}],200:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29644,7 +29796,7 @@ function (_TinyEmitter) {
 var _default = Signup;
 exports["default"] = _default;
 
-},{"../config.js":201,"../templates/signup":212,"tiny-emitter":180}],200:[function(require,module,exports){
+},{"../config.js":202,"../templates/signup":214,"tiny-emitter":180}],201:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29816,7 +29968,7 @@ function (_Dialog) {
 var _default = UpdatePropertyDialog;
 exports["default"] = _default;
 
-},{"../config.js":201,"../templates/updatePropertyDialog.js":213,"./dialog.js":187}],201:[function(require,module,exports){
+},{"../config.js":202,"../templates/updatePropertyDialog.js":215,"./dialog.js":187}],202:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29824,13 +29976,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 var config = {
-  host: "https://property-pro-lite-api.herokuapp.com" //"http://localhost:3999"
+  host: "http://localhost:3999" //"https://property-pro-lite-api.herokuapp.com"
 
 };
 var _default = config;
 exports["default"] = _default;
 
-},{}],202:[function(require,module,exports){
+},{}],203:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29841,7 +29993,7 @@ var template = "\n    <div class = \"dialog-container\">\n        <div class = \
 var _default = template;
 exports["default"] = _default;
 
-},{}],203:[function(require,module,exports){
+},{}],204:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29852,7 +30004,21 @@ var template = "\n<div class = \"dialog-container\">\n    <div class = \"dialog-
 var _default = template;
 exports["default"] = _default;
 
-},{}],204:[function(require,module,exports){
+},{}],205:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.render = render;
+
+function render(user) {
+  return "\n            <img id = 'menu-closer' src = './vectors/error.svg' alt = 'close' width = '25px' height = '25px'/>\n            <span class = 'menu-item smaller-text bold-text'>".concat(user.first_name, " ").concat(user.last_name, "</span><br>\n            <span class = 'menu-item smaller-text'>").concat(user.email, "</span><br>\n            <span class = 'menu-item smaller-text'>Properties:</span><br>\n            <span class = 'menu-item smaller-text'>Available:</span><br>\n            <span class = 'menu-item smaller-text'>Sold:</span><br><br>\n            <span id = 'signout' class = 'menu-item smaller-text bold-text'>Sign out</span>\n    ");
+}
+
+;
+
+},{}],206:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29864,7 +30030,7 @@ function render() {
   return "\n        <div class = 'main-content'>\n            <div class = 'home-image-container'>\n                <img src = './images/estate.jpg' alt = 'image'/>\n            </div>\n            <div class = 'form-container'>\n                <div class = 'form-header smaller-text'>Reset Password</div>\n                <form id ='pass-reset-form'>\n                    <input type = 'text' placeholder = 'Provide your email for this account' title = 'Provide email' data-email required/>\n                    <br>\n                    <button class = 'reset-pwd-button smaller-text'>Next</button>\n                    <br><br>\n                    <span id = \"reset-link-container\"/>\n                </form>\n            </div>\n        </div>";
 }
 
-},{}],205:[function(require,module,exports){
+},{}],207:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29876,7 +30042,7 @@ function render(data) {
   return "\n        <div class = 'main-content'>\n            <div class = 'home-image-container'>\n                <img src = './images/estate.jpg' alt = 'image'/>\n            </div>\n            <div class = 'form-container'>\n                <div class = 'form-header smaller-text'>Reset Password</div>\n                <form id ='pass-reset-form'>\n                    <input type = 'hidden' data-id value = ".concat(data.id, " />\n                    <input type = 'hidden' data-token value = ").concat(data.token, " />\n                    <input type = 'password' placeholder = 'New password' title = 'Provide new password' data-password required/> <br>\n                    <br>\n                    <button class = 'reset-pwd-button smaller-text'>Reset</button>\n                </form>\n            </div>\n        </div>");
 }
 
-},{}],206:[function(require,module,exports){
+},{}],208:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29887,7 +30053,7 @@ var template = "\n    <div class = \"dialog-container\" >\n        <div class = 
 var _default = template;
 exports["default"] = _default;
 
-},{}],207:[function(require,module,exports){
+},{}],209:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29896,10 +30062,10 @@ Object.defineProperty(exports, "__esModule", {
 exports.render = render;
 
 function render() {
-  return "\n        <div class = \"property-container\">\n            <div id = \"properties-title\" class = \"small-text\">Property Adverts</div>\n            <div class = \"property-type-holder\">\n                <form>\n                    <label>Search by:</label>\n                        <select class = \"property-type-options\">\n                            <option value = \"Property type\"> Property type</option>\n                            <option value = \"Self-contained\">Self-contained</option>\n                            <option value = \"2 Bedroom\">2 Bedroom</option>\n                            <option value = \"3 Bedroom\">3 Bedroom</option>\n                            <option value = \"Mini flat\">Mini flat</option>\n                            <option value = \"Duplex\">Duplex</option>\n                            <option value = \"Bungalow\">Bungalow</option>\n                        </select>\n                    </form>\n                    <br>\n                    <br>\n                    <button id = \"sign-out\" class = \"smaller-text\">Sign out</button>\n            </div>\n            <div id = \"properties-grid\"></div>\n            <div id = \"add-property-button\" class = \"fab tooltip\">+\n                <span class = \"tooltiptext tiny-text\">Add property</span>\n            </div>\n        </div>";
+  return "\n        <div class = \"property-container\">\n            <div id = \"properties-title\" class = \"small-text\">\n                Property Adverts\n                <img id = \"profile\" src = \"./vectors/user.svg\" alt = \"profile-icon\" width = \"25px\" height = \"25px\" />\n                <span class = 'menu'></span>\n            </div>\n            <div class = \"property-type-holder\">\n                <form>\n                    <label>Search by:</label>\n                        <select class = \"property-type-options\">\n                            <option value = \"Property type\"> Property type</option>\n                            <option value = \"Self-contained\">Self-contained</option>\n                            <option value = \"2 Bedroom\">2 Bedroom</option>\n                            <option value = \"3 Bedroom\">3 Bedroom</option>\n                            <option value = \"Mini flat\">Mini flat</option>\n                            <option value = \"Duplex\">Duplex</option>\n                            <option value = \"Bungalow\">Bungalow</option>\n                        </select>\n                    </form>\n            </div>\n            <div id = \"properties-grid\"></div>\n            <div id = \"add-property-button\" class = \"fab tooltip\">+\n                <span class = \"tooltiptext tiny-text\">Add property</span>\n            </div>\n        </div>";
 }
 
-},{}],208:[function(require,module,exports){
+},{}],210:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29916,7 +30082,7 @@ var template = function template() {
 var _default = template;
 exports["default"] = _default;
 
-},{}],209:[function(require,module,exports){
+},{}],211:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29927,7 +30093,7 @@ var template = "\n    <div class = \"dialog-container\">\n        <div class = \
 var _default = template;
 exports["default"] = _default;
 
-},{}],210:[function(require,module,exports){
+},{}],212:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29949,7 +30115,7 @@ function render(properties) {
   return "<h4 class = \"text-center\">No property found</h4>";
 }
 
-},{}],211:[function(require,module,exports){
+},{}],213:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29961,7 +30127,7 @@ function render() {
   return "\n        <div class = 'main-content'>\n            <div class = 'home-image-container'>\n                <img src = './images/estate.jpg' alt = 'image'/>\n            </div>\n            <div class = 'form-container'>\n                <div class = 'form-header smaller-text'>Sign In</div>\n                <form id ='signin-form'>\n                    <input type = 'text' placeholder = 'Email' title = 'Provide email' data-email required/> <br>\n                    <input type = 'password' placeholder = 'Password' title = 'Provide Password' data-password required/> <br>\n                    <label class = \"checkbox tiny-text\"> \n                        <input type = \"checkbox\" id = \"forget-pass\">\n                        Forget Password?\n                        <span class = \"checkmark\"></span>\n                    <label> <br>\n                    <button class = 'login-button smaller-text'>Sign in</button>\n                </form>\n                <p class = 'form-container-text smaller-text'>Don't have an account?</p>\n                <p id = 'signup-text' class = 'bold-text smaller-text' > \n                    <a href = '#'>\n                    SIGN UP NOW\n                    </a>\n                </p>\n            </div>\n        </div>";
 }
 
-},{}],212:[function(require,module,exports){
+},{}],214:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29973,7 +30139,7 @@ function render() {
   return "\n        <div class = \"main-content\">\n             <div class = \"form-container\">\n                <div class = \"form-header smaller-text\">Sign up</div>\n                <form id = \"signup-form\">\n                    <input type = \"text\" placeholder = \"First Name\" title = \"Username\" data-first-name required/>\n                    <input type = \"text\" placeholder = \"Last Name\" title = \"Last Name\" data-last-name required/>\n                    <br>\n                    <input type = \"text\" placeholder = \"Email\" title = \"Email\" data-email required/>\n                    <input type = \"text\" placeholder = \"Phone\" title = \"Phone\" data-phone required/>\n                    <br>\n                    <input type = \"text\" placeholder = \"Address\" title = \"Address\" data-address required/>\n                    <input type = \"password\" placeholder = \"Password\" title = \"Password\" data-password required/>\n                    <br>\n                    <label class = \"checkbox tiny-text\">\n                        <input type = \"checkbox\" data-admin />\n                        Sign up as an Admin\n                        <span class = \"checkmark\"></span>\n                    </label>\n                    <br>\n                    <button class = 'login-button smaller-text'>Sign up</button>    \n                </form>\n                <p class = \"form-container-text bit-smaller-text\">Already have an account?</p>\n                <p id = \"signin-text\" class = 'bold-text smaller-text'>\n                    <a href = \"#\">SIGN IN</a>\n                </p>    \n             </div>\n             <div class = \"home-image-container\">\n                <img src = \"./images/estate.jpg\" alt ='estate img'/>\n             </div>\n        </div>\n    ";
 }
 
-},{}],213:[function(require,module,exports){
+},{}],215:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29984,7 +30150,7 @@ var template = "\n    <div class = \"dialog-container\" >\n        <div class = 
 var _default = template;
 exports["default"] = _default;
 
-},{}],214:[function(require,module,exports){
+},{}],216:[function(require,module,exports){
 "use strict";
 
 var _app = _interopRequireDefault(require("./app.js"));
@@ -29996,4 +30162,4 @@ window.onload = function () {
   new _app["default"](main).init();
 };
 
-},{"./app.js":185}]},{},[214]);
+},{"./app.js":185}]},{},[216]);

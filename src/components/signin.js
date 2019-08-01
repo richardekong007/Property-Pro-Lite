@@ -7,7 +7,6 @@ class Signin extends TinyEmitter{
     constructor (container){
         super();
         this.container = container;
-        this.baseUrl = config.host;
     }
 
     render (){
@@ -71,7 +70,7 @@ class Signin extends TinyEmitter{
     }
 
     signInUser (data){
-        fetch(`${this.baseUrl}/api/v1/auth/signin`,{
+        fetch(`${config.host}/api/v1/auth/signin`,{
             mode: "cors",
             method:"POST",
             headers:{"Content-Type":"application/json"},

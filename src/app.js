@@ -29,7 +29,7 @@ class App {
         this.render();
     }
 
-    addEventListener(){
+    addEventListener (){
         this.signinEvents();
         this.signupEvents();
         this.propertiesPageEvent();
@@ -44,7 +44,7 @@ class App {
     signinEvents (){
         
         this.signin.on("signin", data =>{
-            this.propertiesPage.render();
+            this.propertiesPage.setCurrentUser(data).render();
             InformationDialog.getInstance().setMessage(`${data.first_name} signed in.`).show();
             this.setCredentials(data);
         });
@@ -59,7 +59,7 @@ class App {
         });
 
         this.signin.on("reloading", () =>{
-            this.propertiesPage.render();
+            this.propertiesPage.setCurrentUser(this.getCredential()).render();
         });
 
         this.signin.on("forget_password_checked", () =>{
@@ -70,7 +70,7 @@ class App {
     signupEvents (){
         this.signup.on("signin_click", () => this.signin.render());
         this.signup.on("signup", data => {
-            this.propertiesPage.render();
+            this.propertiesPage.setCurrentUser(data).render();
             InformationDialog.getInstance().setMessage(`${data.first_name} welcome.`).show();
             this.setCredentials(data);
         });
@@ -92,14 +92,14 @@ class App {
         });
 
         this.propertiesPage.on("property_type_error", error =>{
-            this.propertiesPage.render();
+            this.propertiesPage.setCurrentUser(this.getCredential()).render();
             ErrorDialog.getInstance().setMessage(error).show();
         });
 
         this.propertiesPage.on("signout", () =>{
             InformationDialog.getInstance()
-            .setMessage(`Good bye ${this.getUsername()}`)
-            .show();
+                .setMessage(`Good bye ${this.getUsername()}`)
+                .show();
             this.signin.render();
             localStorage.clear();
         });
@@ -115,7 +115,7 @@ class App {
 
         this.propertyDetailDialog.on("delete_property", () => {
             this.propertyDetailDialog.dismiss();
-            this.propertiesPage.render();
+            this.propertiesPage.setCurrentUser(this.getCredential()).render();
             InformationDialog.getInstance().setMessage("Property deleted!").show();
         });
 
@@ -134,7 +134,7 @@ class App {
         this.postPropertyDialog.on("add_property", data =>{
             this.postPropertyDialog.clear();
             this.postPropertyDialog.dismiss();
-            this.propertiesPage.render()
+            this.propertiesPage.setCurrentUser(this.getCredential()).render()
             InformationDialog.getInstance().setMessage("Property added!").show();
         });
 
@@ -145,7 +145,7 @@ class App {
 
     updatePropertyDialogEvent (){
         this.updatePropertyDialog.on("mark_sold", () =>{
-            this.propertiesPage.render();
+            this.propertiesPage.setCurrentUser(this.getCredential()).render();
         });
 
         this.updatePropertyDialog.on("mark_sold_error", error => {
@@ -153,7 +153,7 @@ class App {
         });
 
         this.updatePropertyDialog.on("update_property", ()=>{
-            this.propertiesPage.render();
+            this.propertiesPage.setCurrentUser(this.getCredential()).render();
         });
 
         this.updatePropertyDialog.on("update_property_error", error =>{
@@ -202,28 +202,36 @@ class App {
             ErrorDialog.getInstance().setMessage(err).show();
         });
     }
-    
+
     setCredentials (data){
-        localStorage.setItem("token",data.token);
-        localStorage.setItem("username", `${data.first_name} ${data.last_name}`);
+        this.user = data;
+        localStorage.setItem("user", JSON.stringify(data));
+    }
+
+    getCredential (){
+        return JSON.parse(localStorage.getItem("user"));
     }
 
     getUsername (){
-        return !(localStorage.getItem("username"))? "": localStorage.getItem("username");
+        const {first_name, last_name} = this.getCredential();
+        return !(first_name || last_name)? "": `${first_name} ${last_name}`;
     }
 
     render (){
-        const token = localStorage.getItem("token");
-        if (!token){
+        const user = this.getCredential();
+        if (!user){
             this.signin.render();
         } else if (Authenticator.isExpired()){
             this.signin.render();
-            InformationDialog.getInstance().setMessage("Session Timeout!").show();
+            InformationDialog.getInstance()
+                .setMessage("Session Timeout!")
+                .show();
             localStorage.clear();
         } else{
-            this.propertiesPage.render();
+            this.propertiesPage.setCurrentUser(user).render();
             InformationDialog.getInstance()
-            .setMessage(`Welcome back ${this.getUsername()}`).show();
+                .setMessage(`Welcome back ${this.getUsername()}`)
+                .show();
         }
 
         this.addEventListener();
