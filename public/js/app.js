@@ -29976,8 +29976,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 var config = {
-  host: "http://localhost:3999" //"https://property-pro-lite-api.herokuapp.com"
-
+  host: "https://property-pro-lite-api.herokuapp.com"
 };
 var _default = config;
 exports["default"] = _default;
